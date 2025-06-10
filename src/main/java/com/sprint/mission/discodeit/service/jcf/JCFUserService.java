@@ -30,17 +30,10 @@ public class JCFUserService implements UserService {
         data.add(user);
     }
 
-    /**
-     * 이 부분 검토 부탁드립니다
-     * 정책에 따라 상이할 것 같으나 ID를 통해 찾을 수 있는 사용자는 활성 사용자로 제한하였습니다.
-     * 메서드명에는 해당 내용을 반영하지 않았는데 이유는 다음과 같습니다
-     * 1. 많은 서비스에서 ID를 통해 사용자를 조회할 때 활성화된 사용자를 조회하는 것을 기본 정책으로 채택하고있습니다.
-     * 2. 위 이유의 연장선으로 다른 상태의 사용자를 조회할 때 상태를 메서드에 포함시켜주면 됩니다.
-     */
     @Override
     public Optional<User> findUserById(UUID userId) {
         return data.stream()
-                .filter(user -> user.getId() == userId)  // 자료구조에 따라 다르겠으나 카디널리티 높은 필드 우선 필터링
+                .filter(user -> user.getId() == userId)
                 .filter(user -> user.getMemberStatus() == MemberStatus.ACTIVE)
                 .findFirst();
     }
@@ -89,11 +82,11 @@ public class JCFUserService implements UserService {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
-        Optional.ofNullable(updatedUser.getUserName()).ifPresent(findUser::setUserName);
-        Optional.ofNullable(updatedUser.getEmail()).ifPresent(findUser::setEmail);
-        Optional.ofNullable(updatedUser.getPhoneNumber()).ifPresent(findUser::setPhoneNumber);
-        Optional.ofNullable(updatedUser.getPassword()).ifPresent(findUser::setPassword);
-        Optional.ofNullable(updatedUser.getMemberStatus()).ifPresent(findUser::setMemberStatus);
+        Optional.ofNullable(updatedUser.getUserName()).ifPresent(findUser::updateUserName);
+        Optional.ofNullable(updatedUser.getEmail()).ifPresent(findUser::updateEmail);
+        Optional.ofNullable(updatedUser.getPhoneNumber()).ifPresent(findUser::updatePhoneNumber);
+        Optional.ofNullable(updatedUser.getPassword()).ifPresent(findUser::updatePassword);
+        Optional.ofNullable(updatedUser.getMemberStatus()).ifPresent(findUser::editMemberStatus);
 
     }
 

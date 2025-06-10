@@ -34,7 +34,7 @@ public class Channel extends BaseEntity {
     }
 
     public void addUser(User user) {
-        if (!users.contains(user)) {
+        if (!DataExistenceChecker.isExistDataInField(users, user)) {
             users.add(user);
             user.addChannel(this);
         }
@@ -48,14 +48,14 @@ public class Channel extends BaseEntity {
     }
 
     public void addMessage(User user, Message message) {
-        if (!messages.contains(message)) {
+        if (!DataExistenceChecker.isExistDataInField(messages, message)) {
             messages.add(message);
             user.addMessage(message);
         }
     }
 
     public void removeMessage(User user, Message message) {
-        if(messages.contains(message)) {
+        if(DataExistenceChecker.isExistDataInField(messages, message)) {
             messages.remove(message);
             user.removeMessage(message);
         }
@@ -93,11 +93,11 @@ public class Channel extends BaseEntity {
         return users;
     }
 
-    public void setChannelName(String channelName) {
+    public void editChannelName(String channelName) {
         this.channelName = channelName;
     }
 
-    public void setDescription(String description) {
+    public void editDescription(String description) {
         this.description = description;
     }
 
