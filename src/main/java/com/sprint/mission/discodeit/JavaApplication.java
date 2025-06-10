@@ -20,90 +20,155 @@ public class JavaApplication {
     public static void main(String[] args) {
 
         // User
-        // 단순 조회
         UserService userService = serviceFactory.createUserService();
         User firstUser = new User("firstUser", "firstUser", "firstUser", "firstUser");
-        userService.createUser(firstUser);
-        log.info("\n단순 조회\n{}\n", userService.findUserById(firstUser.getId()).get());
+        User secondUser = new User("secondUser", "secondUser", "secondUser", "secondUser");
+        User updatedSecondUser = new User("updatedSecondUser", "updatedSecondUser", "updatedSecondUser", "updatedSecondUser");
+
+        // 단순 조회
+        testFindUser(firstUser, userService);
 
         // 다건 조회
-        User secondUser = new User("secondUser", "secondUser", "secondUser", "secondUser");
-        userService.createUser(secondUser);
-        List<User> users = userService.findUsers();
-        String formattedUsers = formatList(users);
-        log.info("\n다건 조회\n{}\n", formattedUsers);
+        testFindUsers(secondUser, userService);
 
         // 수정
-        User updatedSecondUser = new User("updatedSecondUser", "updatedSecondUser", "updatedSecondUser", "updatedSecondUser");
-        userService.updateUser(secondUser.getId(), updatedSecondUser);
-        log.info("\n수정\n{}\n", userService.findUserById(secondUser.getId()).get());
+        testUpdateUser(secondUser, updatedSecondUser, userService);
 
         // 삭제
-        userService.deleteUser(secondUser.getId());
-        log.info("\n삭제\n{}\n", userService.findUsers());
+        testDeleteUser(userService, secondUser);
 
         // Channel
-        // 단순 조회
         ChannelService channelService = serviceFactory.createChannelService();
         Channel firstChannel = Channel.of("firstChannel", "firstChannel", firstUser);
-        channelService.createChannel(firstChannel, firstUser);
-        log.info("\n단순조회\n{}\n", channelService.findChannelById(firstChannel.getId()).get());
-
         User thirdUser = new User("thirdUser", "thirdUser", "thirdUser", "thirdUser");
-        userService.createUser(thirdUser);
-        channelService.addUser(firstChannel.getId(), thirdUser);
-        log.info("\n참가자 추가 후 채널\n{}\n", channelService.findChannelById(firstChannel.getId()).get());
-        log.info("\n채널 참가 후 유저\n{}\n", userService.findUserById(thirdUser.getId()).get());
+        Channel secondChannel = Channel.of("secondChannel","secondChannel", firstUser);
 
+        // 단순 조회
+        testFindChannel(channelService, firstChannel, firstUser);
+
+        // 참가자 추가
+        testAddUserToChannel(userService, thirdUser, channelService, firstChannel);
 
         // 다건 조회
-        Channel secondChannel = Channel.of("secondChannel","secondChannel", firstUser);
-        channelService.createChannel(secondChannel, firstUser);
-        List<Channel> channels = channelService.findChannels();
-        String formattedChannels = formatList(channels);
-        log.info("\n다건 조회\n{}\n", formattedChannels);
+        testFindChannels(channelService, secondChannel, firstUser);
 
         // 수정 (이름만 수정)
         Channel updatedChannel = Channel.of("updateName",null, firstUser);
-        channelService.updateChannel(secondChannel.getId(), updatedChannel);
-        log.info("\n수정 - 이름필드\n{}\n", channelService.findChannelById(secondChannel.getId()).get());
+        testUpdateChannelName(channelService, secondChannel, updatedChannel);
 
         // 수정 (설명만 수정)
         updatedChannel = Channel.of(null, "updateDescription", firstUser);
-        channelService.updateChannel(secondChannel.getId(), updatedChannel);
-        log.info("\n수정 - 설명필드\n{}\n", channelService.findChannelById(secondChannel.getId()).get());
+        testUpdateChannelDescription(channelService, secondChannel, updatedChannel);
 
         // 수정 (2개 동시 수정)
         updatedChannel = Channel.of("updatedBoth", "updateBoth", firstUser);
-        channelService.updateChannel(secondChannel.getId(), updatedChannel);
-        log.info("\n수정\n{}\n", channelService.findChannelById(secondChannel.getId()).get());
+        testUpdateChannelNameAndDescription(channelService, secondChannel, updatedChannel);
 
         // 삭제
-        channelService.deleteChannel(secondChannel.getId());
-        log.info("\n삭제\n{}\n", channelService.findChannels());
+        testDeleteChannel(channelService, secondChannel);
 
         //Message
-        // 단순 조회
         MessageService messageService = serviceFactory.createMessageService();
         Message firstMessage = new Message("firstMessage", firstChannel.getId(), firstUser.getId());
-        messageService.createMessage(firstMessage, firstUser);
-        log.info("\n단순 조회\n{}\n", messageService.findMessageById(firstMessage.getMessageId()).get());
+        Message secondMessage = new Message("secondMessage", firstChannel.getId(), firstUser.getId());
+
+        // 단순 조회
+        testFindMessage(messageService, firstMessage, firstUser);
 
         // 다건 조회
-        Message secondMessage = new Message("secondMessage", firstChannel.getId(), firstUser.getId());
-        messageService.createMessage(secondMessage, firstUser);
-        List<Message> messages = messageService.findMessagesByChannelId(firstChannel.getId());
-        String formattedMessages = formatList(messages);
-        log.info("\n다건 조회\n{}\n", formattedMessages);
+        testFindMessages(messageService, secondMessage, firstUser, firstChannel);
 
         // 수정
-        messageService.updateContent(secondMessage.getMessageId(), "updatedSecondMessage");
-        log.info("\n수정\n{}\n", messageService.findMessageById(secondMessage.getMessageId()).get());
+        testUpdateMessage(messageService, secondMessage);
 
         // 삭제
-        messageService.deleteMessage(secondMessage.getMessageId());
-        log.info("\n삭제\n{}\n", messageService.findMessagesByChannelId(firstChannel.getId()));
+        testDeleteMessage(messageService, secondMessage, firstChannel);
 
+    }
+
+    private static void testFindUser(User user, UserService userService) {
+        userService.createUser(user);
+        log.info("\n단순 조회\n{}\n", userService.findUserById(user.getId()).get());
+    }
+
+    private static void testFindUsers(User user, UserService userService) {
+        userService.createUser(user);
+        List<User> users = userService.findUsers();
+        String formattedUsers = formatList(users);
+        log.info("\n다건 조회\n{}\n", formattedUsers);
+    }
+
+    private static void testUpdateUser(User user, User updatedUser, UserService userService) {
+        userService.updateUser(user.getId(), updatedUser);
+        log.info("\n수정\n{}\n", userService.findUserById(user.getId()).get());
+    }
+
+    private static void testDeleteUser(UserService userService, User secondUser) {
+        userService.deleteUser(secondUser.getId());
+        log.info("\n삭제\n{}\n", userService.findUsers());
+    }
+
+    private static void testFindChannel(ChannelService channelService, Channel channel, User user) {
+        channelService.createChannel(channel, user);
+        log.info("\n단순조회\n{}\n", channelService.findChannelById(channel.getId()).get());
+    }
+
+    private static void testFindChannels(ChannelService channelService, Channel channel, User user) {
+        channelService.createChannel(channel, user);
+        List<Channel> channels = channelService.findChannels();
+        String formattedChannels = formatList(channels);
+        log.info("\n다건 조회\n{}\n", formattedChannels);
+    }
+
+    private static void testAddUserToChannel(UserService userService, User user, ChannelService channelService,
+                                             Channel channel) {
+        userService.createUser(user);
+        channelService.addUser(channel.getId(), user);
+        log.info("\n참가자 추가 후 채널\n{}\n", channelService.findChannelById(channel.getId()).get());
+        log.info("\n채널 참가 후 유저\n{}\n", userService.findUserById(user.getId()).get());
+    }
+
+    private static void testUpdateChannelDescription(ChannelService channelService, Channel channel, Channel updatedChannel) {
+        channelService.updateChannel(channel.getId(), updatedChannel);
+        log.info("\n수정 - 설명필드\n{}\n", channelService.findChannelById(channel.getId()).get());
+    }
+
+    private static void testUpdateChannelName(ChannelService channelService, Channel channel, Channel updatedChannel) {
+        channelService.updateChannel(channel.getId(), updatedChannel);
+        log.info("\n수정 - 이름필드\n{}\n", channelService.findChannelById(channel.getId()).get());
+    }
+
+    private static void testUpdateChannelNameAndDescription(ChannelService channelService, Channel channel, Channel updatedChannel) {
+        channelService.updateChannel(channel.getId(), updatedChannel);
+        log.info("\n수정\n{}\n", channelService.findChannelById(channel.getId()).get());
+    }
+
+    private static void testDeleteChannel(ChannelService channelService, Channel channel) {
+        channelService.deleteChannel(channel.getId());
+        log.info("\n삭제\n{}\n", channelService.findChannels());
+    }
+
+    private static void testFindMessage(MessageService messageService, Message message, User user) {
+        messageService.createMessage(message, user);
+        log.info("\n단순 조회\n{}\n", messageService.findMessageById(message.getMessageId()).get());
+    }
+
+    private static void testFindMessages(MessageService messageService, Message message, User user,
+                                         Channel channel) {
+        messageService.createMessage(message, user);
+        List<Message> messages = messageService.findMessagesByChannelId(channel.getId());
+        String formattedMessages = formatList(messages);
+        log.info("\n다건 조회\n{}\n", formattedMessages);
+    }
+
+    private static void testUpdateMessage(MessageService messageService, Message message) {
+        messageService.updateContent(message.getMessageId(), "updatedSecondMessage");
+        log.info("\n수정\n{}\n", messageService.findMessageById(message.getMessageId()).get());
+    }
+
+    private static void testDeleteMessage(MessageService messageService, Message message, Channel channel) {
+        messageService.deleteMessage(message.getMessageId());
+        log.info("\n삭제\n{}\n", messageService.findMessagesByChannelId(channel.getId()));
     }
 
     private static <T> String formatList(List<T> list) {

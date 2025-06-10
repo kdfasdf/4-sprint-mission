@@ -52,7 +52,7 @@ public class JCFMessageService implements MessageService {
         data.stream()
                 .filter(message -> message.getId() == messageId)
                 .findFirst()
-                .ifPresent(message -> message.setContent(content));
+                .ifPresent(message -> message.editContent(content));
     }
 
     @Override

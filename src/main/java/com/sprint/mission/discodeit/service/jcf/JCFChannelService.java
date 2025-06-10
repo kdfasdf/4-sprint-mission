@@ -55,8 +55,8 @@ public class JCFChannelService implements ChannelService {
 
         findChannel.setUpdatedAt();
 
-        Optional.ofNullable(updatedChannel.getChannelName()).ifPresent(findChannel::setChannelName);
-        Optional.ofNullable(updatedChannel.getDescription()).ifPresent(findChannel::setDescription);
+        Optional.ofNullable(updatedChannel.getChannelName()).ifPresent(findChannel::editChannelName);
+        Optional.ofNullable(updatedChannel.getDescription()).ifPresent(findChannel::editDescription);
 
     }
 

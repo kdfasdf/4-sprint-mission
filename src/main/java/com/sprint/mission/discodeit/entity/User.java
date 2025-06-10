@@ -3,7 +3,6 @@ package com.sprint.mission.discodeit.entity;
 import com.sprint.mission.discodeit.util.DataExistenceChecker;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public class User extends BaseEntity {
@@ -35,7 +34,7 @@ public class User extends BaseEntity {
     }
 
     public void addChannel(Channel channel) {
-        if(!channels.contains(channel)) {
+        if(!DataExistenceChecker.isExistDataInField(channels, channel)) {
             channels.add(channel);
             channel.addUser(this);
         }
@@ -49,21 +48,15 @@ public class User extends BaseEntity {
     }
 
     public void addMessage(Message message) {
-        if(!messages.contains(message)) {
+        if(!DataExistenceChecker.isExistDataInField(messages, message)) {
             messages.add(message);
         }
     }
 
     public void removeMessage(Message message) {
-        if(messages.contains(message)) {
+        if(DataExistenceChecker.isExistDataInField(messages, message)) {
             messages.remove(message);
         }
-    }
-
-    private <T extends BaseEntity> Optional<T> isExist(List<T> field, T data) {
-        return field.stream()
-                .filter(element -> element.getId() == data.getId())
-                .findFirst();
     }
 
     public UUID getId() {
@@ -86,7 +79,7 @@ public class User extends BaseEntity {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void updateEmail(String email) {
         this.email = email;
     }
 
@@ -94,7 +87,7 @@ public class User extends BaseEntity {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void updatePhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -102,7 +95,7 @@ public class User extends BaseEntity {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public void updateUserName(String userName) {
         this.userName = userName;
     }
 
@@ -110,7 +103,7 @@ public class User extends BaseEntity {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void updatePassword(String password) {
         this.password = password;
     }
 
@@ -118,7 +111,7 @@ public class User extends BaseEntity {
         return memberStatus;
     }
 
-    public void setMemberStatus(MemberStatus memberStatus) {
+    public void editMemberStatus(MemberStatus memberStatus) {
         this.memberStatus = memberStatus;
     }
 
