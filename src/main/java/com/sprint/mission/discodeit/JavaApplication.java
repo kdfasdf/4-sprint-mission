@@ -24,7 +24,6 @@ public class JavaApplication {
         User secondUser = new User("secondUser", "secondUser", "secondUser", "secondUser");
         User updatedSecondUser = new User("updatedSecondUser", "updatedSecondUser", "updatedSecondUser", "updatedSecondUser");
 
-
         // 단순 조회
         testFindUser(firstUser, userService);
 
@@ -38,7 +37,7 @@ public class JavaApplication {
         testDeleteUser(userService, secondUser);
 
         // Channel
-        ChannelService channelService = serviceFactory.createChannelService();
+        ChannelService channelService = serviceFactory.createFileChannelService();
         Channel firstChannel = Channel.of("firstChannel", "firstChannel", firstUser);
         User thirdUser = new User("thirdUser", "thirdUser", "thirdUser", "thirdUser");
         Channel secondChannel = Channel.of("secondChannel","secondChannel", firstUser);
@@ -66,23 +65,23 @@ public class JavaApplication {
 
         // 삭제
         testDeleteChannel(channelService, secondChannel);
-
-        //Message
-        MessageService messageService = serviceFactory.createMessageService();
-        Message firstMessage = new Message("firstMessage", firstChannel.getId(), firstUser.getId());
-        Message secondMessage = new Message("secondMessage", firstChannel.getId(), firstUser.getId());
-
-        // 단순 조회
-        testFindMessage(messageService, firstMessage, firstUser);
-
-        // 다건 조회
-        testFindMessages(messageService, secondMessage, firstUser, firstChannel);
-
-        // 수정
-        testUpdateMessage(messageService, secondMessage);
-
-        // 삭제
-        testDeleteMessage(messageService, secondMessage, firstChannel);
+//
+//        //Message
+//        MessageService messageService = serviceFactory.createMessageService();
+//        Message firstMessage = new Message("firstMessage", firstChannel.getId(), firstUser.getId());
+//        Message secondMessage = new Message("secondMessage", firstChannel.getId(), firstUser.getId());
+//
+//        // 단순 조회
+//        testFindMessage(messageService, firstMessage, firstUser);
+//
+//        // 다건 조회
+//        testFindMessages(messageService, secondMessage, firstUser, firstChannel);
+//
+//        // 수정
+//        testUpdateMessage(messageService, secondMessage);
+//
+//        // 삭제
+//        testDeleteMessage(messageService, secondMessage, firstChannel);
 
     }
 
