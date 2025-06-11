@@ -1,6 +1,5 @@
 package com.sprint.mission.discodeit.util;
 
-import com.sprint.mission.discodeit.entity.User;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -35,17 +34,32 @@ public class FileUtils {
         }
     }
 
-    public static List<User> load(Path directory) {
+    public static <T> List<T> load(Path directory, Class<T> clazz) {
         if (Files.exists(directory)) {
             try {
-                List<User> list = Files.list(directory)
+                List<T> list = Files.list(directory)
+                        .filter(path -> {
+
+                            try (
+                                    FileInputStream fis = new FileInputStream(path.toFile());
+                                    ObjectInputStream ois = new ObjectInputStream(fis)
+                            ) {
+                                Object data = ois.readObject();
+                                if(clazz.isInstance(data)) {
+                                    return true;
+                                }
+                                return false;
+                            } catch (IOException | ClassNotFoundException e) {
+                                throw new RuntimeException(e);
+                            }
+                        })
                         .map(path -> {
                             try (
                                     FileInputStream fis = new FileInputStream(path.toFile());
                                     ObjectInputStream ois = new ObjectInputStream(fis)
                             ) {
                                 Object data = ois.readObject();
-                                return (User) data;
+                                    return (T) data;
                             } catch (IOException | ClassNotFoundException e) {
                                 throw new RuntimeException(e);
                             }

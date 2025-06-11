@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class FileUserService implements UserService {
 
-    private static FileUserService fileUserService = new FileUserService();
+    private static FileUserService fileUserService;
     private static final Path directory;
 
     static {
@@ -26,6 +26,8 @@ public class FileUserService implements UserService {
         }
         return fileUserService;
     }
+
+    private FileUserService() {}
 
     @Override
     public void createUser(User user) {
@@ -60,7 +62,7 @@ public class FileUserService implements UserService {
 
     @Override
     public List<User> findUsers() {
-        return FileUtils.load(directory);
+        return FileUtils.load(directory, User.class);
     }
 
     @Override
@@ -79,7 +81,8 @@ public class FileUserService implements UserService {
 
     @Override
     public void updateUser(UUID userId, User updatedUser) {
-        User findUser = findUserById(userId).get(); // TODO 추후 검토
+        User findUser = findUserById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
         Optional.ofNullable(updatedUser.getUserName()).ifPresent(findUser::updateUserName);
         Optional.ofNullable(updatedUser.getEmail()).ifPresent(findUser::updateEmail);
