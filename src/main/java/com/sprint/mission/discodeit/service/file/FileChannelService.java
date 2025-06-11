@@ -39,7 +39,7 @@ public class FileChannelService implements ChannelService {
             channel.addUser(user);
             Path filePath = directory.resolve(channel.getId().toString().concat(".ser"));
             FileUtils.save(filePath, channel);
-//            fileUserService.createUser(user);
+            fileUserService.createUser(user);
         }
     }
 
