@@ -20,7 +20,7 @@ public class FileChannelService implements ChannelService {
     private static final Path directory;
 
     static {
-        directory = Paths.get(System.getProperty("user.dir"), "data");
+        directory = Paths.get(System.getProperty("user.dir"), "data", "channel");
         FileUtils.initDirectory(directory);
     }
 
@@ -45,7 +45,7 @@ public class FileChannelService implements ChannelService {
 
     @Override
     public List<Channel> findChannels() {
-        return FileUtils.load(directory, Channel.class);
+        return FileUtils.load(directory);
     }
 
     @Override

@@ -34,25 +34,10 @@ public class FileUtils {
         }
     }
 
-    public static <T> List<T> load(Path directory, Class<T> clazz) {
+    public static <T> List<T> load(Path directory) {
         if (Files.exists(directory)) {
             try {
                 List<T> list = Files.list(directory)
-                        .filter(path -> {
-
-                            try (
-                                    FileInputStream fis = new FileInputStream(path.toFile());
-                                    ObjectInputStream ois = new ObjectInputStream(fis)
-                            ) {
-                                Object data = ois.readObject();
-                                if(clazz.isInstance(data)) {
-                                    return true;
-                                }
-                                return false;
-                            } catch (IOException | ClassNotFoundException e) {
-                                throw new RuntimeException(e);
-                            }
-                        })
                         .map(path -> {
                             try (
                                     FileInputStream fis = new FileInputStream(path.toFile());

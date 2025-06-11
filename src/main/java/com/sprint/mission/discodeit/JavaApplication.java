@@ -67,7 +67,7 @@ public class JavaApplication {
         testDeleteChannel(channelService, secondChannel);
 
         //Message
-        MessageService messageService = serviceFactory.createMessageService();
+        MessageService messageService = serviceFactory.createFileMessageService();
         Message firstMessage = new Message("firstMessage", firstChannel.getId(), firstUser.getId());
         Message secondMessage = new Message("secondMessage", firstChannel.getId(), firstUser.getId());
 

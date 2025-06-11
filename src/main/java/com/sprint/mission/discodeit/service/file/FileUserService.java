@@ -16,7 +16,7 @@ public class FileUserService implements UserService {
     private static final Path directory;
 
     static {
-        directory = Paths.get(System.getProperty("user.dir"), "data");
+        directory = Paths.get(System.getProperty("user.dir"), "data", "user");
         FileUtils.initDirectory(directory);
     }
 
@@ -62,7 +62,7 @@ public class FileUserService implements UserService {
 
     @Override
     public List<User> findUsers() {
-        return FileUtils.load(directory, User.class);
+        return FileUtils.load(directory);
     }
 
     @Override
