@@ -18,12 +18,12 @@ public class JavaApplication {
     private static final ServiceFactory serviceFactory = ServiceFactory.getInstance();
 
     public static void main(String[] args) {
-
         // User
-        UserService userService = serviceFactory.createUserService();
+        UserService userService = serviceFactory.createFileUserService();
         User firstUser = new User("firstUser", "firstUser", "firstUser", "firstUser");
         User secondUser = new User("secondUser", "secondUser", "secondUser", "secondUser");
         User updatedSecondUser = new User("updatedSecondUser", "updatedSecondUser", "updatedSecondUser", "updatedSecondUser");
+
 
         // 단순 조회
         testFindUser(firstUser, userService);
