@@ -17,7 +17,7 @@ public class FileMessageService implements MessageService {
     private static final Path directory;
 
     static {
-        directory = Paths.get(System.getProperty("user.dir"), "data");
+        directory = Paths.get(System.getProperty("user.dir"), "data", "message");
         FileUtils.initDirectory(directory);
     }
 
@@ -44,7 +44,7 @@ public class FileMessageService implements MessageService {
 
     @Override
     public Optional<Message> findMessageById(UUID messageId) {
-        return FileUtils.load(directory, Message.class)
+        return findAllMessages()
                 .stream()
                 .filter(message -> message.getId().equals(messageId))
                 .findFirst();
@@ -52,7 +52,7 @@ public class FileMessageService implements MessageService {
 
     @Override
     public List<Message> findMessagesByChannelId(UUID channelId) {
-        return FileUtils.load(directory, Message.class)
+        return findAllMessages()
                 .stream()
                 .filter(message -> message.getChannelId().equals(channelId))
                 .toList();
@@ -71,6 +71,10 @@ public class FileMessageService implements MessageService {
     public void deleteMessage(UUID messageId) {
         Path filePath = directory.resolve(messageId.toString().concat(".ser"));
         FileUtils.remove(filePath);
+    }
+
+    private List<Message> findAllMessages() {
+        return FileUtils.load(directory);
     }
 
 }

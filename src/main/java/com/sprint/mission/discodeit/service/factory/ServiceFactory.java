@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.service.file.FileChannelService;
+import com.sprint.mission.discodeit.service.file.FileMessageService;
 import com.sprint.mission.discodeit.service.file.FileUserService;
 import com.sprint.mission.discodeit.service.jcf.JCFChannelService;
 import com.sprint.mission.discodeit.service.jcf.JCFMessageService;
@@ -40,6 +41,10 @@ public class ServiceFactory {
 
     public ChannelService createFileChannelService() {
         return FileChannelService.getInstance();
+    }
+
+    public MessageService createFileMessageService() {
+        return FileMessageService.getInstance();
     }
 
 }
