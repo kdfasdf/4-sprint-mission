@@ -2,7 +2,6 @@ package com.sprint.mission.discodeit.service;
 
 import com.sprint.mission.discodeit.entity.User;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService {
@@ -11,11 +10,11 @@ public interface UserService {
     void createUser(User user);
 
     //조회
-    Optional<User> findUserById(UUID userId);
+    User findUserById(UUID userId);
 
-    Optional<User> findDormantUserById(UUID userId);
+    User findDormantUserById(UUID userId);
 
-    Optional<User> findDeletedUserById(UUID userId);
+    User findDeletedUserById(UUID userId);
 
     List<User> findUsers();
 

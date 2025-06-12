@@ -49,16 +49,18 @@ public class FileChannelService implements ChannelService {
     }
 
     @Override
-    public Optional<Channel> findChannelById(UUID channelId) {
-        return findChannels().stream()
+    public Channel findChannelById(UUID channelId) {
+        Channel findChannel = findChannels().stream()
                 .filter(channel -> channel.getId().equals(channelId))
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+
+        return findChannel;
     }
 
     @Override
     public void updateChannel(UUID channelId, Channel updatedChannel) {
-        Channel findChannel = findChannelById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+        Channel findChannel = findChannelById(channelId);
 
         Optional.ofNullable(updatedChannel.getChannelName()).ifPresent(findChannel::editChannelName);
         Optional.ofNullable(updatedChannel.getDescription()).ifPresent(findChannel::editDescription);
@@ -75,8 +77,7 @@ public class FileChannelService implements ChannelService {
 
     @Override
     public void addUser(UUID channelId, User user) {
-        Channel findChannel = findChannelById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+        Channel findChannel = findChannelById(channelId);
 
         findChannel.addUser(user);
         Path filePath = directory.resolve(channelId.toString().concat(".ser"));
@@ -86,8 +87,7 @@ public class FileChannelService implements ChannelService {
 
     @Override
     public void removeUser(UUID channelId, User user) {
-        Channel findChannel = findChannelById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+        Channel findChannel = findChannelById(channelId);
 
         findChannel.removeUser(user);
         Path filePath = directory.resolve(channelId.toString().concat(".ser"));
@@ -97,8 +97,7 @@ public class FileChannelService implements ChannelService {
 
     @Override
     public void addMessage(UUID channelId, User user, Message message) {
-        Channel findChannel = findChannelById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+        Channel findChannel = findChannelById(channelId);
         findChannel.addMessage(user, message);
         Path filePath = directory.resolve(channelId.toString().concat(".ser"));
         FileUtils.save(filePath, findChannel);
@@ -107,8 +106,7 @@ public class FileChannelService implements ChannelService {
 
     @Override
     public void removeMessage(UUID channelId, User user, Message message) {
-        Channel findChannel = findChannelById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+        Channel findChannel = findChannelById(channelId);
         findChannel.removeMessage(user, message);
         Path filePath = directory.resolve(channelId.toString().concat(".ser"));
         FileUtils.save(filePath, findChannel);

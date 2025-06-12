@@ -15,7 +15,6 @@ import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.service.basic.BasicChannelService;
 import com.sprint.mission.discodeit.service.basic.BasicMessageService;
 import com.sprint.mission.discodeit.service.basic.BasicUserService;
-import com.sprint.mission.discodeit.service.factory.ServiceFactory;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -24,7 +23,6 @@ import org.slf4j.LoggerFactory;
 public class JavaApplication {
 
     private static final Logger log = LoggerFactory.getLogger(JavaApplication.class);
-    private static final ServiceFactory serviceFactory = ServiceFactory.getInstance();
 
     private static ChannelService channelService;
     private static UserService userService;
@@ -147,7 +145,7 @@ public class JavaApplication {
 
     private static void testFindUser(User user, UserService userService) {
         userService.createUser(user);
-        log.info("\n단순 조회\n{}\n", userService.findUserById(user.getId()).get());
+        log.info("\n단순 조회\n{}\n", userService.findUserById(user.getId()));
     }
 
     private static void testFindUsers(User user, UserService userService) {
@@ -159,7 +157,7 @@ public class JavaApplication {
 
     private static void testUpdateUser(User user, User updatedUser, UserService userService) {
         userService.updateUser(user.getId(), updatedUser);
-        log.info("\n수정\n{}\n", userService.findUserById(user.getId()).get());
+        log.info("\n수정\n{}\n", userService.findUserById(user.getId()));
     }
 
     private static void testDeleteUser(UserService userService, User secondUser) {
@@ -169,7 +167,7 @@ public class JavaApplication {
 
     private static void testFindChannel(ChannelService channelService, Channel channel, User user) {
         channelService.createChannel(channel, user);
-        log.info("\n단순조회\n{}\n", channelService.findChannelById(channel.getId()).get());
+        log.info("\n단순조회\n{}\n", channelService.findChannelById(channel.getId()));
     }
 
     private static void testFindChannels(ChannelService channelService, Channel channel, User user) {
@@ -183,25 +181,25 @@ public class JavaApplication {
                                              Channel channel) {
         userService.createUser(user);
         channelService.addUser(channel.getId(), user);
-        log.info("\n참가자 추가 후 채널\n{}\n", channelService.findChannelById(channel.getId()).get());
-        log.info("\n채널 참가 후 유저\n{}\n", userService.findUserById(user.getId()).get());
+        log.info("\n참가자 추가 후 채널\n{}\n", channelService.findChannelById(channel.getId()));
+        log.info("\n채널 참가 후 유저\n{}\n", userService.findUserById(user.getId()));
     }
 
     private static void testUpdateChannelDescription(ChannelService channelService, Channel channel,
                                                      Channel updatedChannel) {
         channelService.updateChannel(channel.getId(), updatedChannel);
-        log.info("\n수정 - 설명필드\n{}\n", channelService.findChannelById(channel.getId()).get());
+        log.info("\n수정 - 설명필드\n{}\n", channelService.findChannelById(channel.getId()));
     }
 
     private static void testUpdateChannelName(ChannelService channelService, Channel channel, Channel updatedChannel) {
         channelService.updateChannel(channel.getId(), updatedChannel);
-        log.info("\n수정 - 이름필드\n{}\n", channelService.findChannelById(channel.getId()).get());
+        log.info("\n수정 - 이름필드\n{}\n", channelService.findChannelById(channel.getId()));
     }
 
     private static void testUpdateChannelNameAndDescription(ChannelService channelService, Channel channel,
                                                             Channel updatedChannel) {
         channelService.updateChannel(channel.getId(), updatedChannel);
-        log.info("\n수정\n{}\n", channelService.findChannelById(channel.getId()).get());
+        log.info("\n수정\n{}\n", channelService.findChannelById(channel.getId()));
     }
 
     private static void testDeleteChannel(ChannelService channelService, Channel channel) {
@@ -211,7 +209,7 @@ public class JavaApplication {
 
     private static void testFindMessage(MessageService messageService, Message message, User user) {
         messageService.createMessage(message, user);
-        log.info("\n단순 조회\n{}\n", messageService.findMessageById(message.getMessageId()).get());
+        log.info("\n단순 조회\n{}\n", messageService.findMessageById(message.getMessageId()));
     }
 
     private static void testFindMessages(MessageService messageService, Message message, User user,
@@ -224,7 +222,7 @@ public class JavaApplication {
 
     private static void testUpdateMessage(MessageService messageService, Message message) {
         messageService.updateContent(message.getMessageId(), "updatedSecondMessage");
-        log.info("\n수정\n{}\n", messageService.findMessageById(message.getMessageId()).get());
+        log.info("\n수정\n{}\n", messageService.findMessageById(message.getMessageId()));
     }
 
     private static void testDeleteMessage(MessageService messageService, Message message, Channel channel) {

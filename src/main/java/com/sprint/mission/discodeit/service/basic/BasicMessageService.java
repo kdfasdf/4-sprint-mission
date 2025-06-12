@@ -18,12 +18,17 @@ public class BasicMessageService implements MessageService {
 
     @Override
     public void createMessage(Message message, User user) {
+        Optional.ofNullable(user).orElseThrow(() -> new IllegalArgumentException("User is null."));
+        Optional.ofNullable(message).orElseThrow(() -> new IllegalArgumentException("Message is null."));
         messageRepository.save(message);
     }
 
     @Override
-    public Optional<Message> findMessageById(UUID messageId) {
-        return messageRepository.findMessageById(messageId);
+    public Message findMessageById(UUID messageId) {
+        Message findMessage = messageRepository.findMessageById(messageId)
+                .orElseThrow(() -> new IllegalArgumentException("Message not found."));
+
+        return findMessage;
     }
 
     @Override
@@ -36,6 +41,8 @@ public class BasicMessageService implements MessageService {
 
     @Override
     public void updateContent(UUID messageId, String content) {
+        Optional.ofNullable(content).orElseThrow(() -> new IllegalArgumentException("Content is null."));
+
        Message message = messageRepository.findMessageById(messageId)
                .orElseThrow(() -> new IllegalArgumentException("Message not found."));
 

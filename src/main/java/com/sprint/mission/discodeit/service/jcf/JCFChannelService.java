@@ -35,10 +35,13 @@ public class JCFChannelService implements ChannelService {
     }
 
     @Override
-    public Optional<Channel> findChannelById(UUID channelId) {
-        return data.stream()
+    public Channel findChannelById(UUID channelId) {
+        Channel findChannel = data.stream()
                 .filter(channel -> channel.getId() == channelId)
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+
+        return findChannel;
     }
 
     @Override

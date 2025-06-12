@@ -6,7 +6,6 @@ import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.MessageService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public class JCFMessageService implements MessageService {
@@ -34,10 +33,13 @@ public class JCFMessageService implements MessageService {
     }
 
     @Override
-    public Optional<Message> findMessageById(UUID messageId) {
-        return data.stream()
+    public Message findMessageById(UUID messageId) {
+        Message findMessage = data.stream()
                 .filter(message -> message.getId() == messageId)
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Message not found."));
+
+        return findMessage;
     }
 
     @Override
