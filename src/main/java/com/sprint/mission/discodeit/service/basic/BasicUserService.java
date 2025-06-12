@@ -18,30 +18,40 @@ public class BasicUserService implements UserService {
 
     @Override
     public void createUser(User user) {
+        Optional.ofNullable(user).orElseThrow(() -> new IllegalArgumentException("User is null."));
         userRepository.save(user);
     }
 
     @Override
-    public Optional<User> findUserById(UUID userId) {
-        return userRepository.findUserById(userId);
+    public User findUserById(UUID userId) {
+        User findUser = userRepository.findUserById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        return findUser;
     }
 
     @Override
-    public Optional<User> findDormantUserById(UUID userId) {
-        return userRepository.findUsers()
+    public User findDormantUserById(UUID userId) {
+        User findDormantUser = userRepository.findUsers()
                 .stream()
                 .filter(user -> user.getMemberStatus() == MemberStatus.DORMANT)
                 .filter(user -> user.getId().equals(userId))
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        return findDormantUser;
     }
 
     @Override
-    public Optional<User> findDeletedUserById(UUID userId) {
-        return userRepository.findUsers()
+    public User findDeletedUserById(UUID userId) {
+        User findDeletedUser = userRepository.findUsers()
                 .stream()
                 .filter(user -> user.getMemberStatus() == MemberStatus.DELETED)
                 .filter(user -> user.getId().equals(userId))
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        return findDeletedUser;
     }
 
     @Override
@@ -67,8 +77,9 @@ public class BasicUserService implements UserService {
 
     @Override
     public void updateUser(UUID userId, User updatedUser) {
-        User findUser = findUserById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+        Optional.ofNullable(updatedUser).orElseThrow(() -> new IllegalArgumentException("User is null."));
+
+        User findUser = findUserById(userId);
 
         userRepository.delete(findUser);
 

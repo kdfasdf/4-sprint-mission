@@ -31,27 +31,36 @@ public class JCFUserService implements UserService {
     }
 
     @Override
-    public Optional<User> findUserById(UUID userId) {
-        return data.stream()
+    public User findUserById(UUID userId) {
+        User findUser = data.stream()
                 .filter(user -> user.getId() == userId)
                 .filter(user -> user.getMemberStatus() == MemberStatus.ACTIVE)
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        return findUser;
     }
 
     @Override
-    public Optional<User> findDormantUserById(UUID userId) {
-        return data.stream()
+    public User findDormantUserById(UUID userId) {
+        User findDormantUser = data.stream()
                 .filter(user -> user.getId() == userId)
                 .filter(user -> user.getMemberStatus() == MemberStatus.DORMANT)
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        return findDormantUser;
     }
 
     @Override
-    public Optional<User> findDeletedUserById(UUID userId) {
-        return data.stream()
+    public User findDeletedUserById(UUID userId) {
+        User findDeletedUser = data.stream()
                 .filter(user -> user.getId() == userId)
                 .filter(user -> user.getMemberStatus() == MemberStatus.DELETED)
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        return findDeletedUser;
     }
 
     @Override

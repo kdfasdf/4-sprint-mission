@@ -37,27 +37,36 @@ public class FileUserService implements UserService {
 
 
     @Override
-    public Optional<User> findUserById(UUID id) {
-        return findUsers().stream()
+    public User findUserById(UUID id) {
+        User findUser = findUsers().stream()
                 .filter(user -> user.getId().equals(id))
                 .filter(user -> user.getMemberStatus() == MemberStatus.ACTIVE)
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        return findUser;
     }
 
     @Override
-    public Optional<User> findDormantUserById(UUID id) {
-        return findUsers().stream()
+    public User findDormantUserById(UUID id) {
+        User findDormantUser = findUsers().stream()
                 .filter(user -> user.getId().equals(id))
                 .filter(user -> user.getMemberStatus() == MemberStatus.DORMANT)
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        return findDormantUser;
     }
 
     @Override
-    public Optional<User> findDeletedUserById(UUID id) {
-        return findUsers().stream()
+    public User findDeletedUserById(UUID id) {
+        User findDeletedUser = findUsers().stream()
                 .filter(user -> user.getId().equals(id))
                 .filter(user -> user.getMemberStatus() == MemberStatus.DELETED)
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        return findDeletedUser;
     }
 
     @Override
@@ -81,8 +90,7 @@ public class FileUserService implements UserService {
 
     @Override
     public void updateUser(UUID userId, User updatedUser) {
-        User findUser = findUserById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+        User findUser = findUserById(userId);
 
         Optional.ofNullable(updatedUser.getUserName()).ifPresent(findUser::updateUserName);
         Optional.ofNullable(updatedUser.getEmail()).ifPresent(findUser::updateEmail);

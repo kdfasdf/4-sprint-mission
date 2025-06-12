@@ -8,7 +8,6 @@ import com.sprint.mission.discodeit.util.FileUtils;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public class FileMessageService implements MessageService {
@@ -43,11 +42,14 @@ public class FileMessageService implements MessageService {
     }
 
     @Override
-    public Optional<Message> findMessageById(UUID messageId) {
-        return findAllMessages()
+    public Message findMessageById(UUID messageId) {
+        Message findMessage = findAllMessages()
                 .stream()
                 .filter(message -> message.getId().equals(messageId))
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Message not found."));
+
+        return findMessage;
     }
 
     @Override
@@ -60,9 +62,10 @@ public class FileMessageService implements MessageService {
 
     @Override
     public void updateContent(UUID messageId, String content) {
-        Message findMessage = findMessageById(messageId)
-                .orElseThrow(() -> new IllegalArgumentException("Message not found."));
+        Message findMessage = findMessageById(messageId);
+
         findMessage.editContent(content);
+
         Path filePath = directory.resolve(messageId.toString().concat(".ser"));
         FileUtils.save(filePath, findMessage);
     }

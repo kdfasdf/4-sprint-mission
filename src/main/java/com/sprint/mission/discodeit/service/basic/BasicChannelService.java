@@ -26,16 +26,23 @@ public class BasicChannelService implements ChannelService {
 
     @Override
     public void createChannel(Channel channel, User user) {
+        Optional.ofNullable(user).orElseThrow(() -> new IllegalArgumentException("User is null."));
+        Optional.ofNullable(channel).orElseThrow(() -> new IllegalArgumentException("Channel is null."));
+
         if(user.getMemberStatus() == MemberStatus.ACTIVE) {
             user.addChannel(channel);
             channelRepository.save(channel);
             userRepository.save(user);
         }
+
     }
 
     @Override
-    public Optional<Channel> findChannelById(UUID channelId) {
-        return channelRepository.findChannelById(channelId);
+    public Channel findChannelById(UUID channelId) {
+        Channel findChannel = channelRepository.findChannelById(channelId)
+                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+
+        return findChannel;
     }
 
     @Override
@@ -45,8 +52,7 @@ public class BasicChannelService implements ChannelService {
 
     @Override
     public void updateChannel(UUID channelId, Channel updatedChannel) {
-        Channel findChannel = findChannelById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+        Channel findChannel = findChannelById(channelId);
 
         channelRepository.delete(findChannel);
 
@@ -63,8 +69,9 @@ public class BasicChannelService implements ChannelService {
 
     @Override
     public void addUser(UUID channelId, User user) {
-        Channel findChannel = findChannelById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+        Optional.ofNullable(user).orElseThrow(() -> new IllegalArgumentException("User is null."));
+
+        Channel findChannel = findChannelById(channelId);
 
         channelRepository.delete(findChannel);
 
@@ -76,8 +83,7 @@ public class BasicChannelService implements ChannelService {
 
     @Override
     public void removeUser(UUID channelId, User user) {
-        Channel findChannel = findChannelById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+        Channel findChannel = findChannelById(channelId);
 
         channelRepository.delete(findChannel);
 
@@ -88,26 +94,30 @@ public class BasicChannelService implements ChannelService {
 
     @Override
     public void addMessage(UUID channelId, User user, Message message) {
-        Channel findChannel = findChannelById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+        Optional.ofNullable(message).orElseThrow(() -> new IllegalArgumentException("Message is null."));
+
+        Channel findChannel = findChannelById(channelId);
 
         channelRepository.delete(findChannel);
 
         findChannel.addMessage(user, message);
 
         channelRepository.save(findChannel);
+        messageRepository.save(message);
+        userRepository.save(user);
     }
 
     @Override
     public void removeMessage(UUID channelId, User user, Message message) {
-        Channel findChannel = findChannelById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+        Channel findChannel = findChannelById(channelId);
 
         channelRepository.delete(findChannel);
 
         findChannel.removeMessage(user, message);
 
         channelRepository.save(findChannel);
+        messageRepository.save(message);
+        userRepository.save(user);
     }
 
 }
