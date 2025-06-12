@@ -96,8 +96,8 @@ public class FileUserService implements UserService {
     }
 
     @Override
-    public void deleteUser(UUID userId) {
-        Path filePath = directory.resolve(userId.toString().concat(".ser"));
+    public void deleteUser(User user) {
+        Path filePath = directory.resolve(user.getId().toString().concat(".ser"));
         FileUtils.remove(filePath);
     }
 }

@@ -3,9 +3,18 @@ package com.sprint.mission.discodeit;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.repository.file.FileChannelRepository;
+import com.sprint.mission.discodeit.repository.file.FileMessageRepository;
+import com.sprint.mission.discodeit.repository.file.FileUserRepository;
+import com.sprint.mission.discodeit.repository.jcf.JCFChannelRepository;
+import com.sprint.mission.discodeit.repository.jcf.JCFMessageRepository;
+import com.sprint.mission.discodeit.repository.jcf.JCFUserRepository;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.service.UserService;
+import com.sprint.mission.discodeit.service.basic.BasicChannelService;
+import com.sprint.mission.discodeit.service.basic.BasicMessageService;
+import com.sprint.mission.discodeit.service.basic.BasicUserService;
 import com.sprint.mission.discodeit.service.factory.ServiceFactory;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,13 +26,76 @@ public class JavaApplication {
     private static final Logger log = LoggerFactory.getLogger(JavaApplication.class);
     private static final ServiceFactory serviceFactory = ServiceFactory.getInstance();
 
-    public static void main(String[] args) {
-        // User
-        UserService userService = serviceFactory.createFileUserService();
-        User firstUser = new User("firstUser", "firstUser", "firstUser", "firstUser");
-        User secondUser = new User("secondUser", "secondUser", "secondUser", "secondUser");
-        User updatedSecondUser = new User("updatedSecondUser", "updatedSecondUser", "updatedSecondUser", "updatedSecondUser");
+    private static ChannelService channelService;
+    private static UserService userService;
+    private static MessageService messageService;
 
+    private static User firstUser;
+    private static User secondUser;
+    private static User updatedSecondUser;
+
+    private static Channel firstChannel;
+    private static Message firstMessage;
+    private static Message secondMessage;
+    private static User thirdUser;
+    private static Channel secondChannel;
+    private static Channel descriptionUpdatedChannel;
+    private static Channel nameUpdatedChannel;
+    private static Channel updatedChannel ;
+
+    public static void main(String[] args) {
+
+        log.info("\n===========FileService Test===========\n");
+        setUpFileService();
+        testCycle();
+
+        log.info("\n===========JCFService Test===========\n");
+        setUpJCFService();
+        testCycle();
+    }
+
+    private static void setUpTestDomain() {
+        firstUser = new User("firstUser", "firstUser", "firstUser", "firstUser");
+        secondUser = new User("secondUser", "secondUser", "secondUser", "secondUser");
+        updatedSecondUser = new User("updatedSecondUser", "updatedSecondUser", "updatedSecondUser",
+                "updatedSecondUser");
+        firstChannel = Channel.of("firstChannel", "firstChannel", firstUser);
+        thirdUser = new User("thirdUser", "thirdUser", "thirdUser", "thirdUser");
+        secondChannel = Channel.of("secondChannel", "secondChannel", firstUser);
+        descriptionUpdatedChannel = Channel.of(null, "updateDescription", firstUser);
+        nameUpdatedChannel = Channel.of("updateName", null, firstUser);
+        updatedChannel = Channel.of("updatedBoth", "updateBoth", firstUser);
+        firstMessage = new Message("firstMessage", firstChannel.getId(), firstUser.getId());
+        secondMessage = new Message("secondMessage", firstChannel.getId(), firstUser.getId());
+    }
+
+    private static void setUpJCFService() {
+        channelService = new BasicChannelService(
+                JCFChannelRepository.getInstance(),
+                JCFUserRepository.getInstance(),
+                JCFMessageRepository.getInstance()
+        );
+
+        userService = new BasicUserService(JCFUserRepository.getInstance());
+
+        messageService = new BasicMessageService(JCFMessageRepository.getInstance());
+    }
+
+    private static void setUpFileService() {
+        channelService = new BasicChannelService(
+                FileChannelRepository.getInstance(),
+                FileUserRepository.getInstance(),
+                FileMessageRepository.getInstance()
+        );
+
+        userService = new BasicUserService(FileUserRepository.getInstance());
+
+        messageService = new BasicMessageService(FileMessageRepository.getInstance());
+    }
+
+    private static void testCycle() {
+        setUpTestDomain();
+        //User
         // 단순 조회
         testFindUser(firstUser, userService);
 
@@ -36,12 +108,7 @@ public class JavaApplication {
         // 삭제
         testDeleteUser(userService, secondUser);
 
-        // Channel
-        ChannelService channelService = serviceFactory.createFileChannelService();
-        Channel firstChannel = Channel.of("firstChannel", "firstChannel", firstUser);
-        User thirdUser = new User("thirdUser", "thirdUser", "thirdUser", "thirdUser");
-        Channel secondChannel = Channel.of("secondChannel","secondChannel", firstUser);
-
+        //Channel
         // 단순 조회
         testFindChannel(channelService, firstChannel, firstUser);
 
@@ -51,26 +118,20 @@ public class JavaApplication {
         // 다건 조회
         testFindChannels(channelService, secondChannel, firstUser);
 
+
         // 수정 (이름만 수정)
-        Channel updatedChannel = Channel.of("updateName",null, firstUser);
-        testUpdateChannelName(channelService, secondChannel, updatedChannel);
+        testUpdateChannelName(channelService, secondChannel, nameUpdatedChannel);
 
         // 수정 (설명만 수정)
-        updatedChannel = Channel.of(null, "updateDescription", firstUser);
-        testUpdateChannelDescription(channelService, secondChannel, updatedChannel);
+        testUpdateChannelDescription(channelService, secondChannel, descriptionUpdatedChannel);
 
         // 수정 (2개 동시 수정)
-        updatedChannel = Channel.of("updatedBoth", "updateBoth", firstUser);
         testUpdateChannelNameAndDescription(channelService, secondChannel, updatedChannel);
 
         // 삭제
         testDeleteChannel(channelService, secondChannel);
 
         //Message
-        MessageService messageService = serviceFactory.createFileMessageService();
-        Message firstMessage = new Message("firstMessage", firstChannel.getId(), firstUser.getId());
-        Message secondMessage = new Message("secondMessage", firstChannel.getId(), firstUser.getId());
-
         // 단순 조회
         testFindMessage(messageService, firstMessage, firstUser);
 
@@ -82,7 +143,6 @@ public class JavaApplication {
 
         // 삭제
         testDeleteMessage(messageService, secondMessage, firstChannel);
-
     }
 
     private static void testFindUser(User user, UserService userService) {
@@ -103,7 +163,7 @@ public class JavaApplication {
     }
 
     private static void testDeleteUser(UserService userService, User secondUser) {
-        userService.deleteUser(secondUser.getId());
+        userService.deleteUser(secondUser);
         log.info("\n삭제\n{}\n", userService.findUsers());
     }
 
@@ -127,7 +187,8 @@ public class JavaApplication {
         log.info("\n채널 참가 후 유저\n{}\n", userService.findUserById(user.getId()).get());
     }
 
-    private static void testUpdateChannelDescription(ChannelService channelService, Channel channel, Channel updatedChannel) {
+    private static void testUpdateChannelDescription(ChannelService channelService, Channel channel,
+                                                     Channel updatedChannel) {
         channelService.updateChannel(channel.getId(), updatedChannel);
         log.info("\n수정 - 설명필드\n{}\n", channelService.findChannelById(channel.getId()).get());
     }
@@ -137,13 +198,14 @@ public class JavaApplication {
         log.info("\n수정 - 이름필드\n{}\n", channelService.findChannelById(channel.getId()).get());
     }
 
-    private static void testUpdateChannelNameAndDescription(ChannelService channelService, Channel channel, Channel updatedChannel) {
+    private static void testUpdateChannelNameAndDescription(ChannelService channelService, Channel channel,
+                                                            Channel updatedChannel) {
         channelService.updateChannel(channel.getId(), updatedChannel);
         log.info("\n수정\n{}\n", channelService.findChannelById(channel.getId()).get());
     }
 
     private static void testDeleteChannel(ChannelService channelService, Channel channel) {
-        channelService.deleteChannel(channel.getId());
+        channelService.deleteChannel(channel);
         log.info("\n삭제\n{}\n", channelService.findChannels());
     }
 
