@@ -68,8 +68,8 @@ public class FileChannelService implements ChannelService {
     }
 
     @Override
-    public void deleteChannel(UUID channelId) {
-        Path filePath = directory.resolve(channelId.toString().concat(".ser"));
+    public void deleteChannel(Channel channel) {
+        Path filePath = directory.resolve(channel.getId().toString().concat(".ser"));
         FileUtils.remove(filePath);
     }
 

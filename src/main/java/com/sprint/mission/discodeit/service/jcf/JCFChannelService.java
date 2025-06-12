@@ -101,9 +101,9 @@ public class JCFChannelService implements ChannelService {
     }
 
     @Override
-    public void deleteChannel(UUID channelId) {
+    public void deleteChannel(Channel deleteChannel) {
         data.stream()
-                .filter(channel -> channel.getId() == channelId)
+                .filter(channel -> channel.getId() == deleteChannel.getId())
                 .findFirst()
                 .ifPresent(data::remove);
     }

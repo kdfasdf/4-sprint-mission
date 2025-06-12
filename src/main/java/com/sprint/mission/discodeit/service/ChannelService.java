@@ -20,7 +20,7 @@ public interface ChannelService {
     void updateChannel(UUID channelId, Channel updatedChannel);
 
     // 삭제
-    void deleteChannel(UUID channelId);
+    void deleteChannel(Channel channel);
 
     // 유저
     void addUser(UUID channelId, User user);

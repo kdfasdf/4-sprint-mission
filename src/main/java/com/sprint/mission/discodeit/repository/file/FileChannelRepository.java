@@ -23,6 +23,7 @@ public class FileChannelRepository implements ChannelRepository {
 
     private FileChannelRepository() {
         directory = Paths.get(System.getProperty("user.dir"), "data", "channel");
+        FileUtils.initDirectory(directory);
     }
 
     @Override

@@ -13,7 +13,7 @@ public class FileMessageRepository implements MessageRepository {
     private static Path directory;
     private static FileMessageRepository fileMessageRepository;
 
-    public static synchronized FileMessageRepository getInstance(Path directory) {
+    public static synchronized FileMessageRepository getInstance() {
         if(fileMessageRepository == null) {
             fileMessageRepository = new FileMessageRepository();
         }
@@ -22,6 +22,7 @@ public class FileMessageRepository implements MessageRepository {
 
     private FileMessageRepository() {
         directory = Path.of(System.getProperty("user.dir"), "data", "message");
+        FileUtils.initDirectory(directory);
     }
 
     @Override

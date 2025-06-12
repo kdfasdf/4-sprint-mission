@@ -24,6 +24,7 @@ public class FileUserRepository implements UserRepository {
 
     private FileUserRepository () {
         directory = Paths.get(System.getProperty("user.dir"), "data", "user");
+        FileUtils.initDirectory(directory);
     }
 
     @Override

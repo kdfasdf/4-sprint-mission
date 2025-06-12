@@ -26,6 +26,6 @@ public interface UserService {
     //수정
     void updateUser(UUID userId, User updatedUser);
     //삭제
-    void deleteUser(UUID userId);
+    void deleteUser(User user);
 
 }
