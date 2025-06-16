@@ -1,39 +1,45 @@
-package com.sprint.mission.discodeit.service.jcf;
+package com.sprint.mission.discodeit.service.file;
 
 import com.sprint.mission.discodeit.entity.MemberStatus;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
-import java.util.ArrayList;
+import com.sprint.mission.discodeit.util.FileUtils;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class JCFUserService implements UserService {
+public class FileUserService implements UserService {
 
-    private final List<User> data;
+    private static FileUserService fileUserService;
+    private static final Path directory;
 
-    private static JCFUserService jcfUserService;
+    static {
+        directory = Paths.get(System.getProperty("user.dir"), "data", "user");
+        FileUtils.initDirectory(directory);
+    }
 
-    public static synchronized JCFUserService getInstance() {
-        if (jcfUserService == null) {
-            jcfUserService = new JCFUserService();
+    public static synchronized FileUserService getInstance() {
+        if(fileUserService == null) {
+            fileUserService = new FileUserService();
         }
-        return jcfUserService;
+        return fileUserService;
     }
 
-    private JCFUserService() {
-        this.data = new ArrayList<>();
-    }
+    private FileUserService() {}
 
     @Override
     public void createUser(User user) {
-        data.add(user);
+        Path filePath = directory.resolve(user.getId().toString().concat(".ser"));
+        FileUtils.save(filePath, user);
     }
 
+
     @Override
-    public User findUserById(UUID userId) {
-        User findUser = data.stream()
-                .filter(user -> user.getId() == userId)
+    public User findUserById(UUID id) {
+        User findUser = findUsers().stream()
+                .filter(user -> user.getId().equals(id))
                 .filter(user -> user.getMemberStatus() == MemberStatus.ACTIVE)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
@@ -42,9 +48,9 @@ public class JCFUserService implements UserService {
     }
 
     @Override
-    public User findDormantUserById(UUID userId) {
-        User findDormantUser = data.stream()
-                .filter(user -> user.getId() == userId)
+    public User findDormantUserById(UUID id) {
+        User findDormantUser = findUsers().stream()
+                .filter(user -> user.getId().equals(id))
                 .filter(user -> user.getMemberStatus() == MemberStatus.DORMANT)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
@@ -53,9 +59,9 @@ public class JCFUserService implements UserService {
     }
 
     @Override
-    public User findDeletedUserById(UUID userId) {
-        User findDeletedUser = data.stream()
-                .filter(user -> user.getId() == userId)
+    public User findDeletedUserById(UUID id) {
+        User findDeletedUser = findUsers().stream()
+                .filter(user -> user.getId().equals(id))
                 .filter(user -> user.getMemberStatus() == MemberStatus.DELETED)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
@@ -65,31 +71,26 @@ public class JCFUserService implements UserService {
 
     @Override
     public List<User> findUsers() {
-        return data.stream()
-                .filter(user -> user.getMemberStatus() == MemberStatus.ACTIVE)
-                .toList();
+        return FileUtils.load(directory);
     }
 
     @Override
     public List<User> findDormantUsers() {
-        return data.stream()
+        return findUsers().stream()
                 .filter(user -> user.getMemberStatus() == MemberStatus.DORMANT)
                 .toList();
     }
 
     @Override
     public List<User> findDeletedUsers() {
-        return data.stream()
+        return findUsers().stream()
                 .filter(user -> user.getMemberStatus() == MemberStatus.DELETED)
                 .toList();
     }
 
     @Override
     public void updateUser(UUID userId, User updatedUser) {
-        User findUser = data.stream()
-                .filter(user -> user.getId() == userId)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+        User findUser = findUserById(userId);
 
         Optional.ofNullable(updatedUser.getUserName()).ifPresent(findUser::updateUserName);
         Optional.ofNullable(updatedUser.getEmail()).ifPresent(findUser::updateEmail);
@@ -97,14 +98,14 @@ public class JCFUserService implements UserService {
         Optional.ofNullable(updatedUser.getPassword()).ifPresent(findUser::updatePassword);
         Optional.ofNullable(updatedUser.getMemberStatus()).ifPresent(findUser::editMemberStatus);
 
+        Path filePath = directory.resolve(userId.toString().concat(".ser"));
+        FileUtils.save(filePath, findUser);
+
     }
 
     @Override
-    public void deleteUser(User deleteUser) {
-        data.stream()
-                .filter(user -> user.getId() == deleteUser.getId())
-                .findFirst()
-                .ifPresent(data::remove);
+    public void deleteUser(User user) {
+        Path filePath = directory.resolve(user.getId().toString().concat(".ser"));
+        FileUtils.remove(filePath);
     }
-
 }

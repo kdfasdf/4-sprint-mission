@@ -1,41 +1,30 @@
-package com.sprint.mission.discodeit.service.jcf;
+package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.entity.MemberStatus;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.UserService;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class JCFUserService implements UserService {
+public class BasicUserService implements UserService {
 
-    private final List<User> data;
+    private UserRepository userRepository;
 
-    private static JCFUserService jcfUserService;
-
-    public static synchronized JCFUserService getInstance() {
-        if (jcfUserService == null) {
-            jcfUserService = new JCFUserService();
-        }
-        return jcfUserService;
-    }
-
-    private JCFUserService() {
-        this.data = new ArrayList<>();
+    public BasicUserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public void createUser(User user) {
-        data.add(user);
+        Optional.ofNullable(user).orElseThrow(() -> new IllegalArgumentException("User is null."));
+        userRepository.save(user);
     }
 
     @Override
     public User findUserById(UUID userId) {
-        User findUser = data.stream()
-                .filter(user -> user.getId() == userId)
-                .filter(user -> user.getMemberStatus() == MemberStatus.ACTIVE)
-                .findFirst()
+        User findUser = userRepository.findUserById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
         return findUser;
@@ -43,9 +32,10 @@ public class JCFUserService implements UserService {
 
     @Override
     public User findDormantUserById(UUID userId) {
-        User findDormantUser = data.stream()
-                .filter(user -> user.getId() == userId)
+        User findDormantUser = userRepository.findUsers()
+                .stream()
                 .filter(user -> user.getMemberStatus() == MemberStatus.DORMANT)
+                .filter(user -> user.getId().equals(userId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
@@ -54,9 +44,10 @@ public class JCFUserService implements UserService {
 
     @Override
     public User findDeletedUserById(UUID userId) {
-        User findDeletedUser = data.stream()
-                .filter(user -> user.getId() == userId)
+        User findDeletedUser = userRepository.findUsers()
+                .stream()
                 .filter(user -> user.getMemberStatus() == MemberStatus.DELETED)
+                .filter(user -> user.getId().equals(userId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
@@ -65,31 +56,32 @@ public class JCFUserService implements UserService {
 
     @Override
     public List<User> findUsers() {
-        return data.stream()
-                .filter(user -> user.getMemberStatus() == MemberStatus.ACTIVE)
-                .toList();
+        return userRepository.findUsers();
     }
 
     @Override
     public List<User> findDormantUsers() {
-        return data.stream()
+        return userRepository.findUsers()
+                .stream()
                 .filter(user -> user.getMemberStatus() == MemberStatus.DORMANT)
                 .toList();
     }
 
     @Override
     public List<User> findDeletedUsers() {
-        return data.stream()
+        return userRepository.findUsers()
+                .stream()
                 .filter(user -> user.getMemberStatus() == MemberStatus.DELETED)
                 .toList();
     }
 
     @Override
     public void updateUser(UUID userId, User updatedUser) {
-        User findUser = data.stream()
-                .filter(user -> user.getId() == userId)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+        Optional.ofNullable(updatedUser).orElseThrow(() -> new IllegalArgumentException("User is null."));
+
+        User findUser = findUserById(userId);
+
+        userRepository.delete(findUser);
 
         Optional.ofNullable(updatedUser.getUserName()).ifPresent(findUser::updateUserName);
         Optional.ofNullable(updatedUser.getEmail()).ifPresent(findUser::updateEmail);
@@ -97,14 +89,12 @@ public class JCFUserService implements UserService {
         Optional.ofNullable(updatedUser.getPassword()).ifPresent(findUser::updatePassword);
         Optional.ofNullable(updatedUser.getMemberStatus()).ifPresent(findUser::editMemberStatus);
 
+        userRepository.save(findUser);
     }
 
     @Override
-    public void deleteUser(User deleteUser) {
-        data.stream()
-                .filter(user -> user.getId() == deleteUser.getId())
-                .findFirst()
-                .ifPresent(data::remove);
+    public void deleteUser(User user) {
+        userRepository.delete(user);
     }
 
 }
