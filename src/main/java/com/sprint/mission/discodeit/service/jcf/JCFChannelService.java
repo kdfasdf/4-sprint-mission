@@ -35,10 +35,13 @@ public class JCFChannelService implements ChannelService {
     }
 
     @Override
-    public Optional<Channel> findChannelById(UUID channelId) {
-        return data.stream()
+    public Channel findChannelById(UUID channelId) {
+        Channel findChannel = data.stream()
                 .filter(channel -> channel.getId() == channelId)
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+
+        return findChannel;
     }
 
     @Override
@@ -55,8 +58,8 @@ public class JCFChannelService implements ChannelService {
 
         findChannel.setUpdatedAt();
 
-        Optional.ofNullable(updatedChannel.getChannelName()).ifPresent(findChannel::setChannelName);
-        Optional.ofNullable(updatedChannel.getDescription()).ifPresent(findChannel::setDescription);
+        Optional.ofNullable(updatedChannel.getChannelName()).ifPresent(findChannel::editChannelName);
+        Optional.ofNullable(updatedChannel.getDescription()).ifPresent(findChannel::editDescription);
 
     }
 
@@ -101,9 +104,9 @@ public class JCFChannelService implements ChannelService {
     }
 
     @Override
-    public void deleteChannel(UUID channelId) {
+    public void deleteChannel(Channel deleteChannel) {
         data.stream()
-                .filter(channel -> channel.getId() == channelId)
+                .filter(channel -> channel.getId() == deleteChannel.getId())
                 .findFirst()
                 .ifPresent(data::remove);
     }

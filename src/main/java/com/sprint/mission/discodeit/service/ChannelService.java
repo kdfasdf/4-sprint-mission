@@ -4,7 +4,6 @@ import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface ChannelService {
@@ -13,14 +12,14 @@ public interface ChannelService {
     void createChannel(Channel channel, User user);
 
     // 조회
-    Optional<Channel> findChannelById(UUID channelId);
+    Channel findChannelById(UUID channelId);
     List<Channel> findChannels();
 
     // 수정
     void updateChannel(UUID channelId, Channel updatedChannel);
 
     // 삭제
-    void deleteChannel(UUID channelId);
+    void deleteChannel(Channel channel);
 
     // 유저
     void addUser(UUID channelId, User user);
