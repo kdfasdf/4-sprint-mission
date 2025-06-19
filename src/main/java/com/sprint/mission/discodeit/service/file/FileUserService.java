@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.service.file;
 
-import com.sprint.mission.discodeit.entity.MemberStatus;
+import com.sprint.mission.discodeit.entity.ActiveStatus;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.util.FileUtils;
@@ -40,7 +40,7 @@ public class FileUserService implements UserService {
     public User findUserById(UUID id) {
         User findUser = findUsers().stream()
                 .filter(user -> user.getId().equals(id))
-                .filter(user -> user.getMemberStatus() == MemberStatus.ACTIVE)
+                .filter(user -> user.getActiveStatus() == ActiveStatus.ACTIVE)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
@@ -51,7 +51,7 @@ public class FileUserService implements UserService {
     public User findDormantUserById(UUID id) {
         User findDormantUser = findUsers().stream()
                 .filter(user -> user.getId().equals(id))
-                .filter(user -> user.getMemberStatus() == MemberStatus.DORMANT)
+                .filter(user -> user.getActiveStatus() == ActiveStatus.DORMANT)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
@@ -62,7 +62,7 @@ public class FileUserService implements UserService {
     public User findDeletedUserById(UUID id) {
         User findDeletedUser = findUsers().stream()
                 .filter(user -> user.getId().equals(id))
-                .filter(user -> user.getMemberStatus() == MemberStatus.DELETED)
+                .filter(user -> user.getActiveStatus() == ActiveStatus.DELETED)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
@@ -77,14 +77,14 @@ public class FileUserService implements UserService {
     @Override
     public List<User> findDormantUsers() {
         return findUsers().stream()
-                .filter(user -> user.getMemberStatus() == MemberStatus.DORMANT)
+                .filter(user -> user.getActiveStatus() == ActiveStatus.DORMANT)
                 .toList();
     }
 
     @Override
     public List<User> findDeletedUsers() {
         return findUsers().stream()
-                .filter(user -> user.getMemberStatus() == MemberStatus.DELETED)
+                .filter(user -> user.getActiveStatus() == ActiveStatus.DELETED)
                 .toList();
     }
 
@@ -96,7 +96,7 @@ public class FileUserService implements UserService {
         Optional.ofNullable(updatedUser.getEmail()).ifPresent(findUser::updateEmail);
         Optional.ofNullable(updatedUser.getPhoneNumber()).ifPresent(findUser::updatePhoneNumber);
         Optional.ofNullable(updatedUser.getPassword()).ifPresent(findUser::updatePassword);
-        Optional.ofNullable(updatedUser.getMemberStatus()).ifPresent(findUser::editMemberStatus);
+        Optional.ofNullable(updatedUser.getActiveStatus()).ifPresent(findUser::editMemberStatus);
 
         Path filePath = directory.resolve(userId.toString().concat(".ser"));
         FileUtils.save(filePath, findUser);

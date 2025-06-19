@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.repository.file;
 
-import com.sprint.mission.discodeit.entity.MemberStatus;
+import com.sprint.mission.discodeit.entity.ActiveStatus;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.util.FileUtils;
@@ -13,16 +13,8 @@ import java.util.UUID;
 public class FileUserRepository implements UserRepository {
 
     private static Path directory;
-    private static FileUserRepository fileUserRepository;
 
-    public static FileUserRepository getInstance() {
-        if(fileUserRepository == null) {
-            fileUserRepository = new FileUserRepository();
-        }
-        return fileUserRepository;
-    }
-
-    private FileUserRepository () {
+    public FileUserRepository () {
         directory = Paths.get(System.getProperty("user.dir"), "data", "user");
         FileUtils.initDirectory(directory);
     }
@@ -37,7 +29,7 @@ public class FileUserRepository implements UserRepository {
     public Optional<User> findUserById(UUID userId) {
         return findUsers().stream()
                 .filter(user -> user.getId().equals(userId))
-                .filter(user -> user.getMemberStatus() == MemberStatus.ACTIVE)
+                .filter(user -> user.getActiveStatus() == ActiveStatus.ACTIVE)
                 .findFirst();
     }
 

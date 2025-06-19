@@ -7,14 +7,12 @@ import com.sprint.mission.discodeit.service.MessageService;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class BasicMessageService implements MessageService {
 
     private final MessageRepository messageRepository;
-
-    public BasicMessageService(MessageRepository messageRepository) {
-        this.messageRepository = messageRepository;
-    }
 
     @Override
     public void createMessage(Message message, User user) {

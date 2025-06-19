@@ -10,16 +10,8 @@ import java.util.UUID;
 public class JCFMessageRepository implements MessageRepository {
 
     private final List<Message> data;
-    private static JCFMessageRepository jcfMessageRepository;
 
-    public static synchronized JCFMessageRepository getInstance() {
-        if(jcfMessageRepository == null) {
-            jcfMessageRepository = new JCFMessageRepository();
-        }
-        return jcfMessageRepository;
-    }
-
-    private JCFMessageRepository() {
+    public JCFMessageRepository() {
         this.data = new ArrayList<>();
     }
 

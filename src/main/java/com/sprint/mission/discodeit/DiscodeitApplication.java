@@ -18,13 +18,13 @@ import com.sprint.mission.discodeit.service.basic.BasicUserService;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 @Slf4j
-public class JavaApplication {
-
-    private static final Logger log = LoggerFactory.getLogger(JavaApplication.class);
+@SpringBootApplication
+public class DiscodeitApplication {
 
     private static ChannelService channelService;
     private static UserService userService;
@@ -43,7 +43,10 @@ public class JavaApplication {
     private static Channel nameUpdatedChannel;
     private static Channel updatedChannel ;
 
+    private static ConfigurableApplicationContext context;
+
     public static void main(String[] args) {
+        context = SpringApplication.run(DiscodeitApplication.class, args);
 
         log.info("\n===========FileService Test===========\n");
         setUpFileService();
@@ -70,27 +73,19 @@ public class JavaApplication {
     }
 
     private static void setUpJCFService() {
-        channelService = new BasicChannelService(
-                new JCFChannelRepository(),
-                new JCFUserRepository(),
-                new JCFMessageRepository()
-        );
+        channelService = context.getBean("basicChannelJCFService",ChannelService.class);
 
-        userService = new BasicUserService(new JCFUserRepository());
+        userService = context.getBean("basicUserJCFService", UserService.class);
 
-        messageService = new BasicMessageService(new JCFMessageRepository());
+        messageService = context.getBean("basicMessageJCFService", MessageService.class);
     }
 
     private static void setUpFileService() {
-        channelService = new BasicChannelService(
-                new FileChannelRepository(),
-                new FileUserRepository(),
-                new FileMessageRepository()
-        );
+        channelService = context.getBean("basicChannelFileService", ChannelService.class);
 
-        userService = new BasicUserService(new FileUserRepository());
+        userService = context.getBean("basicUserFileService", UserService.class);
 
-        messageService = new BasicMessageService(new FileMessageRepository());
+        messageService = context.getBean("basicMessageFileService", MessageService.class);
     }
 
     private static void testCycle() {
@@ -237,6 +232,5 @@ public class JavaApplication {
                 .map(T::toString)
                 .collect(Collectors.joining("\n"));
     }
-
 
 }

@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.service.jcf;
 
-import com.sprint.mission.discodeit.entity.MemberStatus;
+import com.sprint.mission.discodeit.entity.ActiveStatus;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.MessageService;
@@ -27,7 +27,7 @@ public class JCFMessageService implements MessageService {
 
     @Override
     public void createMessage(Message message, User user) {
-        if(user.getMemberStatus() == MemberStatus.ACTIVE) {
+        if(user.getActiveStatus() == ActiveStatus.ACTIVE) {
             data.add(message);
         }
     }
