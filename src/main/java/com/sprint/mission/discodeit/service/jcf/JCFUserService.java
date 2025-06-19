@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.service.jcf;
 
-import com.sprint.mission.discodeit.entity.MemberStatus;
+import com.sprint.mission.discodeit.entity.ActiveStatus;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class JCFUserService implements UserService {
     public User findUserById(UUID userId) {
         User findUser = data.stream()
                 .filter(user -> user.getId() == userId)
-                .filter(user -> user.getMemberStatus() == MemberStatus.ACTIVE)
+                .filter(user -> user.getActiveStatus() == ActiveStatus.ACTIVE)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
@@ -45,7 +45,7 @@ public class JCFUserService implements UserService {
     public User findDormantUserById(UUID userId) {
         User findDormantUser = data.stream()
                 .filter(user -> user.getId() == userId)
-                .filter(user -> user.getMemberStatus() == MemberStatus.DORMANT)
+                .filter(user -> user.getActiveStatus() == ActiveStatus.DORMANT)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
@@ -56,7 +56,7 @@ public class JCFUserService implements UserService {
     public User findDeletedUserById(UUID userId) {
         User findDeletedUser = data.stream()
                 .filter(user -> user.getId() == userId)
-                .filter(user -> user.getMemberStatus() == MemberStatus.DELETED)
+                .filter(user -> user.getActiveStatus() == ActiveStatus.DELETED)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
@@ -66,21 +66,21 @@ public class JCFUserService implements UserService {
     @Override
     public List<User> findUsers() {
         return data.stream()
-                .filter(user -> user.getMemberStatus() == MemberStatus.ACTIVE)
+                .filter(user -> user.getActiveStatus() == ActiveStatus.ACTIVE)
                 .toList();
     }
 
     @Override
     public List<User> findDormantUsers() {
         return data.stream()
-                .filter(user -> user.getMemberStatus() == MemberStatus.DORMANT)
+                .filter(user -> user.getActiveStatus() == ActiveStatus.DORMANT)
                 .toList();
     }
 
     @Override
     public List<User> findDeletedUsers() {
         return data.stream()
-                .filter(user -> user.getMemberStatus() == MemberStatus.DELETED)
+                .filter(user -> user.getActiveStatus() == ActiveStatus.DELETED)
                 .toList();
     }
 
@@ -95,7 +95,7 @@ public class JCFUserService implements UserService {
         Optional.ofNullable(updatedUser.getEmail()).ifPresent(findUser::updateEmail);
         Optional.ofNullable(updatedUser.getPhoneNumber()).ifPresent(findUser::updatePhoneNumber);
         Optional.ofNullable(updatedUser.getPassword()).ifPresent(findUser::updatePassword);
-        Optional.ofNullable(updatedUser.getMemberStatus()).ifPresent(findUser::editMemberStatus);
+        Optional.ofNullable(updatedUser.getActiveStatus()).ifPresent(findUser::editMemberStatus);
 
     }
 

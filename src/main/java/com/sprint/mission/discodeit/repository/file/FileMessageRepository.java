@@ -11,16 +11,8 @@ import java.util.UUID;
 public class FileMessageRepository implements MessageRepository {
 
     private static Path directory;
-    private static FileMessageRepository fileMessageRepository;
 
-    public static synchronized FileMessageRepository getInstance() {
-        if(fileMessageRepository == null) {
-            fileMessageRepository = new FileMessageRepository();
-        }
-        return fileMessageRepository;
-    }
-
-    private FileMessageRepository() {
+    public FileMessageRepository() {
         directory = Path.of(System.getProperty("user.dir"), "data", "message");
         FileUtils.initDirectory(directory);
     }

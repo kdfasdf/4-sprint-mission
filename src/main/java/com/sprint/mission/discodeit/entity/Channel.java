@@ -4,7 +4,9 @@ import com.sprint.mission.discodeit.util.DataExistenceChecker;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import lombok.Getter;
 
+@Getter
 public class Channel extends BaseEntity {
 
     private final List<Message> messages;
@@ -67,30 +69,6 @@ public class Channel extends BaseEntity {
 
     public List<String> getChannelUsers() {
         return users.stream().map(User::getUserName).toList();
-    }
-
-    public UUID getChannelId() {
-        return this.id;
-    }
-
-    public Long getCreatedAt() {
-        return this.createdAt;
-    }
-
-    public String getChannelName() {
-        return channelName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public List<Message> getMessages() {
-        return messages;
-    }
-
-    public List<User> getUsers() {
-        return users;
     }
 
     public void editChannelName(String channelName) {

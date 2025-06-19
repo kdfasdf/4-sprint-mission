@@ -12,16 +12,8 @@ import java.util.UUID;
 public class FileChannelRepository implements ChannelRepository {
 
     private static Path directory;
-    private static FileChannelRepository fileChannelRepository;
 
-    public static FileChannelRepository getInstance() {
-        if(fileChannelRepository == null) {
-            fileChannelRepository = new FileChannelRepository();
-        }
-        return fileChannelRepository;
-    }
-
-    private FileChannelRepository() {
+    public FileChannelRepository() {
         directory = Paths.get(System.getProperty("user.dir"), "data", "channel");
         FileUtils.initDirectory(directory);
     }

@@ -1,7 +1,7 @@
 package com.sprint.mission.discodeit.service.jcf;
 
 import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.entity.MemberStatus;
+import com.sprint.mission.discodeit.entity.ActiveStatus;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.ChannelService;
@@ -28,7 +28,7 @@ public class JCFChannelService implements ChannelService {
 
     @Override
     public void createChannel(Channel channel, User user) {
-        if(user.getMemberStatus() == MemberStatus.ACTIVE) {
+        if(user.getActiveStatus() == ActiveStatus.ACTIVE) {
             data.add(channel);
             channel.addUser(user);
         }
@@ -66,7 +66,7 @@ public class JCFChannelService implements ChannelService {
     @Override
     public void addUser(UUID channelId, User user) {
         data.stream()
-                .filter(channel -> channel.getChannelId() == channelId)
+                .filter(channel -> channel.getId() == channelId)
                 .findFirst()
                 .ifPresent(channel -> {
                     channel.addUser(user);
@@ -76,7 +76,7 @@ public class JCFChannelService implements ChannelService {
     @Override
     public void removeUser(UUID channelId, User user) {
         data.stream()
-                .filter(channel -> channel.getChannelId() == channelId)
+                .filter(channel -> channel.getId() == channelId)
                 .findFirst()
                 .ifPresent(channel -> {
                     channel.removeUser(user);
@@ -86,7 +86,7 @@ public class JCFChannelService implements ChannelService {
     @Override
     public void addMessage(UUID channelId, User user, Message message) {
         data.stream()
-                .filter(channel -> channel.getChannelId() == channelId)
+                .filter(channel -> channel.getId() == channelId)
                 .findFirst()
                 .ifPresent(channel -> {
                     channel.addMessage(user, message);
@@ -96,7 +96,7 @@ public class JCFChannelService implements ChannelService {
     @Override
     public void removeMessage(UUID channelId, User user, Message message) {
         data.stream()
-                .filter(channel -> channel .getChannelId() == channelId)
+                .filter(channel -> channel .getId() == channelId)
                 .findFirst()
                 .ifPresent(channel -> {
                     channel.removeMessage(user, message);

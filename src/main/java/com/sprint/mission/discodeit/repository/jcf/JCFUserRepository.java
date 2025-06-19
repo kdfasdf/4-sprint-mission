@@ -11,16 +11,7 @@ public class JCFUserRepository implements UserRepository {
 
     private final List<User> data;
 
-    private static JCFUserRepository jcfUserRepository;
-
-    public static synchronized JCFUserRepository getInstance() {
-        if (jcfUserRepository == null) {
-            jcfUserRepository = new JCFUserRepository();
-        }
-        return jcfUserRepository;
-    }
-
-    private JCFUserRepository() {
+    public JCFUserRepository() {
         this.data = new ArrayList<>();
     }
 

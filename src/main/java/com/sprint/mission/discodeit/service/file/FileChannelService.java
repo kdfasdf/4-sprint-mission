@@ -1,7 +1,7 @@
 package com.sprint.mission.discodeit.service.file;
 
 import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.entity.MemberStatus;
+import com.sprint.mission.discodeit.entity.ActiveStatus;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.ChannelService;
@@ -35,7 +35,7 @@ public class FileChannelService implements ChannelService {
 
     @Override
     public void createChannel(Channel channel, User user) {
-        if(user.getMemberStatus() == MemberStatus.ACTIVE) {
+        if(user.getActiveStatus() == ActiveStatus.ACTIVE) {
             channel.addUser(user);
             Path filePath = directory.resolve(channel.getId().toString().concat(".ser"));
             FileUtils.save(filePath, channel);

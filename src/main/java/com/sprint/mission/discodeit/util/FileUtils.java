@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class FileUtils {
 
@@ -35,9 +36,10 @@ public class FileUtils {
     }
 
     public static <T> List<T> load(Path directory) {
+        List<T> list = new ArrayList<>();
         if (Files.exists(directory)) {
-            try {
-                List<T> list = Files.list(directory)
+            try (Stream<Path> paths = Files.list(directory)){
+                list = paths
                         .map(path -> {
                             try (
                                     FileInputStream fis = new FileInputStream(path.toFile());
@@ -55,7 +57,7 @@ public class FileUtils {
                 throw new RuntimeException(e);
             }
         } else {
-            return new ArrayList<>();
+            return list;
         }
     }
 
@@ -63,7 +65,6 @@ public class FileUtils {
         if (Files.exists(directory)) {
             try {
                 Files.delete(directory);
-                System.gc();
             } catch (IOException e) {
                  e.printStackTrace();
             }

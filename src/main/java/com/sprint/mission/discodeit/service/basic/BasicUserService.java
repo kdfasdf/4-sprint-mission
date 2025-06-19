@@ -1,20 +1,18 @@
 package com.sprint.mission.discodeit.service.basic;
 
-import com.sprint.mission.discodeit.entity.MemberStatus;
+import com.sprint.mission.discodeit.entity.ActiveStatus;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.UserService;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class BasicUserService implements UserService {
 
-    private UserRepository userRepository;
-
-    public BasicUserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final UserRepository userRepository;
 
     @Override
     public void createUser(User user) {
@@ -34,7 +32,7 @@ public class BasicUserService implements UserService {
     public User findDormantUserById(UUID userId) {
         User findDormantUser = userRepository.findUsers()
                 .stream()
-                .filter(user -> user.getMemberStatus() == MemberStatus.DORMANT)
+                .filter(user -> user.getActiveStatus() == ActiveStatus.DORMANT)
                 .filter(user -> user.getId().equals(userId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
@@ -46,7 +44,7 @@ public class BasicUserService implements UserService {
     public User findDeletedUserById(UUID userId) {
         User findDeletedUser = userRepository.findUsers()
                 .stream()
-                .filter(user -> user.getMemberStatus() == MemberStatus.DELETED)
+                .filter(user -> user.getActiveStatus() == ActiveStatus.DELETED)
                 .filter(user -> user.getId().equals(userId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
@@ -63,7 +61,7 @@ public class BasicUserService implements UserService {
     public List<User> findDormantUsers() {
         return userRepository.findUsers()
                 .stream()
-                .filter(user -> user.getMemberStatus() == MemberStatus.DORMANT)
+                .filter(user -> user.getActiveStatus() == ActiveStatus.DORMANT)
                 .toList();
     }
 
@@ -71,7 +69,7 @@ public class BasicUserService implements UserService {
     public List<User> findDeletedUsers() {
         return userRepository.findUsers()
                 .stream()
-                .filter(user -> user.getMemberStatus() == MemberStatus.DELETED)
+                .filter(user -> user.getActiveStatus() == ActiveStatus.DELETED)
                 .toList();
     }
 
@@ -87,7 +85,7 @@ public class BasicUserService implements UserService {
         Optional.ofNullable(updatedUser.getEmail()).ifPresent(findUser::updateEmail);
         Optional.ofNullable(updatedUser.getPhoneNumber()).ifPresent(findUser::updatePhoneNumber);
         Optional.ofNullable(updatedUser.getPassword()).ifPresent(findUser::updatePassword);
-        Optional.ofNullable(updatedUser.getMemberStatus()).ifPresent(findUser::editMemberStatus);
+        Optional.ofNullable(updatedUser.getActiveStatus()).ifPresent(findUser::editMemberStatus);
 
         userRepository.save(findUser);
     }

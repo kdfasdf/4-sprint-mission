@@ -11,16 +11,7 @@ public class JCFChannelRepository implements ChannelRepository {
 
     private final List<Channel> data;
 
-    private static JCFChannelRepository jcfChannelRepository;
-
-    public static synchronized JCFChannelRepository getInstance() {
-        if (jcfChannelRepository == null) {
-            jcfChannelRepository = new JCFChannelRepository();
-        }
-        return jcfChannelRepository;
-    }
-
-    private JCFChannelRepository() {
+    public JCFChannelRepository() {
         this.data = new ArrayList<>();
     }
 

@@ -1,7 +1,7 @@
 package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.entity.MemberStatus;
+import com.sprint.mission.discodeit.entity.ActiveStatus;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
@@ -11,25 +11,21 @@ import com.sprint.mission.discodeit.service.ChannelService;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class BasicChannelService implements ChannelService {
 
-    private ChannelRepository channelRepository;
-    private UserRepository userRepository;
-    private MessageRepository messageRepository;
-
-    public BasicChannelService(ChannelRepository channelRepository, UserRepository userRepository, MessageRepository messageRepository) {
-        this.channelRepository = channelRepository;
-        this.userRepository = userRepository;
-        this.messageRepository = messageRepository;
-    }
+    private final ChannelRepository channelRepository;
+    private final UserRepository userRepository;
+    private final MessageRepository messageRepository;
 
     @Override
     public void createChannel(Channel channel, User user) {
         Optional.ofNullable(user).orElseThrow(() -> new IllegalArgumentException("User is null."));
         Optional.ofNullable(channel).orElseThrow(() -> new IllegalArgumentException("Channel is null."));
 
-        if(user.getMemberStatus() == MemberStatus.ACTIVE) {
+        if(user.getActiveStatus() == ActiveStatus.ACTIVE) {
             user.addChannel(channel);
             channelRepository.save(channel);
             userRepository.save(user);
@@ -54,7 +50,7 @@ public class BasicChannelService implements ChannelService {
     public void updateChannel(UUID channelId, Channel updatedChannel) {
         Channel findChannel = findChannelById(channelId);
 
-        channelRepository.delete(findChannel);
+        channelRepository.  delete(findChannel);
 
         Optional.ofNullable(updatedChannel.getChannelName()).ifPresent(findChannel::editChannelName);
         Optional.ofNullable(updatedChannel.getDescription()).ifPresent(findChannel::editDescription);
