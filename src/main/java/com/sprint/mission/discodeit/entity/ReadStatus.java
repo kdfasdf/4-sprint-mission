@@ -2,26 +2,25 @@ package com.sprint.mission.discodeit.entity;
 
 import java.time.Instant;
 import java.util.UUID;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class ReadStatus extends BaseEntity{
+public class ReadStatus extends BaseEntity {
 
     private final UUID userId;
     private final UUID channelId;
+    private Instant lastReadAt;
 
-    private UUID messageId;
-
-    public ReadStatus(UUID userId, UUID channelId, UUID messageId) {
+    @Builder
+    public ReadStatus(UUID userId, UUID channelId) {
         this.userId = userId;
         this.channelId = channelId;
-        this.messageId = messageId;
+        this.lastReadAt = Instant.now();
     }
 
-    // 다른 객체의 UUID가 들어오는 것을 방지하기 위함
-    public void updateLastMessageReadStatus(Message message) {
+    public void updateLastReadAt() {
         this.setUpdatedAt();
-        this.messageId = message.getId();
     }
 
 }

@@ -1,33 +1,27 @@
 package com.sprint.mission.discodeit.service;
 
-import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.entity.Message;
-import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.dto.channel.ChannelResponse;
+import com.sprint.mission.discodeit.dto.channel.request.ChannelCreateServiceRequest;
+import com.sprint.mission.discodeit.dto.channel.request.ChannelUpdateServiceRequest;
+import com.sprint.mission.discodeit.dto.channel.request.PrivateChannelCreateServiceRequest;
 import java.util.List;
 import java.util.UUID;
 
 public interface ChannelService {
 
     // 생성
-    void createChannel(Channel channel, User user);
+    void createPublicChannel(ChannelCreateServiceRequest request);
+
+    void createPrivateChannel(PrivateChannelCreateServiceRequest request);
 
     // 조회
-    Channel findChannelById(UUID channelId);
-    List<Channel> findChannels();
+    ChannelResponse findChannelById(UUID channelId);
+    List<ChannelResponse> findAllChannelsByUserId(UUID userId);
 
     // 수정
-    void updateChannel(UUID channelId, Channel updatedChannel);
+    ChannelResponse updateChannel(ChannelUpdateServiceRequest request);
 
     // 삭제
-    void deleteChannel(Channel channel);
-
-    // 유저
-    void addUser(UUID channelId, User user);
-    void removeUser(UUID channelId, User user);
-
-    // 메시지
-    void addMessage(UUID channelId, User user, Message message);
-    void removeMessage(UUID channelId, User user, Message message);
-
+    void deleteChannel(UUID channelId);
 
 }

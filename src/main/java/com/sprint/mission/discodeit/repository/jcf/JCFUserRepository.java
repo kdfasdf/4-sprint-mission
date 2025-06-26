@@ -2,17 +2,17 @@ package com.sprint.mission.discodeit.repository.jcf;
 
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.UserRepository;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 public class JCFUserRepository implements UserRepository {
 
-    private final List<User> data;
+    private final Set<User> data;
 
     public JCFUserRepository() {
-        this.data = new ArrayList<>();
+        this.data = new LinkedHashSet<>();
     }
 
     @Override
@@ -21,7 +21,7 @@ public class JCFUserRepository implements UserRepository {
     }
 
     @Override
-    public List<User> findUsers() { return data; }
+    public Set<User> findUsers() { return data; }
 
     @Override
     public Optional<User> findUserById(UUID userId) {
@@ -31,8 +31,22 @@ public class JCFUserRepository implements UserRepository {
     }
 
     @Override
-    public void delete(User user) {
-        data.remove(user);
+    public Optional<User> findUserByEmail(String email) {
+        return data.stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst();
+    }
+
+    @Override
+    public Optional<User> findUserByUserName(String userName) {
+        return data.stream()
+                .filter(user -> user.getUserName().equals(userName))
+                .findFirst();
+    }
+
+    @Override
+    public void delete(UUID userId) {
+        data.removeIf(user -> user.getId().equals(userId));
     }
 
 }

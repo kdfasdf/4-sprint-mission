@@ -3,16 +3,19 @@ package com.sprint.mission.discodeit.entity;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
+import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class UserStatus extends BaseEntity {
 
-    private UUID userId;
+    private final UUID userId;
 
-    private Instant lastOnlineTime;
+    private Instant lastOnlineTime = Instant.now();;
 
-    public UserStatus(UUID userId, Instant lastOnlineTime) {
+    @Builder
+    public UserStatus(UUID userId) {
         this.userId = userId;
-        this.lastOnlineTime = lastOnlineTime;
     }
 
     public boolean isOnline() {
