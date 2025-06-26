@@ -20,5 +20,4 @@ public class BinaryContentCreateServiceRequest {
                 .data(data)
                 .build();
     }
-
 }

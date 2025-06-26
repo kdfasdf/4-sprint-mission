@@ -7,14 +7,16 @@ import lombok.Getter;
 @Getter
 public class ChannelUpdateRequest {
 
-    private UUID   channelId;
-    private String channelName;
-    private String description;
+    private final UUID channelId;
+
+    private final String channelName;
+
+    private final String description;
 
 
     @Builder
     private ChannelUpdateRequest(UUID channelId, String channelName, String description) {
-        validate(channelId, channelName, description );
+        validate(channelId, channelName, description);
         this.channelId = channelId;
         this.channelName = channelName;
         this.description = description;
@@ -41,5 +43,4 @@ public class ChannelUpdateRequest {
             throw new IllegalArgumentException("채널 설명은 공백이면 안됨");
         }
     }
-
 }

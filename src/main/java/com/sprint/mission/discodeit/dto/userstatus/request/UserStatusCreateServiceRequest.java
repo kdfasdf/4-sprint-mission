@@ -9,12 +9,11 @@ import lombok.Getter;
 @Builder
 public class UserStatusCreateServiceRequest {
 
-    private UUID userId;
+    private final UUID userId;
 
     public UserStatus toEntity() {
         return UserStatus.builder()
                 .userId(userId)
                 .build();
     }
-
 }

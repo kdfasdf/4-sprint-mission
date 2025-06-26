@@ -5,7 +5,6 @@ import lombok.Getter;
 
 @Getter
 public class PublicChannelResponse extends ChannelResponse {
-
     private String channelName;
     private String description;
 

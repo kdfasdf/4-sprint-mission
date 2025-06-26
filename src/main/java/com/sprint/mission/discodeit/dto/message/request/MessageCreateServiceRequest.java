@@ -12,14 +12,14 @@ import lombok.Getter;
 @Builder
 public class MessageCreateServiceRequest {
 
-    private String message;
+    private final String message;
 
-    private UUID channelId;
+    private final UUID channelId;
 
-    private UUID userId;
+    private final UUID userId;
 
     @Builder.Default
-    List<BinaryContent> binaryContents = new ArrayList<>();
+    private final List<BinaryContent> binaryContents = new ArrayList<>();
 
     public Message toEntity() {
         return Message.builder()
@@ -29,5 +29,4 @@ public class MessageCreateServiceRequest {
                 .binaryContents(binaryContents)
                 .build();
     }
-
 }

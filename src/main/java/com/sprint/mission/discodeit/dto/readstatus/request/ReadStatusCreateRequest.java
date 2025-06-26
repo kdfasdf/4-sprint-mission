@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 public class ReadStatusCreateRequest {
 
-    private UUID channelId;
-    private UUID userId;
+    private final UUID channelId;
+    private final UUID userId;
 
     public ReadStatusCreateRequest(UUID channelId, UUID userId) {
         validate(channelId, userId);
@@ -35,5 +35,4 @@ public class ReadStatusCreateRequest {
                 .userId(userId)
                 .build();
     }
-
 }

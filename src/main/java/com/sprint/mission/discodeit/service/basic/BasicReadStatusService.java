@@ -124,5 +124,4 @@ public class BasicReadStatusService implements ReadStatusService {
                         () -> {throw new IllegalArgumentException("ReadStatus not found.");}
                 );
     }
-
 }

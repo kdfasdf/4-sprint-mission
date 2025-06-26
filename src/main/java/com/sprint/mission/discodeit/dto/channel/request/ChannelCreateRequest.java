@@ -49,5 +49,4 @@ public class ChannelCreateRequest {
                 .channelTypeCode(channelTypeCode)
                 .build();
     }
-
 }

@@ -11,10 +11,9 @@ public class UserUpdateServiceRequest {
 
     private final UUID userId;
 
-    private String userName;
-    private String email;
-    private String phoneNumber;
-    private String password;
-    private BinaryContent profile;
-
+    private final String userName;
+    private final String email;
+    private final String phoneNumber;
+    private final String password;
+    private final BinaryContent profile;
 }

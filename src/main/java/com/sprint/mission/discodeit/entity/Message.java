@@ -47,5 +47,4 @@ public class Message extends BaseEntity{
                 ", channelId=" + channelId +
                 '}';
     }
-
 }

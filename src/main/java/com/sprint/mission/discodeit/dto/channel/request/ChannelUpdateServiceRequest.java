@@ -8,8 +8,8 @@ import lombok.Getter;
 @Builder
 public class ChannelUpdateServiceRequest {
 
-    private UUID   channelId;
-    private String channelName;
-    private String description;
+    private final UUID   channelId;
+    private final String channelName;
+    private final String description;
 
 }

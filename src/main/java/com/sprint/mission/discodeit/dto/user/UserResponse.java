@@ -18,15 +18,15 @@ public class UserResponse {
 
     private final List<MessageResponse> messages;
     private final List<String> channels;
-    private UUID id;
-    private Instant createdAt;
-    private Instant updatedAt;
-    private String userName;
-    private String email;
-    private String phoneNumber;
-    private ActiveStatus activeStatus;
-    private UserStatus userStatus;
-    private BinaryContent profile;
+    private final UUID id;
+    private final Instant createdAt;
+    private final Instant updatedAt;
+    private final String userName;
+    private final String email;
+    private final String phoneNumber;
+    private final ActiveStatus activeStatus;
+    private final UserStatus userStatus;
+    private final BinaryContent profile;
 
     public UserResponse(User user, UserStatus userStatus) {
         this.id = user.getId();

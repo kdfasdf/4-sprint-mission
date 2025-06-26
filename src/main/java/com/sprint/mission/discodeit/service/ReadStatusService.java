@@ -18,5 +18,4 @@ public interface ReadStatusService {
     ReadStatusResponse updateReadStatus(ReadStatusUpdateServiceRequest request);
 
     void deleteReadStatus(UUID readStatusId);
-
 }

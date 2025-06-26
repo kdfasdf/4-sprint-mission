@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class UserStatusUpdateRequest {
 
-    private UUID userId;
+    private final UUID userId;
 
     public UserStatusUpdateRequest(UUID userId) {
         validate(userId);
@@ -24,5 +24,4 @@ public class UserStatusUpdateRequest {
                 .userId(userId)
                 .build();
     }
-
 }

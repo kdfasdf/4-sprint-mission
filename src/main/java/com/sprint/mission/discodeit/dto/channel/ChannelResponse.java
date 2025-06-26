@@ -13,12 +13,11 @@ import lombok.Getter;
 
 @Getter
 public class ChannelResponse {
-
-    protected UUID id;
-    protected Instant createdAt;
-    protected Instant lastMessageAt;
     protected final List<MessageResponse> messages;
     protected final List<UUID> users;
+    protected final UUID id;
+    protected final Instant createdAt;
+    protected final Instant lastMessageAt;
 
     protected ChannelResponse(Channel channel) {
         this.id = channel.getId();
@@ -39,6 +38,4 @@ public class ChannelResponse {
     protected static Instant getLastMessageAt(Set<Message> messages) {
         return messages.stream().map(Message::getCreatedAt).max(Instant::compareTo).orElse(null);
     }
-
-
 }

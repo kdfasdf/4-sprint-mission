@@ -85,5 +85,4 @@ public class BasicUserStatusService implements UserStatusService {
                         () -> { throw new IllegalArgumentException("UserStatus not found."); }
                 );
     }
-
 }

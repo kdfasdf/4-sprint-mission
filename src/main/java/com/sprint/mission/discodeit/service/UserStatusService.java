@@ -19,5 +19,4 @@ public interface UserStatusService {
     UserStatusResponse updateUserStatusByUserId(UUID userId);
 
     void deleteByUserId(UUID userId);
-
 }

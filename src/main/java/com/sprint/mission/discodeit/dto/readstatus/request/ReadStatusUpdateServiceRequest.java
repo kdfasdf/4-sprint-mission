@@ -11,5 +11,4 @@ public class ReadStatusUpdateServiceRequest {
     private final UUID readStatusId;
     private final UUID userId;
     private final UUID channelId;
-
 }

@@ -7,13 +7,13 @@ import lombok.Getter;
 @Getter
 public class MessageResponse {
 
-    private String content;
+    private final String content;
 
-    private UUID channelId;
+    private final UUID channelId;
 
-    private UUID userId;
+    private final UUID userId;
 
-    private UUID messageId;
+    private final UUID messageId;
 
     public MessageResponse(Message message) {
         this.messageId = message.getId();

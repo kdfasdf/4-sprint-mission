@@ -23,5 +23,4 @@ public interface MessageService {
 
     // 삭제
     void deleteMessage(UUID messageId);
-
 }

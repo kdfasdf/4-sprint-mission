@@ -26,5 +26,4 @@ public class BinaryContent extends BaseEntity {
         this.fileName = fileName;
         this.fileType = fileType;
     }
-
 }

@@ -10,10 +10,10 @@ import lombok.Getter;
 @Builder
 public class ChannelCreateServiceRequest {
 
-    private String channelName;
-    private String description;
-    private UUID hostId;
-    private String channelTypeCode;
+    private final String channelName;
+    private final String description;
+    private final UUID hostId;
+    private final String channelTypeCode;
 
     public Channel toEntity(ChannelType channelType) {
         return Channel.builder()

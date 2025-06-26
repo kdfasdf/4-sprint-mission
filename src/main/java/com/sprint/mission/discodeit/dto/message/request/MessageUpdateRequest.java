@@ -9,11 +9,11 @@ public class MessageUpdateRequest {
 
     private final UUID messageId;
 
-    private String content;
+    private final String content;
 
-    private UUID channelId;
+    private final UUID channelId;
 
-    private UUID userId;
+    private final UUID userId;
 
     @Builder
     private MessageUpdateRequest(UUID messageId, String content, UUID channelId, UUID userId) {
@@ -38,5 +38,4 @@ public class MessageUpdateRequest {
                 .userId(userId)
                 .build();
     }
-
 }

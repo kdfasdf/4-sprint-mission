@@ -9,11 +9,14 @@ import lombok.Getter;
 public class BinaryContentResponse {
 
     private UUID binaryContentId;
+
     private String fileName;
+
     private String extension;
+
     private byte[] data;
 
-    public BinaryContentResponse (BinaryContent binaryContent) {
+    public BinaryContentResponse(BinaryContent binaryContent) {
         this.binaryContentId = binaryContent.getMessageId();
         this.fileName = binaryContent.getFileName();
         this.extension = binaryContent.getFileType().getExtension();

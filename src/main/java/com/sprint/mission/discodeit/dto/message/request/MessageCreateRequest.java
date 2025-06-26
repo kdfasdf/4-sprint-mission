@@ -8,13 +8,13 @@ import lombok.Getter;
 @Getter
 public class MessageCreateRequest {
 
-    private String message;
+    private final String message;
 
-    private UUID channelId;
+    private final UUID channelId;
 
-    private UUID userId;
+    private final UUID userId;
 
-    List<BinaryContent> binaryContents;
+    private final List<BinaryContent> binaryContents;
 
     public MessageCreateRequest(String message, UUID channelId, UUID userId, List<BinaryContent> binaryContents) {
         validate(message, channelId, userId);
@@ -43,5 +43,4 @@ public class MessageCreateRequest {
             .userId(userId)
             .build();
     }
-
 }

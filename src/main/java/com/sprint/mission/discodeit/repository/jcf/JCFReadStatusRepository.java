@@ -62,6 +62,4 @@ public class JCFReadStatusRepository implements ReadStatusRepository {
                 .map(ReadStatus::getId)
                 .forEach(this::deleteById);
     }
-
-
 }

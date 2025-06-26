@@ -28,5 +28,4 @@ public interface UserService {
     UserResponse updateUser(UserUpdateServiceRequest request);
     //삭제
     void deleteUser(UUID userId);
-
 }

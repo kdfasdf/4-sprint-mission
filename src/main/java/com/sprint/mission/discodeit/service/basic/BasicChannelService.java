@@ -112,6 +112,5 @@ public class BasicChannelService implements ChannelService {
         readStatusRepository.deleteAllByChannelId(channelId);
         channelRepository.delete(channelId);
     }
-
 }
 
