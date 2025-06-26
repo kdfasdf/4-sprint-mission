@@ -1,8 +1,16 @@
 package com.sprint.mission.discodeit.service.basic;
 
+import com.sprint.mission.discodeit.dto.user.UserResponse;
+import com.sprint.mission.discodeit.dto.user.request.UserCreateServiceRequest;
+import com.sprint.mission.discodeit.dto.user.request.UserUpdateServiceRequest;
 import com.sprint.mission.discodeit.entity.ActiveStatus;
+import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.entity.UserStatus;
+import com.sprint.mission.discodeit.factory.DefaultProfileFactory;
+import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
+import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.UserService;
 import java.util.List;
 import java.util.Optional;
@@ -13,23 +21,58 @@ import lombok.RequiredArgsConstructor;
 public class BasicUserService implements UserService {
 
     private final UserRepository userRepository;
+    private final UserStatusRepository userStatusRepository;
+    private final BinaryContentRepository binaryContentRepository;
 
     @Override
-    public void createUser(User user) {
-        Optional.ofNullable(user).orElseThrow(() -> new IllegalArgumentException("User is null."));
-        userRepository.save(user);
+    public void createUser(UserCreateServiceRequest request) {
+        validateEmailDoesNotExist(request.getEmail());
+        validateUserDoesNotExist(request.getUserName());
+
+        BinaryContent profile = request.getProfile();
+
+        User newUser = request.toEntity();
+
+        if(profile == null) {
+            profile = DefaultProfileFactory.createDefaultProfile(newUser.getId());
+        }
+
+        UserStatus newUserStatus = new UserStatus(newUser.getId());
+        newUser.updateProfile(profile);
+
+        binaryContentRepository.save(profile);
+        userStatusRepository.save(newUserStatus);
+        userRepository.save(newUser);
+    }
+
+    private void validateEmailDoesNotExist(String email) {
+        userRepository.findUserByEmail(email)
+                .ifPresent(user -> {
+                    throw new IllegalArgumentException("Email is duplicated.");
+                });
+    }
+
+    private void validateUserDoesNotExist(String userName) {
+        userRepository.findUserByUserName(userName)
+                .ifPresent(user -> {
+                    throw new IllegalArgumentException("User name is duplicated.");
+                });
     }
 
     @Override
-    public User findUserById(UUID userId) {
+    public UserResponse findUserById(UUID userId) {
         User findUser = userRepository.findUserById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
-        return findUser;
+        UserStatus findUserStatus = userStatusRepository.findUserStatusByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User status not found."));
+
+
+        return new UserResponse(findUser, findUserStatus);
     }
 
     @Override
-    public User findDormantUserById(UUID userId) {
+    public UserResponse findDormantUserById(UUID userId) {
         User findDormantUser = userRepository.findUsers()
                 .stream()
                 .filter(user -> user.getActiveStatus() == ActiveStatus.DORMANT)
@@ -37,11 +80,15 @@ public class BasicUserService implements UserService {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
-        return findDormantUser;
+        UserStatus findUserStatus = userStatusRepository.findUserStatusById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User status not found."));
+
+
+        return new UserResponse(findDormantUser, findUserStatus);
     }
 
     @Override
-    public User findDeletedUserById(UUID userId) {
+    public UserResponse findDeletedUserById(UUID userId) {
         User findDeletedUser = userRepository.findUsers()
                 .stream()
                 .filter(user -> user.getActiveStatus() == ActiveStatus.DELETED)
@@ -49,50 +96,70 @@ public class BasicUserService implements UserService {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
-        return findDeletedUser;
+        UserStatus findUserStatus = userStatusRepository.findUserStatusById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User status not found."));
+
+
+        return new UserResponse(findDeletedUser, findUserStatus);
     }
 
     @Override
-    public List<User> findUsers() {
-        return userRepository.findUsers();
+    public List<UserResponse> findUsers() {
+        return userRepository.findUsers()
+                .stream()
+                .map(user ->
+                    new UserResponse(user, userStatusRepository.findUserStatusByUserId(user.getId())
+                                .orElseThrow(() -> new IllegalArgumentException("User status not found.")))
+                )
+                .toList();
     }
 
     @Override
-    public List<User> findDormantUsers() {
+    public List<UserResponse> findDormantUsers() {
         return userRepository.findUsers()
                 .stream()
                 .filter(user -> user.getActiveStatus() == ActiveStatus.DORMANT)
+                .map(user ->
+                        new UserResponse(user, userStatusRepository.findUserStatusById(user.getId())
+                                        .orElseThrow(() -> new IllegalArgumentException("User status not found.")))
+                )
                 .toList();
     }
 
     @Override
-    public List<User> findDeletedUsers() {
+    public List<UserResponse> findDeletedUsers() {
         return userRepository.findUsers()
                 .stream()
                 .filter(user -> user.getActiveStatus() == ActiveStatus.DELETED)
+                .map(user ->
+                        new UserResponse(user, userStatusRepository.findUserStatusById(user.getId())
+                                .orElseThrow(() -> new IllegalArgumentException("User status not found.")))
+                )
                 .toList();
     }
 
     @Override
-    public void updateUser(UUID userId, User updatedUser) {
-        Optional.ofNullable(updatedUser).orElseThrow(() -> new IllegalArgumentException("User is null."));
+    public UserResponse updateUser(UserUpdateServiceRequest request) {
 
-        User findUser = findUserById(userId);
+        User userToUpdate = userRepository.findUserById(request.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
-        userRepository.delete(findUser);
+        Optional.ofNullable(request.getUserName()).ifPresent(userToUpdate::updateUserName);
+        Optional.ofNullable(request.getEmail()).ifPresent(userToUpdate::updateEmail);
+        Optional.ofNullable(request.getPhoneNumber()).ifPresent(userToUpdate::updatePhoneNumber);
+        Optional.ofNullable(request.getPassword()).ifPresent(userToUpdate::updatePassword);
 
-        Optional.ofNullable(updatedUser.getUserName()).ifPresent(findUser::updateUserName);
-        Optional.ofNullable(updatedUser.getEmail()).ifPresent(findUser::updateEmail);
-        Optional.ofNullable(updatedUser.getPhoneNumber()).ifPresent(findUser::updatePhoneNumber);
-        Optional.ofNullable(updatedUser.getPassword()).ifPresent(findUser::updatePassword);
-        Optional.ofNullable(updatedUser.getActiveStatus()).ifPresent(findUser::editMemberStatus);
+        userRepository.save(userToUpdate);
 
-        userRepository.save(findUser);
+        return new UserResponse(userToUpdate, userStatusRepository.findUserStatusByUserId(request.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User status not found.")));
     }
 
     @Override
-    public void deleteUser(User user) {
-        userRepository.delete(user);
+    public void deleteUser(UUID userId) {
+        userStatusRepository.delete(userId);
+        userRepository.delete(userId);
+        binaryContentRepository.deleteByUserId(userId);
     }
 
 }

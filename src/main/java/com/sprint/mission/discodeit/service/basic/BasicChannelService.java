@@ -1,11 +1,19 @@
 package com.sprint.mission.discodeit.service.basic;
 
-import com.sprint.mission.discodeit.entity.Channel;
+import com.sprint.mission.discodeit.dto.channel.ChannelResponse;
+import com.sprint.mission.discodeit.dto.channel.PrivateChannelResponse;
+import com.sprint.mission.discodeit.dto.channel.PublicChannelResponse;
+import com.sprint.mission.discodeit.dto.channel.request.ChannelCreateServiceRequest;
+import com.sprint.mission.discodeit.dto.channel.request.ChannelUpdateServiceRequest;
+import com.sprint.mission.discodeit.dto.channel.request.PrivateChannelCreateServiceRequest;
 import com.sprint.mission.discodeit.entity.ActiveStatus;
-import com.sprint.mission.discodeit.entity.Message;
+import com.sprint.mission.discodeit.entity.Channel;
+import com.sprint.mission.discodeit.entity.ChannelType;
+import com.sprint.mission.discodeit.entity.ReadStatus;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
+import com.sprint.mission.discodeit.repository.ReadStatusRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.ChannelService;
 import java.util.List;
@@ -19,101 +27,90 @@ public class BasicChannelService implements ChannelService {
     private final ChannelRepository channelRepository;
     private final UserRepository userRepository;
     private final MessageRepository messageRepository;
+    private final ReadStatusRepository readStatusRepository;
 
     @Override
-    public void createChannel(Channel channel, User user) {
-        Optional.ofNullable(user).orElseThrow(() -> new IllegalArgumentException("User is null."));
-        Optional.ofNullable(channel).orElseThrow(() -> new IllegalArgumentException("Channel is null."));
+    public void createPublicChannel(ChannelCreateServiceRequest request) {
 
-        if(user.getActiveStatus() == ActiveStatus.ACTIVE) {
-            user.addChannel(channel);
+        ChannelType channelType = ChannelType.getChannelTypeByCode(request.getChannelTypeCode());
+        Channel channel = request.toEntity(channelType);
+
+        User hostUser = userRepository.findUserById(request.getHostId()).orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        if(hostUser.getActiveStatus() == ActiveStatus.ACTIVE) {
+            ReadStatus readStatus = new ReadStatus(hostUser.getId(), channel.getId());
+
+            hostUser.addReadStatus(readStatus);
+            channel.addUserReadStatus(readStatus);
+
+            readStatusRepository.save(readStatus);
             channelRepository.save(channel);
-            userRepository.save(user);
+            userRepository.save(hostUser);
         }
 
     }
 
     @Override
-    public Channel findChannelById(UUID channelId) {
-        Channel findChannel = channelRepository.findChannelById(channelId)
+    public void createPrivateChannel(PrivateChannelCreateServiceRequest request) {
+
+        ChannelType channelType = ChannelType.getChannelTypeByCode(request.getChannelTypeCode());
+        Channel channel = request.toEntity(channelType);
+
+        User hostUser = userRepository.findUserById(request.getHostId()).orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        if(hostUser.getActiveStatus() == ActiveStatus.ACTIVE) {
+            ReadStatus readStatus = new ReadStatus(hostUser.getId(), channel.getId());
+
+            hostUser.addReadStatus(readStatus);
+            channel.addUserReadStatus(readStatus);
+
+            readStatusRepository.save(readStatus);
+            channelRepository.save(channel);
+            userRepository.save(hostUser);
+        }
+    }
+
+    @Override
+    public ChannelResponse findChannelById(UUID channelId) {
+
+        return channelRepository.findChannelById(channelId)
+                .map(channel ->
+                        channel.getChannelType().getCode().startsWith("CHANNEL-1") ? new PublicChannelResponse(channel) : new PrivateChannelResponse(channel)
+                )
                 .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
 
-        return findChannel;
     }
 
     @Override
-    public List<Channel> findChannels() {
-        return channelRepository.findChannels();
+    public  List<ChannelResponse> findAllChannelsByUserId(UUID userId) {
+        return channelRepository.findChannels()
+                .stream()
+                .filter(channel -> channel.getReadStatuses().stream().anyMatch(readStatus -> readStatus.getUserId().equals(userId)))
+                .map(channel ->
+                        channel.getChannelType().getCode().startsWith("CHANNEL-1") ? new PublicChannelResponse(channel) : new PrivateChannelResponse(channel)
+                )
+                .toList();
+    }
+
+    //현재 privateChannel은 수정 불가
+    @Override
+    public ChannelResponse updateChannel(ChannelUpdateServiceRequest request) {
+        Channel channelToUpdate = channelRepository.findChannelById(request.getChannelId())
+                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+
+        Optional.ofNullable(request.getChannelName()).ifPresent(channelToUpdate::editChannelName);
+        Optional.ofNullable(request.getDescription()).ifPresent(channelToUpdate::editDescription);
+
+        channelRepository.save(channelToUpdate);
+
+        return new PublicChannelResponse(channelToUpdate);
     }
 
     @Override
-    public void updateChannel(UUID channelId, Channel updatedChannel) {
-        Channel findChannel = findChannelById(channelId);
-
-        channelRepository.  delete(findChannel);
-
-        Optional.ofNullable(updatedChannel.getChannelName()).ifPresent(findChannel::editChannelName);
-        Optional.ofNullable(updatedChannel.getDescription()).ifPresent(findChannel::editDescription);
-
-        channelRepository.save(findChannel);
-    }
-
-    @Override
-    public void deleteChannel(Channel channel) {
-        channelRepository.delete(channel);
-    }
-
-    @Override
-    public void addUser(UUID channelId, User user) {
-        Optional.ofNullable(user).orElseThrow(() -> new IllegalArgumentException("User is null."));
-
-        Channel findChannel = findChannelById(channelId);
-
-        channelRepository.delete(findChannel);
-
-        findChannel.addUser(user);
-
-        channelRepository.save(findChannel);
-        userRepository.save(user);
-    }
-
-    @Override
-    public void removeUser(UUID channelId, User user) {
-        Channel findChannel = findChannelById(channelId);
-
-        channelRepository.delete(findChannel);
-
-        findChannel.removeUser(user);
-
-        channelRepository.save(findChannel);
-    }
-
-    @Override
-    public void addMessage(UUID channelId, User user, Message message) {
-        Optional.ofNullable(message).orElseThrow(() -> new IllegalArgumentException("Message is null."));
-
-        Channel findChannel = findChannelById(channelId);
-
-        channelRepository.delete(findChannel);
-
-        findChannel.addMessage(user, message);
-
-        channelRepository.save(findChannel);
-        messageRepository.save(message);
-        userRepository.save(user);
-    }
-
-    @Override
-    public void removeMessage(UUID channelId, User user, Message message) {
-        Channel findChannel = findChannelById(channelId);
-
-        channelRepository.delete(findChannel);
-
-        findChannel.removeMessage(user, message);
-
-        channelRepository.save(findChannel);
-        messageRepository.save(message);
-        userRepository.save(user);
+    public void deleteChannel(UUID channelId) {
+        messageRepository.deleteAllByChannelId(channelId);
+        readStatusRepository.deleteAllByChannelId(channelId);
+        channelRepository.delete(channelId);
     }
 
 }

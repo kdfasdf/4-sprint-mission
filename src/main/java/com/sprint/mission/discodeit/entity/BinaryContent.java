@@ -2,22 +2,29 @@ package com.sprint.mission.discodeit.entity;
 
 import java.time.Instant;
 import java.util.UUID;
-import org.apache.logging.log4j.CloseableThreadContext.Instance;
+import lombok.Builder;
+import lombok.Getter;
 
-public class BinaryContent {
+@Getter
+public class BinaryContent extends BaseEntity {
 
-    private final UUID id;
     private final UUID userId;
     private final UUID messageId;
+    private final byte[] data;
 
     private final Instant createdAt;
 
-    public BinaryContent(UUID id, UUID userId, UUID messageId) {
-        this.id = id;
+    private String fileName;
+    private FileType fileType;
+
+    @Builder
+    public BinaryContent(UUID userId, UUID messageId, String fileName, FileType fileType, byte[] data) {
         this.userId = userId;
         this.messageId = messageId;
+        this.data = data;
         this.createdAt = Instant.now();
+        this.fileName = fileName;
+        this.fileType = fileType;
     }
-
 
 }

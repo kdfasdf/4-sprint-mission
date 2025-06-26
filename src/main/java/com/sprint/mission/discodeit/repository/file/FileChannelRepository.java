@@ -3,18 +3,27 @@ package com.sprint.mission.discodeit.repository.file;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.util.FileUtils;
+import jakarta.annotation.PostConstruct;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Value;
 
 public class FileChannelRepository implements ChannelRepository {
 
     private static Path directory;
 
+    @Value("${discodeit.repository.channel}")
+    private String channelDir;
+
     public FileChannelRepository() {
-        directory = Paths.get(System.getProperty("user.dir"), "data", "channel");
+    }
+
+    @PostConstruct
+    private void init() {
+        directory = Paths.get(System.getProperty("user.dir"), channelDir);
         FileUtils.initDirectory(directory);
     }
 
@@ -32,13 +41,13 @@ public class FileChannelRepository implements ChannelRepository {
     }
 
     @Override
-    public List<Channel> findChannels() {
+    public Set<Channel> findChannels() {
         return FileUtils.load(directory);
     }
 
     @Override
-    public void delete(Channel channel) {
-        Path filePath = directory.resolve(channel.getId().toString().concat(".ser"));
+    public void delete(UUID channelId) {
+        Path filePath = directory.resolve(channelId.toString().concat(".ser"));
         FileUtils.remove(filePath);
     }
 

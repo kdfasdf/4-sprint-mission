@@ -3,17 +3,26 @@ package com.sprint.mission.discodeit.repository.file;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.util.FileUtils;
+import jakarta.annotation.PostConstruct;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Value;
 
 public class FileMessageRepository implements MessageRepository {
 
     private static Path directory;
 
+    @Value("${discodeit.repository.message}")
+    private String messageDir;
+
     public FileMessageRepository() {
-        directory = Path.of(System.getProperty("user.dir"), "data", "message");
+    }
+
+    @PostConstruct
+    private void init() {
+        directory = Path.of(System.getProperty("user.dir"), messageDir);
         FileUtils.initDirectory(directory);
     }
 
@@ -31,14 +40,19 @@ public class FileMessageRepository implements MessageRepository {
     }
 
     @Override
-    public List<Message> findMessages() {
+    public Set<Message> findMessages() {
         return FileUtils.load(directory);
     }
 
     @Override
-    public void delete(Message message) {
-        Path filePath = directory.resolve(message.getId().toString().concat(".ser"));
+    public void delete(UUID messageId) {
+        Path filePath = directory.resolve(messageId.toString().concat(".ser"));
         FileUtils.remove(filePath);
+    }
+
+    @Override
+    public void deleteAllByChannelId(UUID channelId) {
+
     }
 
 }

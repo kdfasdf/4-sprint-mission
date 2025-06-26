@@ -1,65 +1,54 @@
 package com.sprint.mission.discodeit.entity;
 
 import com.sprint.mission.discodeit.util.DataExistenceChecker;
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class Channel extends BaseEntity {
 
-    private final List<Message> messages;
-    private final List<User> users;
+    private final Set<Message> messages;
+    private final Set<ReadStatus> readStatuses;
+    private final UUID hostId;
+
     private String channelName;
     private String description;
 
-    private Channel(String channelName, String description, User user) {
+    private ChannelType channelType;
+
+    @Builder
+    private Channel(UUID hostId, String channelName, String description, ChannelType channelType) {
+        this.hostId = hostId;
         this.channelName = channelName;
         this.description = description;
-        this.users = new ArrayList<>(List.of(user));
-        this.messages = new ArrayList<>();
+        this.readStatuses= new LinkedHashSet<>();
+        this.messages = new LinkedHashSet<>();
+        this.channelType = channelType;
     }
 
-    /**
-     * @param channelName 채널 이름
-     * @param description 채널 설명
-     * @param user        채널을 만든 유저
-     * @return
-     */
-    public static Channel of(String channelName, String description, User user) {
-        return new Channel(channelName, description, user);
-    }
-
-    public static Channel of(String channelName, User user) {
-        return new Channel(channelName, "", user);
-    }
-
-    public void addUser(User user) {
-        if (!DataExistenceChecker.isExistDataInField(users, user)) {
-            users.add(user);
-            user.addChannel(this);
+    public void addUserReadStatus(ReadStatus readStatus) {
+        if (!DataExistenceChecker.isExistDataInField(readStatuses, readStatus)) {
+            readStatuses.add(readStatus);
         }
     }
 
-    public void removeUser(User user) {
-        if (DataExistenceChecker.isExistDataInField(users, user)) {
-            users.remove(user);
-            user.removeChannel(this);
-        }
+    public void removeUserReadStatus(ReadStatus readStatus) {
+        readStatuses.remove(readStatus);
     }
 
-    public void addMessage(User user, Message message) {
+    public void addMessage(Message message) {
         if (!DataExistenceChecker.isExistDataInField(messages, message)) {
             messages.add(message);
-            user.addMessage(message);
         }
     }
 
-    public void removeMessage(User user, Message message) {
+    public void removeMessage(Message message) {
         if(DataExistenceChecker.isExistDataInField(messages, message)) {
             messages.remove(message);
-            user.removeMessage(message);
         }
     }
 
@@ -67,8 +56,8 @@ public class Channel extends BaseEntity {
         return messages.stream().map(Message::getContent).toList();
     }
 
-    public List<String> getChannelUsers() {
-        return users.stream().map(User::getUserName).toList();
+    private List<String> getUserIds() {
+        return readStatuses.stream().map(ReadStatus::getUserId).map(UUID::toString).toList();
     }
 
     public void editChannelName(String channelName) {
@@ -88,7 +77,7 @@ public class Channel extends BaseEntity {
                 ", channelName='" + channelName + '\'' +
                 ", description='" + description + '\'' +
                 ", messages=" + this.getMessageContents() +
-                ", users=" + this.getChannelUsers() +
+                ", users=" + this.getUserIds() +
                 '}';
     }
 }
