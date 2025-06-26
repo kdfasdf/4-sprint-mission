@@ -26,5 +26,4 @@ public enum ActiveStatus {
                 .map(ActiveStatus::getDescription)
                 .orElse(null);
     }
-
 }

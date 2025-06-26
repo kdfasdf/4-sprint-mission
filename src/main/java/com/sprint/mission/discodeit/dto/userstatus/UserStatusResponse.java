@@ -8,11 +8,11 @@ import lombok.Getter;
 @Getter
 public class UserStatusResponse {
 
-    private UUID userId;
+    private final UUID userId;
 
-    Instant lastOnlineTime;
+    private final Instant lastOnlineTime;
 
-    boolean isOnline;
+    private final boolean isOnline;
 
     public UserStatusResponse(UserStatus userStatus) {
         this.userId = userStatus.getUserId();

@@ -52,7 +52,9 @@ public class FileMessageRepository implements MessageRepository {
 
     @Override
     public void deleteAllByChannelId(UUID channelId) {
-
+        Path filePath = directory.resolve(channelId.toString().concat(".ser"));
+        findMessages().stream()
+                .filter(message -> message.getChannelId().equals(channelId))
+                .forEach(message -> FileUtils.remove(filePath));
     }
-
 }

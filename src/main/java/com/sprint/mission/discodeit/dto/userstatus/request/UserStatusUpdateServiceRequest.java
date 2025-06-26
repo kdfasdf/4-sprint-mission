@@ -9,6 +9,6 @@ import lombok.Getter;
 @Builder
 public class UserStatusUpdateServiceRequest {
 
-    private UUID userId;
+    private final UUID userId;
 
 }

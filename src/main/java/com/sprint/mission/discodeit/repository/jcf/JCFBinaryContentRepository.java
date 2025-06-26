@@ -59,5 +59,4 @@ public class JCFBinaryContentRepository implements BinaryContentRepository {
                 .map(BinaryContent::getId)
                 .forEach(this::deleteById);
     }
-
 }

@@ -26,5 +26,4 @@ public class UserStatus extends BaseEntity {
         this.lastOnlineTime = Instant.now();
         this.setUpdatedAt();
     }
-
 }

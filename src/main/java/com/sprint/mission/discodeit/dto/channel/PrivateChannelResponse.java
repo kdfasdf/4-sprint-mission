@@ -20,5 +20,4 @@ public class PrivateChannelResponse extends ChannelResponse {
                 ", users=" + users +
                 '}';
     }
-
 }

@@ -9,8 +9,8 @@ import lombok.Getter;
 @Builder
 public class ReadStatusCreateServiceRequest {
 
-    private UUID channelId;
-    private UUID userId;
+    private final UUID channelId;
+    private final UUID userId;
 
     public ReadStatus toEntity() {
         return ReadStatus.builder()
@@ -18,5 +18,4 @@ public class ReadStatusCreateServiceRequest {
                 .userId(userId)
                 .build();
     }
-
 }

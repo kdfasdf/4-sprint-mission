@@ -50,5 +50,4 @@ public class FileChannelRepository implements ChannelRepository {
         Path filePath = directory.resolve(channelId.toString().concat(".ser"));
         FileUtils.remove(filePath);
     }
-
 }

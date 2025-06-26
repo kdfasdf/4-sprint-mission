@@ -344,5 +344,4 @@ public class DiscodeitApplication {
                 .map(T::toString)
                 .collect(Collectors.joining("\n"));
     }
-
 }

@@ -38,5 +38,4 @@ public class JCFChannelRepository implements ChannelRepository {
         data.removeIf(channel -> channel.getId().equals(channerlId));
 
     }
-
 }

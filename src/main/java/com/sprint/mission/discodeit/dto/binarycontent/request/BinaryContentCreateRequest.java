@@ -36,5 +36,4 @@ public class BinaryContentCreateRequest {
                 .data(data)
                 .build();
     }
-
 }

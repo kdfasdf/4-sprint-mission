@@ -33,5 +33,4 @@ public class BasicAuthService implements AuthService {
 
         return new UserResponse(user, userStatus);
     }
-
 }

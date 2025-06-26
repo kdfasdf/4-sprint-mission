@@ -16,5 +16,4 @@ public interface UserStatusRepository {
     Set<UserStatus> findUserStatuses();
 
     void delete(UUID userId);
-
 }

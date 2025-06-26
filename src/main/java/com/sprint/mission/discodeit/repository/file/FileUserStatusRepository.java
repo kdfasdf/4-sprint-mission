@@ -52,5 +52,4 @@ public class FileUserStatusRepository implements UserStatusRepository {
     public void delete(UUID id) {
         directory.resolve(directory.resolve(id.toString().concat(".ser")));
     }
-
 }

@@ -41,5 +41,4 @@ public class BasicBinaryContentService implements BinaryContentService {
                 .map(BinaryContentResponse::new)
                 .toList();
     }
-
 }

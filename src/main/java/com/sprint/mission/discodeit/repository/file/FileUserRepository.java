@@ -68,5 +68,4 @@ public class FileUserRepository implements UserRepository {
         Path filePath = directory.resolve(userId.toString().concat(".ser"));
         FileUtils.remove(filePath);
     }
-
 }

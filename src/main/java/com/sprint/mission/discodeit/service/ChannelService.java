@@ -23,5 +23,4 @@ public interface ChannelService {
 
     // 삭제
     void deleteChannel(UUID channelId);
-
 }

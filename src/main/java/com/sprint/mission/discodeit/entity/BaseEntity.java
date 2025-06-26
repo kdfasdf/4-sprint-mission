@@ -23,5 +23,4 @@ public abstract class BaseEntity implements Serializable {
     public void setUpdatedAt() {
         this.updatedAt = Instant.now();
     }
-
 }

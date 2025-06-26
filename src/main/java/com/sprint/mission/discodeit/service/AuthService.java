@@ -6,5 +6,4 @@ import com.sprint.mission.discodeit.dto.user.UserResponse;
 public interface AuthService {
 
     UserResponse login(SignIn signIn);
-
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 public class SignIn {
 
     private String email;
+
     private String password;
 
     public SignIn(String email, String password) {
@@ -23,5 +24,4 @@ public class SignIn {
             throw new IllegalArgumentException("비밀번호는 null이거나 공백이면 안됨");
         }
     }
-
 }

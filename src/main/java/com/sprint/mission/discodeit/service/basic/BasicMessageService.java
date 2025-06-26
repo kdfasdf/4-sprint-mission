@@ -179,5 +179,4 @@ public class BasicMessageService implements MessageService {
                         () -> { throw new IllegalArgumentException("Message not found."); }
                 );
     }
-
 }

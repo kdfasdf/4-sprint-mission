@@ -11,7 +11,9 @@ import lombok.Getter;
 public class ReadStatusUpdateRequest {
 
     private final UUID readStatusId;
+
     private final UUID userId;
+
     private final UUID channelId;
 
     public ReadStatusUpdateRequest(UUID readStatusId, UUID userId, UUID channelId) {
@@ -46,5 +48,4 @@ public class ReadStatusUpdateRequest {
             throw new IllegalArgumentException("channelId는 null이면 안됨");
         }
     }
-
 }

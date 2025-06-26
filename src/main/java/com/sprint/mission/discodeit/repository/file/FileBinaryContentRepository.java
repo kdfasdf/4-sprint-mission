@@ -80,5 +80,4 @@ public class FileBinaryContentRepository implements BinaryContentRepository {
                 .map(BinaryContent::getId)
                 .forEach(this::deleteById);
     }
-
 }

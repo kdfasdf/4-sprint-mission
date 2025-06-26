@@ -60,5 +60,4 @@ public enum FileType {
                 .map(FileType::getExtension)
                 .orElseThrow(() -> new IllegalArgumentException("FileType not found."));
     }
-
 }

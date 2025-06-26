@@ -8,10 +8,10 @@ import lombok.Getter;
 @Getter
 public class ReadStatusResponse {
 
-    private UUID id;
-    private UUID channelId;
-    private UUID userId;
-    private Instant lastReadAt;
+    private final UUID id;
+    private final UUID channelId;
+    private final UUID userId;
+    private final Instant lastReadAt;
 
     public ReadStatusResponse (ReadStatus readStatus) {
         this.id = readStatus.getId();

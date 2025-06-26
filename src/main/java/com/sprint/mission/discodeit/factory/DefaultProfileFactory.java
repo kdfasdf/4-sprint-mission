@@ -15,5 +15,4 @@ public class DefaultProfileFactory {
                 .data(defaultImage)
                 .build();
     }
-
 }

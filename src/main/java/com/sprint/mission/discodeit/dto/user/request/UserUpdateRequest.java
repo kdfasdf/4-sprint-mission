@@ -9,11 +9,11 @@ public class UserUpdateRequest {
 
     private final UUID userId;
 
-    private String userName;
-    private String email;
-    private String phoneNumber;
-    private String password;
-    private BinaryContent profile;
+    private final String userName;
+    private final String email;
+    private final String phoneNumber;
+    private final String password;
+    private final BinaryContent profile;
 
     public static UserUpdateRequest of(UUID userId, String userName, String email, String phoneNumber, String password, BinaryContent profile) {
         return new UserUpdateRequest(userId, userName, email, phoneNumber, password, profile);
@@ -64,5 +64,4 @@ public class UserUpdateRequest {
             throw new IllegalArgumentException("비밀번호는 null이거나 공백이면 안됨");
         }
     }
-
 }

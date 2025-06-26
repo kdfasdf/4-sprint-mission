@@ -18,5 +18,4 @@ public interface UserRepository {
     Set<User> findUsers();
 
     void delete(UUID userId);
-
 }

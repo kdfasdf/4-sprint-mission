@@ -48,5 +48,4 @@ public class JCFUserRepository implements UserRepository {
     public void delete(UUID userId) {
         data.removeIf(user -> user.getId().equals(userId));
     }
-
 }

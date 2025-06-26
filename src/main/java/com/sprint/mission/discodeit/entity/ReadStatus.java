@@ -22,5 +22,4 @@ public class ReadStatus extends BaseEntity {
     public void updateLastReadAt() {
         this.setUpdatedAt();
     }
-
 }

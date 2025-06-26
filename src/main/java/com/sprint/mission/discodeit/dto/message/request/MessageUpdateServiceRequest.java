@@ -10,10 +10,9 @@ public class MessageUpdateServiceRequest {
 
     private final UUID messageId;
 
-    private String content;
+    private final String content;
 
-    private UUID channelId;
+    private final UUID channelId;
 
-    private UUID userId;
-
+    private final UUID userId;
 }

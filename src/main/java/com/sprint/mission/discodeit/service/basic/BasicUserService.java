@@ -161,5 +161,4 @@ public class BasicUserService implements UserService {
         userRepository.delete(userId);
         binaryContentRepository.deleteByUserId(userId);
     }
-
 }

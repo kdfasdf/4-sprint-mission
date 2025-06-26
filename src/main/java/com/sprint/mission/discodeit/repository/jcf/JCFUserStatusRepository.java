@@ -43,5 +43,4 @@ public class JCFUserStatusRepository implements UserStatusRepository {
     public void delete(UUID userId) {
         data.removeIf(userStatus -> userStatus.getUserId().equals(userId));
     }
-
 }

@@ -31,7 +31,4 @@ public enum ChannelType {
                 .map(ChannelType::getDescription)
                 .orElseThrow(() -> new IllegalArgumentException("ChannelType not found."));
     }
-
-
-
 }

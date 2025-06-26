@@ -11,8 +11,8 @@ import lombok.Getter;
 @Builder
 public class PrivateChannelCreateServiceRequest {
 
-    private UUID hostId;
-    private String channelTypeCode;
+    private final UUID hostId;
+    private final String channelTypeCode;
 
     public Channel toEntity(ChannelType channelType) {
         return Channel.builder()
@@ -20,5 +20,4 @@ public class PrivateChannelCreateServiceRequest {
                 .channelType(channelType)
                 .build();
     }
-
 }

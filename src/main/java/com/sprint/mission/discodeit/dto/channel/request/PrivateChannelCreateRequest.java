@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 public class PrivateChannelCreateRequest {
 
-    private UUID hostId;
-    private String channelTypeCode;
+    private final UUID hostId;
+    private final String channelTypeCode;
 
     public PrivateChannelCreateRequest(UUID hostId, String channelTypeCode) {
         validate(hostId, channelTypeCode);
@@ -36,6 +36,4 @@ public class PrivateChannelCreateRequest {
                 .channelTypeCode(channelTypeCode)
                 .build();
     }
-
-
 }
