@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 
+
 public class FileReadStatusRepository implements ReadStatusRepository {
 
     private static Path directory;
@@ -56,7 +57,10 @@ public class FileReadStatusRepository implements ReadStatusRepository {
     @Override
     public Optional<ReadStatus> findReadStatusByUserIdAndChannelId(UUID userId, UUID channelId) {
         return findAllReadStatus().stream()
-                .filter(readStatus -> readStatus.getUserId().equals(userId) && readStatus.getChannelId().equals(channelId))
+                .filter(
+                        readStatus -> readStatus.getUserId().equals(userId) &&
+                                readStatus.getChannelId().equals(channelId)
+                )
                 .findFirst();
     }
 
@@ -68,7 +72,10 @@ public class FileReadStatusRepository implements ReadStatusRepository {
     @Override
     public void deleteByUserIdAndChannelId(UUID userId, UUID channelId) {
         findAllReadStatus().stream()
-                .filter(readStatus -> readStatus.getId().equals(userId) && readStatus.getChannelId().equals(channelId))
+                .filter(
+                        readStatus -> readStatus.getId().equals(userId) &&
+                                readStatus.getChannelId().equals(channelId)
+                )
                 .findFirst()
                 .ifPresent(readStatus -> directory.resolve(directory.resolve(readStatus.getId().toString().concat(".ser"))));
     }
