@@ -37,24 +37,30 @@ public class FileUserRepository implements UserRepository {
     @Override
     public Optional<User> findUserById(UUID userId) {
         return findUsers().stream()
-                .filter(user -> user.getId().equals(userId))
-                .filter(user -> user.getActiveStatus() == ActiveStatus.ACTIVE)
+                .filter(
+                        user -> user.getId().equals(userId) &&
+                                user.getActiveStatus() == ActiveStatus.ACTIVE
+                )
                 .findFirst();
     }
 
     @Override
     public Optional<User> findUserByEmail(String email) {
         return findUsers().stream()
-                .filter(user -> user.getEmail().equals(email))
-                .filter(user -> user.getActiveStatus() == ActiveStatus.ACTIVE)
+                .filter(
+                        user -> user.getEmail().equals(email) &&
+                                user.getActiveStatus() == ActiveStatus.ACTIVE
+                )
                 .findFirst();
     }
 
     @Override
     public Optional<User> findUserByUserName(String userName) {
         return findUsers().stream()
-                .filter(user -> user.getUserName().equals(userName))
-                .filter(user -> user.getActiveStatus() == ActiveStatus.ACTIVE)
+                .filter(
+                        user -> user.getUserName().equals(userName) &&
+                                user.getActiveStatus() == ActiveStatus.ACTIVE
+                )
                 .findFirst();
     }
 
