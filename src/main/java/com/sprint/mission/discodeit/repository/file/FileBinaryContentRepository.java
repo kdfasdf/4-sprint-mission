@@ -11,7 +11,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
+@Repository("fileBinaryContentRepository")
 public class FileBinaryContentRepository implements BinaryContentRepository {
 
     private static Path directory;

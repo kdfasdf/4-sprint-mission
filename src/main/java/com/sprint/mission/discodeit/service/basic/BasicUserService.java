@@ -16,12 +16,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 public class BasicUserService implements UserService {
 
+    @Qualifier("fileUserRepository")
     private final UserRepository userRepository;
+
+    @Qualifier("fileUserStatusRepository")
     private final UserStatusRepository userStatusRepository;
+
+    @Qualifier("fileBinaryContentRepository")
     private final BinaryContentRepository binaryContentRepository;
 
     @Override

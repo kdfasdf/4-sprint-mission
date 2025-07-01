@@ -11,7 +11,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
+@Repository("fileUserRepository")
 public class FileUserRepository implements UserRepository {
 
     private static Path directory;
