@@ -8,10 +8,14 @@ import com.sprint.mission.discodeit.service.BinaryContentService;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 public class BasicBinaryContentService implements BinaryContentService {
 
+    @Qualifier("fileBinaryContentRepository")
     private final BinaryContentRepository binaryContentRepository;
 
     @Override

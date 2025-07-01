@@ -10,7 +10,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
+@Repository("fileChannelRepository")
 public class FileChannelRepository implements ChannelRepository {
 
     private static Path directory;

@@ -8,11 +8,17 @@ import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 public class BasicAuthService implements AuthService {
 
+    @Qualifier("fileUserRepository")
     private final UserRepository userRepository;
+
+    @Qualifier("fileUserStatusRepository")
     private final UserStatusRepository userStatusRepository;
 
 

@@ -20,13 +20,23 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 public class BasicChannelService implements ChannelService {
 
+    @Qualifier("fileChannelRepository")
     private final ChannelRepository channelRepository;
+
+    @Qualifier("fileUserRepository")
     private final UserRepository userRepository;
+
+    @Qualifier("fileMessageRepository")
     private final MessageRepository messageRepository;
+
+    @Qualifier("fileReadStatusRepository")
     private final ReadStatusRepository readStatusRepository;
 
     @Override

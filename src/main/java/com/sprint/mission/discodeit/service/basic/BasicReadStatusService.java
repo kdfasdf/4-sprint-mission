@@ -13,12 +13,20 @@ import com.sprint.mission.discodeit.service.ReadStatusService;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 public class BasicReadStatusService implements ReadStatusService {
 
+    @Qualifier("fileReadStatusRepository")
     private final ReadStatusRepository readStatusRepository;
+
+    @Qualifier("fileChannelRepository")
     private final ChannelRepository channelRepository;
+
+    @Qualifier("fileUserRepository")
     private final UserRepository userRepository;
 
     @Override
