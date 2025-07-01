@@ -6,26 +6,22 @@ import lombok.Getter;
 
 @Getter
 public class UserUpdateRequest {
-
-    private final UUID userId;
-
     private final String userName;
     private final String email;
     private final String phoneNumber;
     private final String password;
     private final BinaryContent profile;
 
-    public static UserUpdateRequest of(UUID userId, String userName, String email, String phoneNumber, String password, BinaryContent profile) {
-        return new UserUpdateRequest(userId, userName, email, phoneNumber, password, profile);
+    public static UserUpdateRequest of(String userName, String email, String phoneNumber, String password, BinaryContent profile) {
+        return new UserUpdateRequest(userName, email, phoneNumber, password, profile);
     }
 
-    public static UserUpdateRequest of(UUID userId, String userName, String email, String phoneNumber, String password) {
-        return new UserUpdateRequest(userId, userName, email, phoneNumber, password, null);
+    public static UserUpdateRequest of(String userName, String email, String phoneNumber, String password) {
+        return new UserUpdateRequest(userName, email, phoneNumber, password, null);
     }
 
-    private UserUpdateRequest(UUID userId, String userName, String email, String phoneNumber, String password, BinaryContent profile) {
-        validate(userId, userName, email, phoneNumber, password, profile);
-        this.userId = userId;
+    private UserUpdateRequest(String userName, String email, String phoneNumber, String password, BinaryContent profile) {
+        validate(userName, email, phoneNumber, password, profile);
         this.userName = userName;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -33,7 +29,7 @@ public class UserUpdateRequest {
         this.profile = profile;
     }
 
-    public UserUpdateServiceRequest toServiceRequest() {
+    public UserUpdateServiceRequest toServiceRequest(UUID userId) {
         return UserUpdateServiceRequest.builder()
                 .userId(userId)
                 .userName(userName)
@@ -44,10 +40,7 @@ public class UserUpdateRequest {
                 .build();
     }
 
-    public void validate(UUID userId, String userName, String email, String phoneNumber, String password, BinaryContent profile) {
-        if (userId == null) {
-            throw new IllegalArgumentException("유저는 null이면 안됨");
-        }
+    public void validate(String userName, String email, String phoneNumber, String password, BinaryContent profile) {
         if (userName == null || userName.trim().isEmpty()) {
             throw new IllegalArgumentException("유저 네임은 null이거나 공백이면 안됨");
         }

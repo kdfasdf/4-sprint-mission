@@ -7,22 +7,19 @@ import lombok.Getter;
 @Getter
 public class ChannelUpdateRequest {
 
-    private final UUID channelId;
-
     private final String channelName;
 
     private final String description;
 
 
     @Builder
-    private ChannelUpdateRequest(UUID channelId, String channelName, String description) {
-        validate(channelId, channelName, description);
-        this.channelId = channelId;
+    private ChannelUpdateRequest(String channelName, String description) {
+        validate(channelName, description);
         this.channelName = channelName;
         this.description = description;
     }
 
-    public ChannelUpdateServiceRequest toServiceRequest() {
+    public ChannelUpdateServiceRequest toServiceRequest(UUID channelId) {
         return ChannelUpdateServiceRequest.builder()
                 .channelId(channelId)
                 .channelName(channelName)
@@ -30,11 +27,7 @@ public class ChannelUpdateRequest {
                 .build();
     }
 
-    private void validate(UUID channelId, String channelName, String description) {
-        if (channelId == null) {
-            throw new IllegalArgumentException("채널-ID는 null이면 안됨");
-        }
-
+    private void validate(String channelName, String description) {
         if (channelName != null && channelName.trim().isEmpty()) {
             throw new IllegalArgumentException("채널 이름은 공백이면 안됨");
         }
