@@ -10,20 +10,17 @@ import lombok.Getter;
 @Getter
 public class ReadStatusUpdateRequest {
 
-    private final UUID readStatusId;
-
     private final UUID userId;
 
     private final UUID channelId;
 
     public ReadStatusUpdateRequest(UUID readStatusId, UUID userId, UUID channelId) {
         validate(readStatusId, userId, channelId);
-        this.readStatusId = readStatusId;
         this.userId = userId;
         this.channelId = channelId;
     }
 
-    public ReadStatusUpdateServiceRequest toServiceRequest() {
+    public ReadStatusUpdateServiceRequest toServiceRequest(UUID readStatusId) {
         return ReadStatusUpdateServiceRequest.builder()
                 .readStatusId(readStatusId)
                 .userId(userId)
@@ -32,10 +29,6 @@ public class ReadStatusUpdateRequest {
     }
 
     public void validate(UUID readStatusId, UUID userId, UUID channelId) {
-        if(readStatusId == null) {
-            throw new IllegalArgumentException("readStatusId는 null이면 안됨");
-        }
-
         if(userId == null && channelId == null) {
             throw new IllegalArgumentException("userId와 channelId는 모두 null이면 안됨");
         }
