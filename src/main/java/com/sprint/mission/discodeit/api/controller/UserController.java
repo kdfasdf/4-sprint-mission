@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/users/{userId}")
-    public ResponseEntity<UserResponse> findUser(@RequestParam UUID userId) {
+    public ResponseEntity<UserResponse> findUser(@PathVariable UUID userId) {
         return ResponseEntity.ok(userService.findUserById(userId));
     }
 
@@ -40,14 +40,14 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/users/{userId}")
-    public ResponseEntity<Void> deleteUser(@RequestParam UUID userId) {
+    public ResponseEntity<Void> deleteUser(@PathVariable UUID userId) {
         userService.deleteUser(userId);
         return ResponseEntity.ok().build();
     }
 
     @RequestMapping(method = RequestMethod.PATCH, value = "/users/{userId}")
-    public ResponseEntity<UserResponse> updateUser(@RequestBody UserUpdateRequest request) {
-        return ResponseEntity.ok(userService.updateUser(request.toServiceRequest()));
+    public ResponseEntity<UserResponse> updateUser(@PathVariable UUID userId, @RequestBody UserUpdateRequest request) {
+        return ResponseEntity.ok(userService.updateUser(request.toServiceRequest(userId)));
     }
 
 }
