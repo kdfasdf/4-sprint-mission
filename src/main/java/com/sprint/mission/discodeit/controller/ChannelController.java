@@ -1,4 +1,4 @@
-package com.sprint.mission.discodeit.api.controller;
+package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.dto.channel.ChannelResponse;
 import com.sprint.mission.discodeit.dto.channel.PrivateChannelResponse;

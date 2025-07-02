@@ -1,9 +1,9 @@
 package com.sprint.mission.discodeit.dto.user.request;
 
-import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Builder
@@ -13,7 +13,7 @@ public class UserCreateServiceRequest {
     private final String email;
     private final String phoneNumber;
     private final String password;
-    private final BinaryContent profile;
+    private final MultipartFile profile;
 
     public User toEntity() {
         return User.builder()
@@ -21,7 +21,6 @@ public class UserCreateServiceRequest {
                 .email(email)
                 .phoneNumber(phoneNumber)
                 .password(password)
-                .profile(profile)
                 .build();
     }
 }

@@ -1,13 +1,15 @@
 package com.sprint.mission.discodeit.dto.user.request;
 
-import com.sprint.mission.discodeit.entity.BinaryContent;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class UserCreateRequest {
 
@@ -23,7 +25,7 @@ public class UserCreateRequest {
     @NotBlank(message = "비밀번호는 null이거나 공백이면 안됨")
     private String password;
 
-    private BinaryContent profile;
+    private MultipartFile profile;
 
     public UserCreateServiceRequest toServiceRequest() {
         return UserCreateServiceRequest.builder()
