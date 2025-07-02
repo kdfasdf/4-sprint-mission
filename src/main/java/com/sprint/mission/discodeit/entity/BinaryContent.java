@@ -1,5 +1,7 @@
 package com.sprint.mission.discodeit.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Instant;
 import java.util.UUID;
 import lombok.Builder;
@@ -18,7 +20,12 @@ public class BinaryContent extends BaseEntity {
     private FileType fileType;
 
     @Builder
-    public BinaryContent(UUID userId, UUID messageId, String fileName, FileType fileType, byte[] data) {
+    @JsonCreator
+    public BinaryContent(@JsonProperty("userId") UUID userId,
+                         @JsonProperty("messageId") UUID messageId,
+                         @JsonProperty("fileName") String fileName,
+                         @JsonProperty("fileType") FileType fileType,
+                         @JsonProperty("data") byte[] data) {
         this.userId = userId;
         this.messageId = messageId;
         this.data = data;

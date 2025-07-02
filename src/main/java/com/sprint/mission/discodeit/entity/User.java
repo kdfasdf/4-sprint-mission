@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit.entity;
 import com.sprint.mission.discodeit.util.DataExistenceChecker;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Builder;
@@ -31,6 +32,10 @@ public class User extends BaseEntity {
         this.messages = new LinkedHashSet<>();
         this.readStatuses = new LinkedHashSet<>();
         this.activeStatus = ActiveStatus.ACTIVE;
+    }
+
+    public Optional<BinaryContent> getOptionalProfile() {
+        return Optional.ofNullable(profile);
     }
 
     public List<UUID> getChannelIds() {

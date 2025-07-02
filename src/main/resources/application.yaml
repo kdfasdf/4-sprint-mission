@@ -7,3 +7,4 @@ discodeit:
     readStatus : ./data/readStatus
     userStatus : ./data/userStatus
     binaryContent : ./data/binaryContent
+
