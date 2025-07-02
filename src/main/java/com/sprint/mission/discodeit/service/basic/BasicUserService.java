@@ -7,7 +7,6 @@ import com.sprint.mission.discodeit.entity.ActiveStatus;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
-import com.sprint.mission.discodeit.factory.DefaultProfileFactory;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
@@ -41,14 +40,13 @@ public class BasicUserService implements UserService {
 
         User newUser = request.toEntity();
 
-        if(profile == null) {
-            profile = DefaultProfileFactory.createDefaultProfile(newUser.getId());
+        if(profile != null) {
+            newUser.updateProfile(profile);
+            binaryContentRepository.save(profile);
         }
 
+//      profile = DefaultProfileFactory.createDefaultProfile(newUser.getId());
         UserStatus newUserStatus = new UserStatus(newUser.getId());
-        newUser.updateProfile(profile);
-
-        binaryContentRepository.save(profile);
         userStatusRepository.save(newUserStatus);
         userRepository.save(newUser);
     }

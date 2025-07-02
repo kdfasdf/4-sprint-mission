@@ -1,11 +1,15 @@
 package com.sprint.mission.discodeit.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum FileType {
     ZIP("FILE-000", "ZIP"),
 
@@ -45,6 +49,14 @@ public enum FileType {
 
     private final String code;
     private final String extension;
+
+    @JsonCreator
+    public static FileType fromJson(@JsonProperty("code") String code, @JsonProperty("extension") String extension) {
+        return Arrays.stream(FileType.values())
+                .filter(fileType -> fileType.getCode().equals(code))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("FileType not found. code=" + code));
+    }
 
     public static FileType getFileTypeByCode(String code) {
         return Arrays.stream(FileType.values())

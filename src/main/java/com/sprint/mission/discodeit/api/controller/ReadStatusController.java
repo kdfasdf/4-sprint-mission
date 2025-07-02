@@ -27,7 +27,7 @@ public class ReadStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(method = RequestMethod.PATCH, value = "/readStatuses/{readStatusId")
+    @RequestMapping(method = RequestMethod.PATCH, value = "/readStatuses/{readStatusId}")
     public ResponseEntity<ReadStatusResponse> updateChannelReadStatus(@PathVariable UUID readStatusId, @RequestBody ReadStatusUpdateRequest reqeust) {
         return ResponseEntity.ok(readStatusService.updateReadStatus(reqeust.toServiceRequest(readStatusId)));
     }
