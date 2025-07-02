@@ -11,12 +11,15 @@ import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.UserService;
+import com.sprint.mission.discodeit.util.BinaryContentConverter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -36,16 +39,20 @@ public class BasicUserService implements UserService {
         validateEmailDoesNotExist(request.getEmail());
         validateUserDoesNotExist(request.getUserName());
 
-        BinaryContent profile = request.getProfile();
-
+        MultipartFile profile = request.getProfile();
         User newUser = request.toEntity();
+        BinaryContent binaryProfile;
 
         if(profile != null) {
-            newUser.updateProfile(profile);
-            binaryContentRepository.save(profile);
+            try {
+                binaryProfile = BinaryContentConverter.toBinaryContent(newUser.getId(), profile);
+            } catch(IOException e) {
+                throw new IllegalArgumentException("Failed to upload profile.");
+            }
+            newUser.updateProfile(binaryProfile);
+            binaryContentRepository.save(binaryProfile);
         }
 
-//      profile = DefaultProfileFactory.createDefaultProfile(newUser.getId());
         UserStatus newUserStatus = new UserStatus(newUser.getId());
         userStatusRepository.save(newUserStatus);
         userRepository.save(newUser);
