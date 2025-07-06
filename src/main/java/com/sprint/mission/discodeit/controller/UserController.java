@@ -44,7 +44,7 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable("userId") UUID userId) {
         userService.deleteUser(userId);
-        return ResponseEntity.ok().body(ApiResponse.success(null));
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(null));
     }
 
     @PatchMapping("/{userId}")

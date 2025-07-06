@@ -28,27 +28,27 @@ public class ChannelController {
 
     @PostMapping( value = "/channels", params = "type=public")
     public ResponseEntity<ApiResponse<ChannelResponse>> createPublicChannel(@RequestBody ChannelCreateRequest request) {
-        return ResponseEntity.ok().body(ApiResponse.success(channelService.createPublicChannel(request.toServiceRequest())));
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(channelService.createPublicChannel(request.toServiceRequest())));
     }
 
     @PostMapping(value = "/channels", params = "type=private")
     public ResponseEntity<ApiResponse<ChannelResponse>> createPrivateChannel(@RequestBody PrivateChannelCreateRequest request) {
-        return ResponseEntity.ok().body(ApiResponse.success(channelService.createPrivateChannel(request.toServiceRequest())));
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(channelService.createPrivateChannel(request.toServiceRequest())));
     }
 
     @GetMapping( "/channels/{channelId}")
     public ResponseEntity<ApiResponse<ChannelResponse>> findChannel(@PathVariable("channelId") UUID channelId) {
-        return ResponseEntity.ok().body(ApiResponse.success(channelService.findChannelById(channelId)));
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(channelService.findChannelById(channelId)));
     }
 
     @GetMapping( "/users/{userId}/channels")
     public ResponseEntity<ApiResponse<List<ChannelResponse>>> findChannelsWhichUserJoined(@PathVariable("userId") UUID userId) {
-        return ResponseEntity.ok().body(ApiResponse.success(channelService.findAllChannelsByUserId(userId)));
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(channelService.findAllChannelsByUserId(userId)));
     }
 
     @PatchMapping("/channels/{channelId}")
     public ResponseEntity<ApiResponse<ChannelResponse>> updateChannel(@PathVariable("channelId") UUID channelId, @RequestBody ChannelUpdateRequest request) {
-        return ResponseEntity.ok().body(ApiResponse.success(channelService.updateChannel(request.toServiceRequest(channelId))));
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(channelService.updateChannel(request.toServiceRequest(channelId))));
     }
 
     @DeleteMapping( "/channels/{channelId}")
