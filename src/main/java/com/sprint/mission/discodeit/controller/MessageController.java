@@ -42,8 +42,8 @@ public class MessageController {
     }
 
     @GetMapping( "/channels/{channelId}/messages")
-    public ResponseEntity<List<MessageResponse>> findMessagesByChannelId(@PathVariable("channelId") UUID channelId) {
-        return ResponseEntity.ok(messageService.findMessagesByChannelId(channelId));
+    public ResponseEntity<ApiResponse<List<MessageResponse>>> findMessagesByChannelId(@PathVariable("channelId") UUID channelId) {
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(messageService.findMessagesByChannelId(channelId)));
     }
 
 }

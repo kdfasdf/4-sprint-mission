@@ -27,8 +27,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> findUsers() {
-        return ResponseEntity.ok(userService.findUsers());
+    public ResponseEntity<ApiResponse<List<UserResponse>>> findUsers() {
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(userService.findUsers()));
     }
 
     @PostMapping
