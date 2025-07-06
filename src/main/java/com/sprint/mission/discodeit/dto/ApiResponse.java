@@ -12,11 +12,11 @@ public class ApiResponse<T> {
     private final String message;
     private T data;
 
-    public static <T> ApiResponse<T> success(T data) {
+    public static <T> ApiResponse<T> onSuccess(T data) {
         return new ApiResponse<>(HttpStatus.OK, data);
     }
 
-    public static <T> ApiResponse<T> badRequest(T data) {
+    public static <T> ApiResponse<T> onFailure(T data) {
         return new ApiResponse<>(HttpStatus.BAD_REQUEST, data);
     }
 

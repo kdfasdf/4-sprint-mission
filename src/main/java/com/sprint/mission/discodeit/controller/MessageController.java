@@ -27,18 +27,18 @@ public class MessageController {
 
     @PostMapping("/messages")
     public ResponseEntity<ApiResponse<MessageResponse>> createMessage(@RequestBody MessageCreateRequest request) {
-        return ResponseEntity.ok().body(ApiResponse.success(messageService.createMessage(request.toServiceRequest())));
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(messageService.createMessage(request.toServiceRequest())));
     }
 
     @PatchMapping( "/messages/{messageId}")
     public ResponseEntity<ApiResponse<MessageResponse>> updateMessage(@PathVariable("messageId") UUID messageId, @RequestBody MessageUpdateRequest request) {
-        return ResponseEntity.ok().body(ApiResponse.success(messageService.updateContent(request.toServiceRequest(messageId))));
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(messageService.updateContent(request.toServiceRequest(messageId))));
     }
 
     @DeleteMapping( "/messages/{messageId}")
     public ResponseEntity<ApiResponse<Void>> deleteMessage(@PathVariable("messageId") UUID messageId) {
         messageService.deleteMessage(messageId);
-        return ResponseEntity.ok().body( ApiResponse.success(null));
+        return ResponseEntity.ok().body( ApiResponse.onSuccess(null));
     }
 
     @GetMapping( "/channels/{channelId}/messages")
