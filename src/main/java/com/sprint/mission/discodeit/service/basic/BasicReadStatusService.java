@@ -30,7 +30,7 @@ public class BasicReadStatusService implements ReadStatusService {
     private final UserRepository userRepository;
 
     @Override
-    public void createReadStatus(ReadStatusCreateServiceRequest request) {
+    public ReadStatusResponse createReadStatus(ReadStatusCreateServiceRequest request) {
         Channel channel = channelRepository.findChannelById(request.getChannelId())
                 .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
 
@@ -45,6 +45,8 @@ public class BasicReadStatusService implements ReadStatusService {
         userRepository.save(user);
         channelRepository.save(channel);
         readStatusRepository.save(readStatus);
+
+        return new ReadStatusResponse(readStatus);
     }
 
     @Override

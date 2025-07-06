@@ -3,29 +3,28 @@ package com.sprint.mission.discodeit.dto.user.request;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
-@Setter
-@NoArgsConstructor
+@AllArgsConstructor
 public class UserCreateRequest {
 
     @NotBlank(message = "유저 네임은 null이거나 공백이면 안됨")
-    private String userName;
+    private final String userName;
 
+    @NotBlank(message = "이메일은 필수입니다.")
     @Email(message = "이메일 형식이 올바르지 않음")
-    private String email;
+    private final String email;
 
     @Pattern(regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$", message = "휴대폰 번호 형식이 올바르지 않음.")
-    private String phoneNumber;
+    private final String phoneNumber;
 
     @NotBlank(message = "비밀번호는 null이거나 공백이면 안됨")
-    private String password;
+    private final String password;
 
-    private MultipartFile profile;
+    private final MultipartFile profile;
 
     public UserCreateServiceRequest toServiceRequest() {
         return UserCreateServiceRequest.builder()

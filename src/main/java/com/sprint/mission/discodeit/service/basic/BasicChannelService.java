@@ -40,7 +40,7 @@ public class BasicChannelService implements ChannelService {
     private final ReadStatusRepository readStatusRepository;
 
     @Override
-    public void createPublicChannel(ChannelCreateServiceRequest request) {
+    public ChannelResponse createPublicChannel(ChannelCreateServiceRequest request) {
 
         ChannelType channelType = ChannelType.getChannelTypeByCode(request.getChannelTypeCode());
         Channel channel = request.toEntity(channelType);
@@ -57,11 +57,11 @@ public class BasicChannelService implements ChannelService {
             channelRepository.save(channel);
             userRepository.save(hostUser);
         }
-
+        return new PublicChannelResponse(channel);
     }
 
     @Override
-    public void createPrivateChannel(PrivateChannelCreateServiceRequest request) {
+    public ChannelResponse createPrivateChannel(PrivateChannelCreateServiceRequest request) {
 
         ChannelType channelType = ChannelType.getChannelTypeByCode(request.getChannelTypeCode());
         Channel channel = request.toEntity(channelType);
@@ -78,6 +78,8 @@ public class BasicChannelService implements ChannelService {
             channelRepository.save(channel);
             userRepository.save(hostUser);
         }
+
+        return new PrivateChannelResponse(channel);
     }
 
     @Override

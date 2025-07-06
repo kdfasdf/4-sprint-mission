@@ -31,7 +31,7 @@ public class BasicAuthService implements AuthService {
             throw new IllegalArgumentException("Password is incorrect.");
         }
 
-        UserStatus userStatus = userStatusRepository.findUserStatusById(user.getId())
+        UserStatus userStatus = userStatusRepository.findUserStatusByUserId(user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("User status not found."));
 
         userStatus.updateLastOnlineTime();

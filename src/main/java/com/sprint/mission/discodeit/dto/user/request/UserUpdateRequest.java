@@ -1,33 +1,30 @@
 package com.sprint.mission.discodeit.dto.user.request;
 
 import com.sprint.mission.discodeit.entity.BinaryContent;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
+@AllArgsConstructor
 public class UserUpdateRequest {
+
     private final String userName;
+
+    @NotBlank(message = "이메일은 필수입니다.")
+    @Email(message = "이메일 형식이 올바르지 않음")
     private final String email;
+
+    @Pattern(regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$", message = "휴대폰 번호 형식이 올바르지 않음.")
     private final String phoneNumber;
+
     private final String password;
-    private final BinaryContent profile;
 
-    public static UserUpdateRequest of(String userName, String email, String phoneNumber, String password, BinaryContent profile) {
-        return new UserUpdateRequest(userName, email, phoneNumber, password, profile);
-    }
-
-    public static UserUpdateRequest of(String userName, String email, String phoneNumber, String password) {
-        return new UserUpdateRequest(userName, email, phoneNumber, password, null);
-    }
-
-    private UserUpdateRequest(String userName, String email, String phoneNumber, String password, BinaryContent profile) {
-        validate(userName, email, phoneNumber, password, profile);
-        this.userName = userName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.password = password;
-        this.profile = profile;
-    }
+    private final MultipartFile profile;
 
     public UserUpdateServiceRequest toServiceRequest(UUID userId) {
         return UserUpdateServiceRequest.builder()

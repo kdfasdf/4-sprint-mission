@@ -10,9 +10,9 @@ import java.util.UUID;
 public interface ChannelService {
 
     // 생성
-    void createPublicChannel(ChannelCreateServiceRequest request);
+    ChannelResponse createPublicChannel(ChannelCreateServiceRequest request);
 
-    void createPrivateChannel(PrivateChannelCreateServiceRequest request);
+    ChannelResponse createPrivateChannel(PrivateChannelCreateServiceRequest request);
 
     // 조회
     ChannelResponse findChannelById(UUID channelId);
