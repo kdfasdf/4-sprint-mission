@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.controller;
 
+import com.sprint.mission.discodeit.dto.ApiResponse;
 import com.sprint.mission.discodeit.dto.message.MessageResponse;
 import com.sprint.mission.discodeit.dto.message.request.MessageCreateRequest;
 import com.sprint.mission.discodeit.dto.message.request.MessageUpdateRequest;
@@ -25,19 +26,19 @@ public class MessageController {
     private final MessageService messageService;
 
     @PostMapping("/messages")
-    public ResponseEntity<MessageResponse> createMessage(@RequestBody MessageCreateRequest request) {
-        return ResponseEntity.ok(messageService.createMessage(request.toServiceRequest()));
+    public ResponseEntity<ApiResponse<MessageResponse>> createMessage(@RequestBody MessageCreateRequest request) {
+        return ResponseEntity.ok().body(ApiResponse.success(messageService.createMessage(request.toServiceRequest())));
     }
 
     @PatchMapping( "/messages/{messageId}")
-    public ResponseEntity<MessageResponse> updateMessage(@PathVariable("messageId") UUID messageId, @RequestBody MessageUpdateRequest request) {
-        return ResponseEntity.ok(messageService.updateContent(request.toServiceRequest(messageId)));
+    public ResponseEntity<ApiResponse<MessageResponse>> updateMessage(@PathVariable("messageId") UUID messageId, @RequestBody MessageUpdateRequest request) {
+        return ResponseEntity.ok().body(ApiResponse.success(messageService.updateContent(request.toServiceRequest(messageId))));
     }
 
     @DeleteMapping( "/messages/{messageId}")
-    public ResponseEntity<Void> deleteMessage(@PathVariable("messageId") UUID messageId) {
+    public ResponseEntity<ApiResponse<Void>> deleteMessage(@PathVariable("messageId") UUID messageId) {
         messageService.deleteMessage(messageId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body( ApiResponse.success(null));
     }
 
     @GetMapping( "/channels/{channelId}/messages")

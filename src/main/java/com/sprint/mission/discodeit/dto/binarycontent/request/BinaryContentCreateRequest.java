@@ -1,33 +1,22 @@
 package com.sprint.mission.discodeit.dto.binarycontent.request;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class BinaryContentCreateRequest {
 
+    @NotBlank(message = "fileName는 null이거나 공백이면 안됨")
     String fileName;
+
+    @NotBlank(message = "fileType는 null이거나 공백이면 안됨")
     String fileType;
+
+    @NotNull(message = "data는 null이면 안됨")
     byte[] data;
-
-    public BinaryContentCreateRequest(String fileName, String fileType, byte[] data) {
-        this.fileName = fileName;
-        this.fileType = fileType;
-        this.data = data;
-    }
-
-    public void validate() {
-        if (fileName == null || fileName.trim().isEmpty()) {
-            throw new IllegalArgumentException("fileName는 null이나 공백이면 안됨");
-        }
-
-        if (fileType == null || fileType.trim().isEmpty()) {
-            throw new IllegalArgumentException("fileType는 null이나 공백이면 안됨");
-        }
-
-        if (data == null) {
-            throw new IllegalArgumentException("data는 null이면 안됨");
-        }
-    }
 
     public BinaryContentCreateServiceRequest toServiceRequest() {
         return BinaryContentCreateServiceRequest.builder()
