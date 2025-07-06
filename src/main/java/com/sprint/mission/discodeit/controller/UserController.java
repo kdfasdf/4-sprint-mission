@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.controller;
 
+import com.sprint.mission.discodeit.dto.ApiResponse;
 import com.sprint.mission.discodeit.dto.user.UserResponse;
 import com.sprint.mission.discodeit.dto.user.request.UserCreateRequest;
 import com.sprint.mission.discodeit.dto.user.request.UserUpdateRequest;
@@ -41,9 +42,9 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("userId") UUID userId) {
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable("userId") UUID userId) {
         userService.deleteUser(userId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(ApiResponse.success(null));
     }
 
     @PatchMapping("/{userId}")
