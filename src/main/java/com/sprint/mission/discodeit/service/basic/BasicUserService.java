@@ -35,7 +35,7 @@ public class BasicUserService implements UserService {
     private final BinaryContentRepository binaryContentRepository;
 
     @Override
-    public void createUser(UserCreateServiceRequest request) {
+    public UserResponse createUser(UserCreateServiceRequest request) {
         validateEmailDoesNotExist(request.getEmail());
         validateUserDoesNotExist(request.getUserName());
 
@@ -44,11 +44,7 @@ public class BasicUserService implements UserService {
         BinaryContent binaryProfile;
 
         if(profile != null) {
-            try {
-                binaryProfile = BinaryContentConverter.toBinaryContent(newUser.getId(), profile);
-            } catch(IOException e) {
-                throw new IllegalArgumentException("Failed to upload profile.");
-            }
+            binaryProfile = getBinaryContent(newUser, profile);
             newUser.updateProfile(binaryProfile);
             binaryContentRepository.save(binaryProfile);
         }
@@ -56,6 +52,7 @@ public class BasicUserService implements UserService {
         UserStatus newUserStatus = new UserStatus(newUser.getId());
         userStatusRepository.save(newUserStatus);
         userRepository.save(newUser);
+        return new UserResponse(newUser, newUserStatus);
     }
 
     private void validateEmailDoesNotExist(String email) {
@@ -161,11 +158,26 @@ public class BasicUserService implements UserService {
         Optional.ofNullable(request.getEmail()).ifPresent(userToUpdate::updateEmail);
         Optional.ofNullable(request.getPhoneNumber()).ifPresent(userToUpdate::updatePhoneNumber);
         Optional.ofNullable(request.getPassword()).ifPresent(userToUpdate::updatePassword);
+        Optional.ofNullable(request.getProfile()).ifPresent(binaryContent -> {
+            BinaryContent updateBinaryContent = getBinaryContent(userToUpdate, binaryContent);
+            userToUpdate.updateProfile(updateBinaryContent);
+            binaryContentRepository.save(updateBinaryContent);
+        });
 
         userRepository.save(userToUpdate);
 
         return new UserResponse(userToUpdate, userStatusRepository.findUserStatusByUserId(request.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("User status not found.")));
+    }
+
+    private static BinaryContent getBinaryContent(User newUser, MultipartFile profile) {
+        BinaryContent binaryProfile;
+        try {
+            binaryProfile = BinaryContentConverter.toBinaryContent(newUser.getId(), profile);
+        } catch(IOException e) {
+            throw new IllegalArgumentException("Failed to upload profile.");
+        }
+        return binaryProfile;
     }
 
     @Override

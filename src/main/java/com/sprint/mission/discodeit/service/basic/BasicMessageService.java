@@ -36,7 +36,7 @@ public class BasicMessageService implements MessageService {
     private final BinaryContentRepository binaryContentRepository;
 
     @Override
-    public void createMessage(MessageCreateServiceRequest request) {
+    public MessageResponse createMessage(MessageCreateServiceRequest request) {
         Message message = request.toEntity();
 
         Channel findChannel = channelRepository.findChannelById(request.getChannelId())
@@ -51,6 +51,7 @@ public class BasicMessageService implements MessageService {
         channelRepository.save(findChannel);
         userRepository.save(findUser);
         messageRepository.save(message);
+        return new MessageResponse(message);
     }
 
     private void addBinaryContentsToMessage(List<BinaryContent> binaryContents) {

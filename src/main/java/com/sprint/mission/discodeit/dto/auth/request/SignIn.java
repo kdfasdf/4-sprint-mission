@@ -1,27 +1,17 @@
 package com.sprint.mission.discodeit.dto.auth.request;
 
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class SignIn {
 
+    @NotBlank(message = "이메일은 필수입니다.")
     private String email;
 
+    @NotBlank(message = "비밀번호는 필수입니다.")
     private String password;
 
-    public SignIn(String email, String password) {
-        validate(email, password);
-        this.email = email;
-        this.password = password;
-    }
-
-    public void validate(String email, String password) {
-        if (email == null || email.trim().isEmpty() || !email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$")) {
-            throw new IllegalArgumentException("이메일 형식에 맞지 않음");
-        }
-
-        if (password == null || password.trim().isEmpty()) {
-            throw new IllegalArgumentException("비밀번호는 null이거나 공백이면 안됨");
-        }
-    }
 }
