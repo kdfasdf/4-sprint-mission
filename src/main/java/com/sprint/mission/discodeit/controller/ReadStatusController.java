@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.controller;
 
+import com.sprint.mission.discodeit.dto.ApiResponse;
 import com.sprint.mission.discodeit.dto.readstatus.ReadStatusResponse;
 import com.sprint.mission.discodeit.dto.readstatus.request.ReadStatusCreateRequest;
 import com.sprint.mission.discodeit.dto.readstatus.request.ReadStatusUpdateRequest;
@@ -24,17 +25,17 @@ public class ReadStatusController {
     private final ReadStatusService readStatusService;
 
     @PostMapping("/readStatuses")
-    public ResponseEntity<ReadStatusResponse> createReadStatuses(@RequestBody ReadStatusCreateRequest reqeust) {
-        return ResponseEntity.ok(readStatusService.createReadStatus(reqeust.toServiceRequest()));
+    public ResponseEntity<ApiResponse<ReadStatusResponse>> createReadStatuses(@RequestBody ReadStatusCreateRequest reqeust) {
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(readStatusService.createReadStatus(reqeust.toServiceRequest())));
     }
 
     @PatchMapping("/readStatuses/{readStatusId}")
-    public ResponseEntity<ReadStatusResponse> updateChannelReadStatus(@PathVariable("readStatusId") UUID readStatusId, @RequestBody ReadStatusUpdateRequest reqeust) {
-        return ResponseEntity.ok(readStatusService.updateReadStatus(reqeust.toServiceRequest(readStatusId)));
+    public ResponseEntity<ApiResponse<ReadStatusResponse>> updateChannelReadStatus(@PathVariable("readStatusId") UUID readStatusId, @RequestBody ReadStatusUpdateRequest reqeust) {
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(readStatusService.updateReadStatus(reqeust.toServiceRequest(readStatusId))));
     }
 
     @GetMapping("/users/{userId}/readStatuses")
-    public ResponseEntity<List<ReadStatusResponse>> getUserReadStatuses(@PathVariable("userId") UUID userId) {
-        return ResponseEntity.ok(readStatusService.findAllByUserId(userId));
+    public ResponseEntity<ApiResponse<List<ReadStatusResponse>>> getUserReadStatuses(@PathVariable("userId") UUID userId) {
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(readStatusService.findAllByUserId(userId)));
     }
 }

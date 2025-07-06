@@ -32,13 +32,13 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponse> createUser(@Valid @ModelAttribute UserCreateRequest request) {
-        return ResponseEntity.ok(userService.createUser(request.toServiceRequest()));
+    public ResponseEntity<ApiResponse<UserResponse>> createUser(@Valid @ModelAttribute UserCreateRequest request) {
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(userService.createUser(request.toServiceRequest())));
     }
 
     @GetMapping( "/{userId}")
-    public ResponseEntity<UserResponse> findUser(@PathVariable("userId") UUID userId) {
-        return ResponseEntity.ok(userService.findUserById(userId));
+    public ResponseEntity<ApiResponse<UserResponse>> findUser(@PathVariable("userId") UUID userId) {
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(userService.findUserById(userId)));
     }
 
     @DeleteMapping("/{userId}")
@@ -48,8 +48,8 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable("userId") UUID userId, @Valid @ModelAttribute UserUpdateRequest request) {
-        return ResponseEntity.ok(userService.updateUser(request.toServiceRequest(userId)));
+    public ResponseEntity<ApiResponse<UserResponse>> updateUser(@PathVariable("userId") UUID userId, @Valid @ModelAttribute UserUpdateRequest request) {
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(userService.updateUser(request.toServiceRequest(userId))));
     }
 
 }
