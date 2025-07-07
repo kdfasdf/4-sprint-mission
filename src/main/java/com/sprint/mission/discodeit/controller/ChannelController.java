@@ -54,7 +54,7 @@ public class ChannelController {
     @DeleteMapping( "/channels/{channelId}")
     public ResponseEntity<ApiResponse<Void>> deleteChannel(@PathVariable("channelId") UUID channelId) {
         channelService.deleteChannel(channelId);
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(null));
     }
 
 }
