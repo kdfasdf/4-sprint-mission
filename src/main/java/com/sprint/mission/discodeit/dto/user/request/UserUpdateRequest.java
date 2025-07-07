@@ -7,24 +7,26 @@ import jakarta.validation.constraints.Pattern;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
+@Setter
 @AllArgsConstructor
 public class UserUpdateRequest {
 
-    private final String userName;
+    private String userName;
 
     @NotBlank(message = "이메일은 필수입니다.")
     @Email(message = "이메일 형식이 올바르지 않음")
-    private final String email;
+    private String email;
 
     @Pattern(regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$", message = "휴대폰 번호 형식이 올바르지 않음.")
-    private final String phoneNumber;
+    private String phoneNumber;
 
-    private final String password;
+    private String password;
 
-    private final MultipartFile profile;
+    private MultipartFile profile;
 
     public UserUpdateServiceRequest toServiceRequest(UUID userId) {
         return UserUpdateServiceRequest.builder()
