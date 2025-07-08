@@ -1,39 +1,34 @@
 package com.sprint.mission.discodeit.dto.user.request;
 
 import com.sprint.mission.discodeit.entity.BinaryContent;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
+@Setter
+@AllArgsConstructor
 public class UserUpdateRequest {
 
-    private final UUID userId;
+    private String userName;
 
-    private final String userName;
-    private final String email;
-    private final String phoneNumber;
-    private final String password;
-    private final BinaryContent profile;
+    @NotBlank(message = "이메일은 필수입니다.")
+    @Email(message = "이메일 형식이 올바르지 않음")
+    private String email;
 
-    public static UserUpdateRequest of(UUID userId, String userName, String email, String phoneNumber, String password, BinaryContent profile) {
-        return new UserUpdateRequest(userId, userName, email, phoneNumber, password, profile);
-    }
+    @Pattern(regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$", message = "휴대폰 번호 형식이 올바르지 않음.")
+    private String phoneNumber;
 
-    public static UserUpdateRequest of(UUID userId, String userName, String email, String phoneNumber, String password) {
-        return new UserUpdateRequest(userId, userName, email, phoneNumber, password, null);
-    }
+    private String password;
 
-    private UserUpdateRequest(UUID userId, String userName, String email, String phoneNumber, String password, BinaryContent profile) {
-        validate(userId, userName, email, phoneNumber, password, profile);
-        this.userId = userId;
-        this.userName = userName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.password = password;
-        this.profile = profile;
-    }
+    private MultipartFile profile;
 
-    public UserUpdateServiceRequest toServiceRequest() {
+    public UserUpdateServiceRequest toServiceRequest(UUID userId) {
         return UserUpdateServiceRequest.builder()
                 .userId(userId)
                 .userName(userName)
@@ -44,10 +39,7 @@ public class UserUpdateRequest {
                 .build();
     }
 
-    public void validate(UUID userId, String userName, String email, String phoneNumber, String password, BinaryContent profile) {
-        if (userId == null) {
-            throw new IllegalArgumentException("유저는 null이면 안됨");
-        }
+    public void validate(String userName, String email, String phoneNumber, String password, BinaryContent profile) {
         if (userName == null || userName.trim().isEmpty()) {
             throw new IllegalArgumentException("유저 네임은 null이거나 공백이면 안됨");
         }

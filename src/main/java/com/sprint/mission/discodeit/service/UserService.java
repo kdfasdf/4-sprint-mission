@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface UserService {
 
     // 생성
-    void createUser(UserCreateServiceRequest request);
+    UserResponse createUser(UserCreateServiceRequest request);
 
     //조회
     UserResponse findUserById(UUID userId);

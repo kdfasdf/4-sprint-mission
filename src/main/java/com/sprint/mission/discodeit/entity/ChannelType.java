@@ -8,11 +8,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ChannelType {
 
-    PRIVATE_CHATTING("CHANNEL-100", "비밀 채팅방"),
-    PRIVATE_VOICE("CHANNEL-101", "비밀 음성채팅방"),
+    PUBLIC_CHATTING("CHANNEL-100", "공공 채팅방"),
+    PUBLIC_VOICE("CHANNEL-101", "공공 음성채팅방"),
 
-    PUBLIC_CHATTING("CHANNEL-200", "공공 채팅방"),
-    PUBLIC_VOICE("CHANNEL-201", "공공 음성채팅방");
+    PRIVATE_CHATTING("CHANNEL-200", "비밀 채팅방"),
+    PRIVATE_VOICE("CHANNEL-201", "비밀 음성채팅방");
 
     private final String code;
     private final String description;

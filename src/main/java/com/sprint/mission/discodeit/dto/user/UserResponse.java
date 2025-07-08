@@ -2,7 +2,7 @@ package com.sprint.mission.discodeit.dto.user;
 
 import com.sprint.mission.discodeit.dto.message.MessageResponse;
 import com.sprint.mission.discodeit.entity.ActiveStatus;
-import com.sprint.mission.discodeit.entity.BinaryContent;
+import com.sprint.mission.discodeit.entity.BaseEntity;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.ReadStatus;
 import com.sprint.mission.discodeit.entity.User;
@@ -26,7 +26,7 @@ public class UserResponse {
     private final String phoneNumber;
     private final ActiveStatus activeStatus;
     private final UserStatus userStatus;
-    private final BinaryContent profile;
+    private final UUID profileId;
 
     public UserResponse(User user, UserStatus userStatus) {
         this.id = user.getId();
@@ -39,7 +39,9 @@ public class UserResponse {
         this.phoneNumber = user.getPhoneNumber();
         this.activeStatus = user.getActiveStatus();
         this.userStatus = userStatus;
-        this.profile = user.getProfile();
+        this.profileId = user.getOptionalProfile()
+                .map(BaseEntity::getId)
+                .orElse(null);
     }
 
     private static List<MessageResponse> toMessageResponses(Set<Message> messages) {

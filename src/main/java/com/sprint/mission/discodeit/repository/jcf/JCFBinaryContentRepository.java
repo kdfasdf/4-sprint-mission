@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import org.springframework.stereotype.Repository;
 
+@Repository("jcfBinaryContentRepository")
 public class JCFBinaryContentRepository implements BinaryContentRepository {
 
     private final Set<BinaryContent> data;

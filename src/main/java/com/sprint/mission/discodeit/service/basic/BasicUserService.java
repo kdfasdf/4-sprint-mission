@@ -7,42 +7,52 @@ import com.sprint.mission.discodeit.entity.ActiveStatus;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
-import com.sprint.mission.discodeit.factory.DefaultProfileFactory;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.UserService;
+import com.sprint.mission.discodeit.util.BinaryContentConverter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+@Service
 @RequiredArgsConstructor
 public class BasicUserService implements UserService {
 
+    @Qualifier("fileUserRepository")
     private final UserRepository userRepository;
+
+    @Qualifier("fileUserStatusRepository")
     private final UserStatusRepository userStatusRepository;
+
+    @Qualifier("fileBinaryContentRepository")
     private final BinaryContentRepository binaryContentRepository;
 
     @Override
-    public void createUser(UserCreateServiceRequest request) {
+    public UserResponse createUser(UserCreateServiceRequest request) {
         validateEmailDoesNotExist(request.getEmail());
         validateUserDoesNotExist(request.getUserName());
 
-        BinaryContent profile = request.getProfile();
-
+        MultipartFile profile = request.getProfile();
         User newUser = request.toEntity();
+        BinaryContent binaryProfile;
 
-        if(profile == null) {
-            profile = DefaultProfileFactory.createDefaultProfile(newUser.getId());
+        if(profile != null) {
+            binaryProfile = getBinaryContent(newUser, profile);
+            newUser.updateProfile(binaryProfile);
+            binaryContentRepository.save(binaryProfile);
         }
 
         UserStatus newUserStatus = new UserStatus(newUser.getId());
-        newUser.updateProfile(profile);
-
-        binaryContentRepository.save(profile);
         userStatusRepository.save(newUserStatus);
         userRepository.save(newUser);
+        return new UserResponse(newUser, newUserStatus);
     }
 
     private void validateEmailDoesNotExist(String email) {
@@ -148,11 +158,26 @@ public class BasicUserService implements UserService {
         Optional.ofNullable(request.getEmail()).ifPresent(userToUpdate::updateEmail);
         Optional.ofNullable(request.getPhoneNumber()).ifPresent(userToUpdate::updatePhoneNumber);
         Optional.ofNullable(request.getPassword()).ifPresent(userToUpdate::updatePassword);
+        Optional.ofNullable(request.getProfile()).ifPresent(binaryContent -> {
+            BinaryContent updateBinaryContent = getBinaryContent(userToUpdate, binaryContent);
+            userToUpdate.updateProfile(updateBinaryContent);
+            binaryContentRepository.save(updateBinaryContent);
+        });
 
         userRepository.save(userToUpdate);
 
         return new UserResponse(userToUpdate, userStatusRepository.findUserStatusByUserId(request.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("User status not found.")));
+    }
+
+    private static BinaryContent getBinaryContent(User newUser, MultipartFile profile) {
+        BinaryContent binaryProfile;
+        try {
+            binaryProfile = BinaryContentConverter.toBinaryContent(newUser.getId(), profile);
+        } catch(IOException e) {
+            throw new IllegalArgumentException("Failed to upload profile.");
+        }
+        return binaryProfile;
     }
 
     @Override

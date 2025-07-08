@@ -11,8 +11,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
-
+@Repository("fileReadStatusRepository")
 public class FileReadStatusRepository implements ReadStatusRepository {
 
     private static Path directory;

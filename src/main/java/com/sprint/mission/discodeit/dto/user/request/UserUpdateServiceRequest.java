@@ -1,9 +1,9 @@
 package com.sprint.mission.discodeit.dto.user.request;
 
-import com.sprint.mission.discodeit.entity.BinaryContent;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Builder
@@ -15,5 +15,5 @@ public class UserUpdateServiceRequest {
     private final String email;
     private final String phoneNumber;
     private final String password;
-    private final BinaryContent profile;
+    private final MultipartFile profile;
 }

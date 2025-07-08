@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface MessageService {
 
     // 생성
-    void createMessage(MessageCreateServiceRequest messageCreateService);
+    MessageResponse createMessage(MessageCreateServiceRequest messageCreateService);
 
     //조회
     MessageResponse findMessageById(UUID messageId);
