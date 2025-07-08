@@ -1,0 +1,9 @@
+discodeit:
+  repository:
+    #type: jcf   # jcf | file
+    channel : ./data/channel
+    message : ./data/message
+    user : ./data/user
+    readStatus : ./data/readStatus
+    userStatus : ./data/userStatus
+    binaryContent : ./data/binaryContent

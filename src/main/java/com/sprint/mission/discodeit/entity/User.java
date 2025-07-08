@@ -1,50 +1,54 @@
 package com.sprint.mission.discodeit.entity;
 
 import com.sprint.mission.discodeit.util.DataExistenceChecker;
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class User extends BaseEntity {
 
-    private final List<Message> messages;
-    private final List<Channel> channels;
+    private final Set<Message> messages;
+    private final Set<ReadStatus> readStatuses;
+
     private String userName;
     private String email;
     private String phoneNumber;
     private String password;
-    private MemberStatus memberStatus;
+    private ActiveStatus activeStatus;
+    private BinaryContent profile;
 
-    public User(String userName, String email, String phoneNumber, String password) {
+    @Builder
+    public User(String userName, String email, String phoneNumber, String password, BinaryContent profile) {
         this.userName = userName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
-        this.messages = new ArrayList<>();
-        this.channels = new ArrayList<>();
-        this.memberStatus = MemberStatus.ACTIVE;
+        this.profile = profile;
+        this.messages = new LinkedHashSet<>();
+        this.readStatuses = new LinkedHashSet<>();
+        this.activeStatus = ActiveStatus.ACTIVE;
     }
 
-    public List<String> getChannelNames() {
-        return channels.stream().map(Channel::getChannelName).toList();
+    public List<UUID> getChannelIds() {
+        return readStatuses.stream().map(ReadStatus::getChannelId).toList();
     }
 
     public List<String> getMessageContents() {
         return messages.stream().map(Message::getContent).toList();
     }
 
-    public void addChannel(Channel channel) {
-        if(!DataExistenceChecker.isExistDataInField(channels, channel)) {
-            channels.add(channel);
-            channel.addUser(this);
+    public void addReadStatus(ReadStatus readStatus) {
+        if(!DataExistenceChecker.isExistDataInField(readStatuses, readStatus)) {
+            readStatuses.add(readStatus);
         }
     }
 
-    public void removeChannel(Channel channel) {
-        if(DataExistenceChecker.isExistDataInField(channels, channel)) {
-            channels.remove(channel);
-            channel.removeUser(this);
-        }
+    public void removeReadStatus(ReadStatus readStatus) {
+        readStatuses.remove(readStatus);
     }
 
     public void addMessage(Message message) {
@@ -59,60 +63,36 @@ public class User extends BaseEntity {
         }
     }
 
-    public UUID getId() {
-        return this.id;
-    }
-
-    public Long getCreatedAt() {
-        return this.createdAt;
-    }
-
-    public List<Channel> getChannels() {
-        return channels;
-    }
-
-    public List<Message> getMessages() {
-        return messages;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
     public void updateEmail(String email) {
         this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
     }
 
     public void updatePhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
     public void updateUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void updatePassword(String password) {
         this.password = password;
     }
 
-    public MemberStatus getMemberStatus() {
-        return memberStatus;
+    public void updateProfile(BinaryContent profile) {
+        this.profile = profile;
     }
 
-    public void editMemberStatus(MemberStatus memberStatus) {
-        this.memberStatus = memberStatus;
+    public void updateActiveStatus(ActiveStatus activeStatus) {
+        this.activeStatus = activeStatus;
+    }
+
+    public void updateUserStatus() {
+        this.activeStatus = this.activeStatus == ActiveStatus.ACTIVE ? ActiveStatus.DORMANT : ActiveStatus.ACTIVE;
+    }
+
+    public void editMemberStatus(ActiveStatus activeStatus) {
+        this.activeStatus = activeStatus;
     }
 
 
@@ -126,7 +106,7 @@ public class User extends BaseEntity {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", messages=" + this.getMessages() +
-                ", channels=" + this.getChannels() +
+                ", channels=" + this.getChannelIds() +
                 '}';
     }
 }
