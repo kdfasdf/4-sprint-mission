@@ -8,11 +8,17 @@ import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 public class BasicAuthService implements AuthService {
 
+    @Qualifier("fileUserRepository")
     private final UserRepository userRepository;
+
+    @Qualifier("fileUserStatusRepository")
     private final UserStatusRepository userStatusRepository;
 
 
@@ -25,7 +31,7 @@ public class BasicAuthService implements AuthService {
             throw new IllegalArgumentException("Password is incorrect.");
         }
 
-        UserStatus userStatus = userStatusRepository.findUserStatusById(user.getId())
+        UserStatus userStatus = userStatusRepository.findUserStatusByUserId(user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("User status not found."));
 
         userStatus.updateLastOnlineTime();

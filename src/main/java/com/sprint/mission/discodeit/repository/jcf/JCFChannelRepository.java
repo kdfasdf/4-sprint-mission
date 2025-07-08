@@ -6,7 +6,9 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import org.springframework.stereotype.Repository;
 
+@Repository("jcfChannelRepository")
 public class JCFChannelRepository implements ChannelRepository {
 
     private final Set<Channel> data;

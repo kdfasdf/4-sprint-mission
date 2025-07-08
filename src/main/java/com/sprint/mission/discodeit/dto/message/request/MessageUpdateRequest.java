@@ -1,36 +1,25 @@
 package com.sprint.mission.discodeit.dto.message.request;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class MessageUpdateRequest {
 
-    private final UUID messageId;
-
+    @NotBlank(message = "메시지는 null이거나 빈문자열, 공백이면 안됨")
     private final String content;
 
+    @NotNull(message = "채널ID는 null이면 안됨")
     private final UUID channelId;
 
+    @NotNull(message = "유저ID는 null이면 안됨")
     private final UUID userId;
 
-    @Builder
-    private MessageUpdateRequest(UUID messageId, String content, UUID channelId, UUID userId) {
-        validate(messageId);
-        this.messageId = messageId;
-        this.content = content;
-        this.channelId = channelId;
-        this.userId = userId;
-    }
-
-    private void validate(UUID messageId) {
-        if (messageId == null) {
-            throw new IllegalArgumentException("MessageId is null.");
-        }
-    }
-
-    public MessageUpdateServiceRequest toServiceRequest() {
+    public MessageUpdateServiceRequest toServiceRequest(UUID messageId) {
         return MessageUpdateServiceRequest.builder()
                 .messageId(messageId)
                 .content(content)

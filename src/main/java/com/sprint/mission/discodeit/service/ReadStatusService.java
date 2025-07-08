@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ReadStatusService {
-    void createReadStatus(ReadStatusCreateServiceRequest request);
+    ReadStatusResponse createReadStatus(ReadStatusCreateServiceRequest request);
 
     ReadStatusResponse findReadStatusById(UUID readStatusId);
 

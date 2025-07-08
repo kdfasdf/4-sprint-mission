@@ -6,7 +6,9 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import org.springframework.stereotype.Repository;
 
+@Repository("jcfUserRepository")
 public class JCFUserRepository implements UserRepository {
 
     private final Set<User> data;
