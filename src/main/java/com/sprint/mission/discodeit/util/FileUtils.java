@@ -7,8 +7,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FileUtils {
 
@@ -34,28 +36,28 @@ public class FileUtils {
         }
     }
 
-    public static <T> List<T> load(Path directory) {
+    public static <T> Set<T> load(Path directory) {
+        Set<T> set = new LinkedHashSet<>();
         if (Files.exists(directory)) {
-            try {
-                List<T> list = Files.list(directory)
+            try (Stream<Path> paths = Files.list(directory)){
+                set = paths
                         .map(path -> {
                             try (
                                     FileInputStream fis = new FileInputStream(path.toFile());
                                     ObjectInputStream ois = new ObjectInputStream(fis)
                             ) {
                                 Object data = ois.readObject();
-                                    return (T) data;
+                                return (T) data;
                             } catch (IOException | ClassNotFoundException e) {
                                 throw new RuntimeException(e);
                             }
-                        })
-                        .toList();
-                return list;
+                        }).collect(Collectors.toCollection(LinkedHashSet::new));
+                return set;
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         } else {
-            return new ArrayList<>();
+            return set;
         }
     }
 
@@ -63,13 +65,10 @@ public class FileUtils {
         if (Files.exists(directory)) {
             try {
                 Files.delete(directory);
-                System.gc();
             } catch (IOException e) {
                  e.printStackTrace();
             }
         }
 
     }
-
-
 }

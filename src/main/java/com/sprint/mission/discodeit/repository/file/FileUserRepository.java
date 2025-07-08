@@ -1,29 +1,30 @@
 package com.sprint.mission.discodeit.repository.file;
 
-import com.sprint.mission.discodeit.entity.MemberStatus;
+import com.sprint.mission.discodeit.entity.ActiveStatus;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.util.FileUtils;
+import jakarta.annotation.PostConstruct;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Value;
 
 public class FileUserRepository implements UserRepository {
 
     private static Path directory;
-    private static FileUserRepository fileUserRepository;
 
-    public static FileUserRepository getInstance() {
-        if(fileUserRepository == null) {
-            fileUserRepository = new FileUserRepository();
-        }
-        return fileUserRepository;
+    @Value("${discodeit.repository.user}")
+    private String userDir;
+
+    public FileUserRepository () {
     }
 
-    private FileUserRepository () {
-        directory = Paths.get(System.getProperty("user.dir"), "data", "user");
+    @PostConstruct
+    private void init() {
+        directory = Paths.get(System.getProperty("user.dir"), userDir);
         FileUtils.initDirectory(directory);
     }
 
@@ -36,20 +37,41 @@ public class FileUserRepository implements UserRepository {
     @Override
     public Optional<User> findUserById(UUID userId) {
         return findUsers().stream()
-                .filter(user -> user.getId().equals(userId))
-                .filter(user -> user.getMemberStatus() == MemberStatus.ACTIVE)
+                .filter(
+                        user -> user.getId().equals(userId) &&
+                                user.getActiveStatus() == ActiveStatus.ACTIVE
+                )
                 .findFirst();
     }
 
     @Override
-    public List<User> findUsers() {
+    public Optional<User> findUserByEmail(String email) {
+        return findUsers().stream()
+                .filter(
+                        user -> user.getEmail().equals(email) &&
+                                user.getActiveStatus() == ActiveStatus.ACTIVE
+                )
+                .findFirst();
+    }
+
+    @Override
+    public Optional<User> findUserByUserName(String userName) {
+        return findUsers().stream()
+                .filter(
+                        user -> user.getUserName().equals(userName) &&
+                                user.getActiveStatus() == ActiveStatus.ACTIVE
+                )
+                .findFirst();
+    }
+
+    @Override
+    public Set<User> findUsers() {
         return FileUtils.load(directory);
     }
 
     @Override
-    public void delete(User user) {
-        Path filePath = directory.resolve(user.getId().toString().concat(".ser"));
+    public void delete(UUID userId) {
+        Path filePath = directory.resolve(userId.toString().concat(".ser"));
         FileUtils.remove(filePath);
     }
-
 }
