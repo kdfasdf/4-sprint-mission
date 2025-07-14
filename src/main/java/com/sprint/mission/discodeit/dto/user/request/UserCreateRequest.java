@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.dto.user.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class UserCreateRequest {
 
+    @JsonProperty("username")
     @NotBlank(message = "유저 네임은 null이거나 공백이면 안됨")
     private String userName;
 
@@ -28,7 +30,7 @@ public class UserCreateRequest {
 
     private MultipartFile profile;
 
-    public UserCreateServiceRequest toServiceRequest() {
+    public UserCreateServiceRequest toServiceRequest(MultipartFile profile) {
         return UserCreateServiceRequest.builder()
                 .userName(userName)
                 .email(email)

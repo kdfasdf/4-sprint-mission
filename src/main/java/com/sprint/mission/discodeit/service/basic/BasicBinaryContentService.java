@@ -20,8 +20,8 @@ public class BasicBinaryContentService implements BinaryContentService {
 
     @Override
     public void createBinaryContent(BinaryContentCreateServiceRequest request) {
-        FileType fileType = FileType.getFileTypeByCode(request.getFileType());
-        binaryContentRepository.save(request.toEntity(fileType));
+        FileType fileType = FileType.getFileTypeByCode(request.getContentType());
+        binaryContentRepository.save(request.toEntity());
     }
 
     @Override

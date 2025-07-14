@@ -17,7 +17,7 @@ public class PrivateChannelResponse extends ChannelResponse {
                 ", id=" + id +
                 ", lastMessageAt=" + lastMessageAt +
                 ", messages=" + messages +
-                ", users=" + users +
+                ", users=" + participantIds +
                 '}';
     }
 }

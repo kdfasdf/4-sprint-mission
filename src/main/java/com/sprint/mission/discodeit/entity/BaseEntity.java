@@ -23,4 +23,21 @@ public abstract class BaseEntity implements Serializable {
     public void setUpdatedAt() {
         this.updatedAt = Instant.now();
     }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof BaseEntity that)) {
+            return false;
+        }
+
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }
