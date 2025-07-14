@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.controller;
 
+import com.sprint.mission.discodeit.controller.api.MessageApi;
 import com.sprint.mission.discodeit.dto.message.MessageResponse;
 import com.sprint.mission.discodeit.dto.message.request.MessageCreateRequest;
 import com.sprint.mission.discodeit.dto.message.request.MessageUpdateRequest;
@@ -24,10 +25,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/messages")
-public class MessageController {
+public class MessageController implements MessageApi {
 
     private final MessageService messageService;
 
+    @Override
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MessageResponse> createMessage(
             @RequestPart("messageCreateRequest") MessageCreateRequest request,
@@ -36,17 +38,20 @@ public class MessageController {
         return ResponseEntity.ok().body(messageService.createMessage(request.toServiceRequest(attachments)));
     }
 
+    @Override
     @PatchMapping( "/{messageId}")
     public ResponseEntity<MessageResponse> updateMessage(@PathVariable("messageId") UUID messageId, @RequestBody MessageUpdateRequest request) {
         return ResponseEntity.ok().body(messageService.updateContent(request.toServiceRequest(messageId)));
     }
 
+    @Override
     @DeleteMapping( "/{messageId}")
     public ResponseEntity<Void> deleteMessage(@PathVariable("messageId") UUID messageId) {
         messageService.deleteMessage(messageId);
         return ResponseEntity.ok().build();
     }
 
+    @Override
     @GetMapping( params = "channelId")
     public ResponseEntity<List<MessageResponse>> findMessagesByChannelId(@RequestParam("channelId") UUID channelId) {
         return ResponseEntity.ok().body(messageService.findMessagesByChannelId(channelId));

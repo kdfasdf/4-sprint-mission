@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.controller;
 
+import com.sprint.mission.discodeit.controller.api.ReadStatusApi;
 import com.sprint.mission.discodeit.dto.readstatus.ReadStatusResponse;
 import com.sprint.mission.discodeit.dto.readstatus.request.ReadStatusCreateRequest;
 import com.sprint.mission.discodeit.dto.readstatus.request.ReadStatusUpdateRequest;
@@ -20,22 +21,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/readStatuses")
-public class ReadStatusController {
+public class ReadStatusController implements ReadStatusApi {
 
     private final ReadStatusService readStatusService;
 
+    @Override
     @PostMapping
-    public ResponseEntity<ReadStatusResponse> createReadStatuses(@RequestBody ReadStatusCreateRequest reqeust) {
+    public ResponseEntity<ReadStatusResponse> createReadStatus(@RequestBody ReadStatusCreateRequest reqeust) {
         return ResponseEntity.ok().body(readStatusService.createReadStatus(reqeust.toServiceRequest()));
     }
 
+    @Override
     @PatchMapping("/{readStatusId}")
-    public ResponseEntity<ReadStatusResponse> updateChannelReadStatus(@PathVariable("readStatusId") UUID readStatusId, @RequestBody ReadStatusUpdateRequest reqeust) {
+    public ResponseEntity<ReadStatusResponse> updateReadStatus(@PathVariable("readStatusId") UUID readStatusId, @RequestBody ReadStatusUpdateRequest reqeust) {
         return ResponseEntity.ok().body(readStatusService.updateReadStatus(reqeust.toServiceRequest(readStatusId)));
     }
 
+    @Override
     @GetMapping
-    public ResponseEntity<List<ReadStatusResponse>> getUserReadStatuses(@RequestParam("userId") UUID userId) {
+    public ResponseEntity<List<ReadStatusResponse>> findAllReadStatusByUserId(@RequestParam("userId") UUID userId) {
         return ResponseEntity.ok().body(readStatusService.findAllByUserId(userId));
     }
 }
