@@ -5,25 +5,25 @@ import lombok.Getter;
 
 @Getter
 public class PublicChannelResponse extends ChannelResponse {
-    private String channelName;
+    private String name;
     private String description;
 
     public PublicChannelResponse(Channel channel) {
         super(channel);
-        this.channelName = channel.getChannelName();
+        this.name = channel.getChannelName();
         this.description = channel.getDescription();
     }
 
     @Override
     public String toString() {
         return "PublicChannelResponse{" +
-                "channelName='" + channelName + '\'' +
+                "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", createdAt=" + createdAt +
                 ", id=" + id +
                 ", lastMessageAt=" + lastMessageAt +
                 ", messages=" + messages +
-                ", users=" + users +
+                ", users=" + participantIds +
                 '}';
     }
 }

@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.dto.binarycontent;
 
 import com.sprint.mission.discodeit.entity.BinaryContent;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.UUID;
 import lombok.Getter;
@@ -8,28 +9,35 @@ import lombok.Getter;
 @Getter
 public class BinaryContentResponse {
 
-    private UUID binaryContentId;
+    private UUID id;
 
     private String fileName;
 
-    private String extension;
+    private String contentType;
 
-    private byte[] data;
+    private Instant createdAt;
+
+    private Long size;
+
+    private byte[] bytes;
 
     public BinaryContentResponse(BinaryContent binaryContent) {
-        this.binaryContentId = binaryContent.getMessageId();
+        this.id = binaryContent.getId();
         this.fileName = binaryContent.getFileName();
-        this.extension = binaryContent.getFileType().getExtension();
-        this.data = binaryContent.getData();
+        this.contentType = binaryContent.getContentType();
+        this.bytes = binaryContent.getBytes();
+        this.createdAt = binaryContent.getCreatedAt();
+        this.size = binaryContent.getSize();
     }
 
     @Override
     public String toString() {
         return "BinaryContentResponse{" +
-                "binaryContentId=" + binaryContentId +
                 ", fileName='" + fileName + '\'' +
-                ", extension='" + extension + '\'' +
-                ", data=" + Arrays.toString(data) +
+                ", extension='" + contentType + '\'' +
+                ", createdAt=" + createdAt +
+                ", size=" + size +
+                ", data=" + Arrays.toString(bytes) +
                 '}';
     }
 }

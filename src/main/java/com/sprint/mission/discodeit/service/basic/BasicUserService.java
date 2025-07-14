@@ -44,7 +44,7 @@ public class BasicUserService implements UserService {
         BinaryContent binaryProfile;
 
         if(profile != null) {
-            binaryProfile = getBinaryContent(newUser, profile);
+            binaryProfile = getBinaryContent(profile);
             newUser.updateProfile(binaryProfile);
             binaryContentRepository.save(binaryProfile);
         }
@@ -154,12 +154,12 @@ public class BasicUserService implements UserService {
         User userToUpdate = userRepository.findUserById(request.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
-        Optional.ofNullable(request.getUserName()).ifPresent(userToUpdate::updateUserName);
-        Optional.ofNullable(request.getEmail()).ifPresent(userToUpdate::updateEmail);
-        Optional.ofNullable(request.getPhoneNumber()).ifPresent(userToUpdate::updatePhoneNumber);
-        Optional.ofNullable(request.getPassword()).ifPresent(userToUpdate::updatePassword);
+        Optional.ofNullable(request.getNewUsername()).ifPresent(userToUpdate::updateUserName);
+        Optional.ofNullable(request.getNewEmail()).ifPresent(userToUpdate::updateEmail);
+//        Optional.ofNullable(request.getPhoneNumber()).ifPresent(userToUpdate::updatePhoneNumber);
+        Optional.ofNullable(request.getNewPassword()).ifPresent(userToUpdate::updatePassword);
         Optional.ofNullable(request.getProfile()).ifPresent(binaryContent -> {
-            BinaryContent updateBinaryContent = getBinaryContent(userToUpdate, binaryContent);
+            BinaryContent updateBinaryContent = getBinaryContent(binaryContent);
             userToUpdate.updateProfile(updateBinaryContent);
             binaryContentRepository.save(updateBinaryContent);
         });
@@ -170,10 +170,10 @@ public class BasicUserService implements UserService {
                 .orElseThrow(() -> new IllegalArgumentException("User status not found.")));
     }
 
-    private static BinaryContent getBinaryContent(User newUser, MultipartFile profile) {
+    private static BinaryContent getBinaryContent(MultipartFile profile) {
         BinaryContent binaryProfile;
         try {
-            binaryProfile = BinaryContentConverter.toBinaryContent(newUser.getId(), profile);
+            binaryProfile = BinaryContentConverter.toBinaryContent(profile);
         } catch(IOException e) {
             throw new IllegalArgumentException("Failed to upload profile.");
         }
@@ -184,6 +184,6 @@ public class BasicUserService implements UserService {
     public void deleteUser(UUID userId) {
         userStatusRepository.delete(userId);
         userRepository.delete(userId);
-        binaryContentRepository.deleteByUserId(userId);
+//        binaryContentRepository.deleteByUserId(userId);
     }
 }

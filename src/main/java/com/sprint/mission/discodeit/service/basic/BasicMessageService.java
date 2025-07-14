@@ -12,12 +12,16 @@ import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.MessageService;
+import com.sprint.mission.discodeit.util.BinaryContentConverter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +41,15 @@ public class BasicMessageService implements MessageService {
 
     @Override
     public MessageResponse createMessage(MessageCreateServiceRequest request) {
-        Message message = request.toEntity();
+
+        List<BinaryContent> binaryContents = new ArrayList<>();
+
+        Optional.ofNullable(request.getAttachments())
+                .ifPresent(attachments -> attachments.stream()
+                        .map(this::getBinaryContent)
+                        .forEach(binaryContents::add));
+
+        Message message = request.toEntity(binaryContents);
 
         Channel findChannel = channelRepository.findChannelById(request.getChannelId())
                 .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
@@ -48,10 +60,23 @@ public class BasicMessageService implements MessageService {
         findChannel.addMessage(message);
         findUser.addMessage(message);
 
+        binaryContents.stream()
+                        .forEach(binaryContentRepository::save);
+
         channelRepository.save(findChannel);
         userRepository.save(findUser);
         messageRepository.save(message);
         return new MessageResponse(message);
+    }
+
+    private BinaryContent getBinaryContent(MultipartFile profile) {
+        BinaryContent binaryProfile;
+        try {
+            binaryProfile = BinaryContentConverter.toBinaryContent(profile);
+        } catch(IOException e) {
+            throw new IllegalArgumentException("Failed to upload profile.");
+        }
+        return binaryProfile;
     }
 
     private void addBinaryContentsToMessage(List<BinaryContent> binaryContents) {
@@ -144,10 +169,10 @@ public class BasicMessageService implements MessageService {
         Channel channel = channelRepository.findChannelById(findMessage.getChannelId())
                 .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
 
-        if(findMessage.getBinaryContents() != null && !findMessage.getBinaryContents().isEmpty()) {
-            List<BinaryContent> binaryContent = binaryContentRepository.findBinaryContentsByMessageId(messageId);
-            removeBinaryContentsOfMessage(binaryContent);
-        }
+//        if(findMessage.getBinaryContents() != null && !findMessage.getBinaryContents().isEmpty()) {
+//            List<BinaryContent> binaryContent = binaryContentRepository.findBinaryContentsByMessageId(messageId);
+//            removeBinaryContentsOfMessage(binaryContent);
+//        }
 
         removeMessageFromUser(author, messageId);
         removeMessageFromChannel(channel, messageId);

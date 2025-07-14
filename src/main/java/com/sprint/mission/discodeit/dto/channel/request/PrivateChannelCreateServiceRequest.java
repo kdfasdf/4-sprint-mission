@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit.dto.channel.request;
 
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ChannelType;
+import java.util.List;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,12 +12,14 @@ import lombok.Getter;
 @Builder
 public class PrivateChannelCreateServiceRequest {
 
-    private final UUID hostId;
-    private final String channelTypeCode;
+//    private final UUID hostId;
+//    private final String channelTypeCode;
+
+    private final List<UUID> participantIds;
 
     public Channel toEntity(ChannelType channelType) {
         return Channel.builder()
-                .hostId(hostId)
+//                .hostId(hostId)
                 .channelType(channelType)
                 .build();
     }

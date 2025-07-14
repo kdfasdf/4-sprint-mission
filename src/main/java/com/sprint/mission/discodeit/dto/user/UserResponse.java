@@ -21,12 +21,13 @@ public class UserResponse {
     private final UUID id;
     private final Instant createdAt;
     private final Instant updatedAt;
-    private final String userName;
+    private final String username;
     private final String email;
     private final String phoneNumber;
     private final ActiveStatus activeStatus;
     private final UserStatus userStatus;
     private final UUID profileId;
+    private final boolean online;
 
     public UserResponse(User user, UserStatus userStatus) {
         this.id = user.getId();
@@ -34,7 +35,7 @@ public class UserResponse {
         this.updatedAt = user.getUpdatedAt();
         this.messages = toMessageResponses(user.getMessages());
         this.channels = toChannelIds(user.getReadStatuses());
-        this.userName = user.getUserName();
+        this.username = user.getUserName();
         this.email = user.getEmail();
         this.phoneNumber = user.getPhoneNumber();
         this.activeStatus = user.getActiveStatus();
@@ -42,6 +43,7 @@ public class UserResponse {
         this.profileId = user.getOptionalProfile()
                 .map(BaseEntity::getId)
                 .orElse(null);
+        this.online = userStatus.isOnline();
     }
 
     private static List<MessageResponse> toMessageResponses(Set<Message> messages) {
@@ -64,7 +66,7 @@ public class UserResponse {
                 ", id=" + id +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", userName='" + userName + '\'' +
+                ", userName='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", userStatus=" + userStatus +

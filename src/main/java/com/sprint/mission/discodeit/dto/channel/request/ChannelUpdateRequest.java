@@ -8,14 +8,14 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ChannelUpdateRequest {
 
-    private final String channelName;
+    private final String name;
 
     private final String description;
 
     public ChannelUpdateServiceRequest toServiceRequest(UUID channelId) {
         return ChannelUpdateServiceRequest.builder()
                 .channelId(channelId)
-                .channelName(channelName)
+                .name(name)
                 .description(description)
                 .build();
     }
