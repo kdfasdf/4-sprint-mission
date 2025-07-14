@@ -12,17 +12,20 @@ public class BinaryContentCreateRequest {
     @NotBlank(message = "fileName는 null이거나 공백이면 안됨")
     String fileName;
 
-    @NotBlank(message = "fileType는 null이거나 공백이면 안됨")
-    String fileType;
+//    @NotBlank(message = "fileType는 null이거나 공백이면 안됨")
+//    String fileType;
+
+    @NotNull(message = "contentType는 null이면 안됨")
+    private String contentType;
 
     @NotNull(message = "data는 null이면 안됨")
-    byte[] data;
+    byte[] bytes;
 
     public BinaryContentCreateServiceRequest toServiceRequest() {
         return BinaryContentCreateServiceRequest.builder()
                 .fileName(fileName)
-                .fileType(fileType)
-                .data(data)
+                .contentType(contentType)
+                .bytes(bytes)
                 .build();
     }
 }

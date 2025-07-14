@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Builder
@@ -19,9 +20,9 @@ public class MessageCreateServiceRequest {
     private final UUID userId;
 
     @Builder.Default
-    private final List<BinaryContent> binaryContents = new ArrayList<>();
+    private final List<MultipartFile> attachments = new ArrayList<>();
 
-    public Message toEntity() {
+    public Message toEntity(List<BinaryContent> binaryContents) {
         return Message.builder()
                 .content(message)
                 .channelId(channelId)
