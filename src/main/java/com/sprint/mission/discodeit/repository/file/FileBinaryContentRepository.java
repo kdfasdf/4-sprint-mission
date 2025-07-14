@@ -6,7 +6,6 @@ import com.sprint.mission.discodeit.util.FileUtils;
 import jakarta.annotation.PostConstruct;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -46,21 +45,21 @@ public class FileBinaryContentRepository implements BinaryContentRepository {
                 .findFirst();
     }
 
-    @Override
-    public Optional<BinaryContent> findBinaryContentsByUserId(UUID userId) {
-        return findBinaryContents()
-                .stream()
-                .filter(binaryContent -> binaryContent.getUserId().equals(userId))
-                .findFirst();
-    }
-
-    @Override
-    public List<BinaryContent> findBinaryContentsByMessageId(UUID messageId) {
-        return findBinaryContents()
-                .stream()
-                .filter(binaryContent -> binaryContent.getMessageId().equals(messageId))
-                .toList();
-    }
+//    @Override
+//    public Optional<BinaryContent> findBinaryContentsByUserId(UUID userId) {
+//        return findBinaryContents()
+//                .stream()
+//                .filter(binaryContent -> binaryContent.getUserId().equals(userId))
+//                .findFirst();
+//    }
+//
+//    @Override
+//    public List<BinaryContent> findBinaryContentsByMessageId(UUID messageId) {
+//        return findBinaryContents()
+//                .stream()
+//                .filter(binaryContent -> binaryContent.getMessageId().equals(messageId))
+//                .toList();
+//    }
 
     @Override
     public void deleteById(UUID binaryContentId) {
@@ -68,18 +67,18 @@ public class FileBinaryContentRepository implements BinaryContentRepository {
         FileUtils.remove(filePath);
     }
 
-    @Override
-    public void deleteByUserId(UUID userId) {
-        Set<BinaryContent> binaryContents = findBinaryContents();
-
-        if(binaryContents.isEmpty()) {
-            return;
-        }
-
-        binaryContents
-                .stream()
-                .filter(binaryContent -> binaryContent.getUserId().equals(userId))
-                .map(BinaryContent::getId)
-                .forEach(this::deleteById);
-    }
+//    @Override
+//    public void deleteByUserId(UUID userId) {
+//        Set<BinaryContent> binaryContents = findBinaryContents();
+//
+//        if(binaryContents.isEmpty()) {
+//            return;
+//        }
+//
+//        binaryContents
+//                .stream()
+//                .filter(binaryContent -> binaryContent.getUserId().equals(userId))
+//                .map(BinaryContent::getId)
+//                .forEach(this::deleteById);
+//    }
 }

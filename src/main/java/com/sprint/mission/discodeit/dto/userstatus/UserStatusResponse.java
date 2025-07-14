@@ -10,22 +10,25 @@ public class UserStatusResponse {
 
     private final UUID userId;
 
-    private final Instant lastOnlineTime;
+    private final Instant lastActiveAt;
 
-    private final boolean isOnline;
+    private final Instant createdAt;
+
+    private final boolean online;
 
     public UserStatusResponse(UserStatus userStatus) {
         this.userId = userStatus.getUserId();
-        this.lastOnlineTime = userStatus.getLastOnlineTime();
-        this.isOnline = userStatus.isOnline();
+        this.lastActiveAt = userStatus.getLastOnlineTime();
+        this.online = userStatus.isOnline();
+        this.createdAt = userStatus.getCreatedAt();
     }
 
     @Override
     public String toString() {
         return "UserStatusResponse{" +
-                "isOnline=" + isOnline +
+                "isOnline=" + online +
                 ", userId=" + userId +
-                ", lastOnlineTime=" + lastOnlineTime +
+                ", lastOnlineTime=" + lastActiveAt +
                 '}';
     }
 }

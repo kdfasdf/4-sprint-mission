@@ -24,7 +24,7 @@ public class BasicAuthService implements AuthService {
 
     @Override
     public UserResponse login(SignIn signIn) {
-        User user = userRepository.findUserByEmail(signIn.getEmail())
+        User user = userRepository.findUserByUserName(signIn.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
         if (!user.getPassword().equals(signIn.getPassword())) {

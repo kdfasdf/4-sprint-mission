@@ -2,7 +2,7 @@
 const API_BASE_URL = '/api';
 const ENDPOINTS = {
     USERS: `${API_BASE_URL}/users`,
-    BINARY_CONTENT: `${API_BASE_URL}/binarycontents`
+    BINARY_CONTENT: `${API_BASE_URL}/binary-contents`
 };
 
 // Initialize the application
@@ -14,7 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
 async function fetchAndRenderUsers() {
     try {
         const response = await fetch(ENDPOINTS.USERS);
-        if (!response.ok) throw new Error('Failed to fetch users');
+        if (!response.ok) {
+            throw new Error('Failed to fetch users');
+        }
         const users = await response.json();
         renderUserList(users);
     } catch (error) {
@@ -26,14 +28,16 @@ async function fetchAndRenderUsers() {
 async function fetchUserProfile(profileId) {
     try {
         const response = await fetch(`${ENDPOINTS.BINARY_CONTENT}/${profileId}`);
-        if (!response.ok) throw new Error('Failed to fetch profile');
+        if (!response.ok) {
+            throw new Error('Failed to fetch profile');
+        }
         const profile = await response.json();
 
         // Convert base64 encoded bytes to data URL
-        return `data:${profile.contentType};base64,${profile.data}`;
+        return `data:${profile.contentType};base64,${profile.bytes}`;
     } catch (error) {
         console.error('Error fetching profile:', error);
-        return '/default-profile.png'; // Fallback to default avatar
+        return '/default-avatar.png'; // Fallback to default avatar
     }
 }
 
@@ -49,12 +53,12 @@ async function renderUserList(users) {
         // Get profile image URL
         const profileUrl = user.profileId ?
             await fetchUserProfile(user.profileId) :
-            '/default-profile.png';
+            '/default-avatar.png';
 
         userElement.innerHTML = `
-            <img src="${profileUrl}" alt="${user.userName}" class="user-avatar">
+            <img src="${profileUrl}" alt="${user.username}" class="user-avatar">
             <div class="user-info">
-                <div class="user-name">${user.userName}</div>
+                <div class="user-name">${user.username}</div>
                 <div class="user-email">${user.email}</div>
             </div>
             <div class="status-badge ${user.online ? 'online' : 'offline'}">

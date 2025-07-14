@@ -1,9 +1,9 @@
 package com.sprint.mission.discodeit.controller;
 
-import com.sprint.mission.discodeit.dto.ApiResponse;
 import com.sprint.mission.discodeit.dto.auth.request.SignIn;
 import com.sprint.mission.discodeit.dto.user.UserResponse;
 import com.sprint.mission.discodeit.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,8 +18,8 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping( "/login")
-    public ResponseEntity<ApiResponse<UserResponse>> login(@RequestBody SignIn signIn) {
-        return ResponseEntity.ok().body(ApiResponse.onSuccess(authService.login(signIn)));
+    @PostMapping( "/auth/login")
+    public ResponseEntity<UserResponse> login(@Valid @RequestBody SignIn signIn) {
+        return ResponseEntity.ok().body(authService.login(signIn));
     }
 }

@@ -1,6 +1,5 @@
 package com.sprint.mission.discodeit.controller;
 
-import com.sprint.mission.discodeit.dto.ApiResponse;
 import com.sprint.mission.discodeit.dto.user.UserResponse;
 import com.sprint.mission.discodeit.dto.user.request.UserCreateRequest;
 import com.sprint.mission.discodeit.dto.user.request.UserUpdateRequest;
@@ -9,15 +8,17 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,29 +28,38 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<UserResponse>>> findUsers() {
-        return ResponseEntity.ok().body(ApiResponse.onSuccess(userService.findUsers()));
+    public ResponseEntity<List<UserResponse>> findUsers() {
+        return ResponseEntity.ok().body(userService.findUsers());
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<UserResponse>> createUser(@Valid @ModelAttribute UserCreateRequest request) {
-        return ResponseEntity.ok().body(ApiResponse.onSuccess(userService.createUser(request.toServiceRequest())));
+    @PostMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestPart("userCreateRequest") UserCreateRequest request,
+                                                                @RequestPart(value = "profile", required = false)
+                                                                MultipartFile profile) {
+        return ResponseEntity.ok().body(userService.createUser(request.toServiceRequest(profile)));
     }
 
     @GetMapping( "/{userId}")
-    public ResponseEntity<ApiResponse<UserResponse>> findUser(@PathVariable("userId") UUID userId) {
-        return ResponseEntity.ok().body(ApiResponse.onSuccess(userService.findUserById(userId)));
+    public ResponseEntity<UserResponse> findUser(@PathVariable("userId") UUID userId) {
+        return ResponseEntity.ok().body(userService.findUserById(userId));
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable("userId") UUID userId) {
+    public ResponseEntity<Void> deleteUser(@PathVariable("userId") UUID userId) {
         userService.deleteUser(userId);
-        return ResponseEntity.ok().body(ApiResponse.onSuccess(null));
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<ApiResponse<UserResponse>> updateUser(@PathVariable("userId") UUID userId, @Valid @ModelAttribute UserUpdateRequest request) {
-        return ResponseEntity.ok().body(ApiResponse.onSuccess(userService.updateUser(request.toServiceRequest(userId))));
+    public ResponseEntity<UserResponse> updateUser(
+            @PathVariable("userId") UUID userId,
+            @RequestPart("userUpdateRequest") UserUpdateRequest userUpdateRequest,
+            @RequestPart(value = "profile", required = false) MultipartFile profile
+    ) {
+        return ResponseEntity.ok().body(userService.updateUser(userUpdateRequest.toServiceRequest(userId, profile)));
     }
 
 }
