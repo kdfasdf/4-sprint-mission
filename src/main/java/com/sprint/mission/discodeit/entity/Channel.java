@@ -13,7 +13,6 @@ public class Channel extends BaseEntity {
 
     private final Set<Message> messages;
     private final Set<ReadStatus> readStatuses;
-//    private final UUID hostId;
 
     private String channelName;
     private String description;
@@ -22,7 +21,6 @@ public class Channel extends BaseEntity {
 
     @Builder
     private Channel(UUID hostId, String channelName, String description, ChannelType channelType) {
-//        this.hostId = hostId;
         this.channelName = channelName;
         this.description = description;
         this.readStatuses= new LinkedHashSet<>();

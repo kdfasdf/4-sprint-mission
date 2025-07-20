@@ -62,7 +62,6 @@ public class BasicUserStatusService implements UserStatusService {
                 .orElseThrow(() -> new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND));
 
         userStatusRepository.delete(request.getUserId());
-        // 추후에 수정해야할 필드 추가되면 수정로직 추가
 
         userStatusToUpdate.updateLastOnlineTime();
 
@@ -78,7 +77,6 @@ public class BasicUserStatusService implements UserStatusService {
                 .orElseThrow(() -> new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND));
 
         userStatusRepository.delete(userId);
-        // 추후에 수정해야할 필드 추가되면 수정로직 추가
 
         userStatusToUpdate.updateLastOnlineTime();
 
