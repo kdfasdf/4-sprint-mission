@@ -16,6 +16,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ErrorResponse.of(ClientRequestErrorCode.UKNOWN_ERROR));
+    }
+
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(BusinessException ex) {
         return ResponseEntity.status(ex.getStatus())

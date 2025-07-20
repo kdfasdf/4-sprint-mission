@@ -13,7 +13,8 @@ public enum ClientRequestErrorCode implements ErrorCode {
     MISMATH_REQUEST_METHOD(400, "CLIENT_REQUEST_004", "요청 메소드 오류"),
     VALIDATION_FAILED(400, "CLIENT_REQUEST_005", "유효하지 않은 요청 값"),
     CONSTRAINT_VIOLATION(400, "CLIENT_REQUEST_006", "제약 조건을 위반"),
-    METHOD_NOT_ALLOWED(405, "CLIENT_REQUEST_007", "허용되지 않은 HTTP 메서드입니다");;
+    METHOD_NOT_ALLOWED(405, "CLIENT_REQUEST_007", "허용되지 않은 HTTP 메서드입니다"),
+    UKNOWN_ERROR(500, "CLIENT_REQUEST_008", "UNKNOWN_ERROR");;
 
     private final int status;
     private final String code;
