@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum ClientRequestErrorCode implements ErrorCode{
+public enum ClientRequestErrorCode implements ErrorCode {
 
     INVALID_INPUT_VALUE(400, "CLIENT_REQUEST_001", "유효하지 않은 입력 값"),
     METHOD_ARGUMENT_TYPE_MISMATCH(400, "CLIENT_REQUEST_002", "요청 파라미터 타입 오류"),

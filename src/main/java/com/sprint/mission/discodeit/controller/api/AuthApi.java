@@ -31,5 +31,4 @@ public interface AuthApi {
             )
     })
     ResponseEntity<UserResponse> login(@Parameter(description = "로그인 정보") SignIn signIn);
-
 }

@@ -57,5 +57,4 @@ public class MessageController implements MessageApi {
     public ResponseEntity<List<MessageResponse>> findMessagesByChannelId(@RequestParam("channelId") UUID channelId) {
         return ResponseEntity.ok().body(messageService.findMessagesByChannelId(channelId));
     }
-
 }

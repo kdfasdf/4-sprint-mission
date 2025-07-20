@@ -64,5 +64,4 @@ public class ChannelController implements ChannelApi {
         channelService.deleteChannel(channelId);
         return ResponseEntity.noContent().build();
     }
-
 }
