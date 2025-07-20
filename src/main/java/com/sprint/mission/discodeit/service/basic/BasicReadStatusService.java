@@ -86,20 +86,9 @@ public class BasicReadStatusService implements ReadStatusService {
         ReadStatus readStatusToUpdate = readStatusRepository.findReadStatusById(request.getReadStatusId())
                 .orElseThrow(() -> new ReadStatusException(ReadStatusErrorCode.READ_STATUS_NOT_FOUND));
 
-//        Channel channel = channelRepository.findChannelById(request.getChannelId())
-//                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
-//
-//        User user = userRepository.findUserById(request.getUserId())
-//                .orElseThrow(() -> new IllegalArgumentException("User not found."));
-
         readStatusToUpdate.updateLastReadAt();
 
-//        user.addReadStatus(readStatusToUpdate);
-//        channel.addUserReadStatus(readStatusToUpdate);
-
         readStatusRepository.save(readStatusToUpdate);
-//        userRepository.save(user);
-//        channelRepository.save(channel);
 
         return new ReadStatusResponse(readStatusToUpdate);
 

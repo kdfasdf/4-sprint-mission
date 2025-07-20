@@ -63,22 +63,7 @@ public class BasicChannelService implements ChannelService {
 
     @Override
     public ChannelResponse createPrivateChannel(PrivateChannelCreateServiceRequest request) {
-
-//        ChannelType channelType = ChannelType.getChannelTypeByCode(request.getChannelTypeCode());
         Channel channel = request.toEntity(ChannelType.PRIVATE);
-
-//        User hostUser = userRepository.findUserById(request.getHostId()).orElseThrow(() -> new IllegalArgumentException("User not found."));
-//
-//        if(hostUser.getActiveStatus() == ActiveStatus.ACTIVE) {
-//            ReadStatus readStatus = new ReadStatus(hostUser.getId(), channel.getId());
-//
-//            hostUser.addReadStatus(readStatus);
-//            channel.addUserReadStatus(readStatus);
-//
-//            readStatusRepository.save(readStatus);
-//            channelRepository.save(channel);
-//            userRepository.save(hostUser);
-//        }
 
         request.getParticipantIds().stream()
                 .map(userId -> new ReadStatus(userId, channel.getId()))

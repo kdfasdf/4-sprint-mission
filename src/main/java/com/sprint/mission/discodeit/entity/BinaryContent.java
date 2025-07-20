@@ -9,8 +9,6 @@ import lombok.Getter;
 @Getter
 public class BinaryContent extends BaseEntity {
 
-//    private final UUID userId;
-//    private final UUID messageId;
     private final byte[] bytes;
 
     private final Instant createdAt;
@@ -19,25 +17,18 @@ public class BinaryContent extends BaseEntity {
     private Long size;
     private String fileName;
 
-//    private FileType fileType;
 
     @Builder
     @JsonCreator
     public BinaryContent(
-//            @JsonProperty("userId") UUID userId,
-//                         @JsonProperty("messageId") UUID messageId,
                          @JsonProperty("fileName") String fileName,
                          @JsonProperty("contentType") String contentType,
                          @JsonProperty("size") Long size,
-//                         @JsonProperty("fileType") FileType fileType,
                          @JsonProperty("data") byte[] bytes) {
-//        this.userId = userId;
-//        this.messageId = messageId;
         this.bytes = bytes;
         this.createdAt = Instant.now();
         this.contentType = contentType;
         this.size = size;
         this.fileName = fileName;
-//        this.fileType = fileType;
     }
 }

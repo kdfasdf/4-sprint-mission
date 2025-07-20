@@ -190,6 +190,5 @@ public class BasicUserService implements UserService {
     public void deleteUser(UUID userId) {
         userStatusRepository.delete(userId);
         userRepository.delete(userId);
-//        binaryContentRepository.deleteByUserId(userId);
     }
 }
