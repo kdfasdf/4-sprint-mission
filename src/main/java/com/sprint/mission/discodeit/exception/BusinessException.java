@@ -20,4 +20,8 @@ public class BusinessException extends RuntimeException {
     public String getCode() {
         return errorCode.getCode();
     }
+
+    public ErrorCode getErrorCode() {
+        return errorCode;
+    }
 }
