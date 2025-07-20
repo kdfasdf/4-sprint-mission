@@ -67,5 +67,4 @@ public class UserController implements UserApi {
     ) {
         return ResponseEntity.ok().body(userService.updateUser(userUpdateRequest.toServiceRequest(userId, profile)));
     }
-
 }

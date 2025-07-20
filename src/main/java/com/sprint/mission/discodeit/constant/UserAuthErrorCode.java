@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum UserAuthErrorCode implements ErrorCode{
+public enum UserAuthErrorCode implements ErrorCode {
 
     INVALID_USERNAME(401, "AUTH_002", "INVALID_USERNAME"),
     INVALID_PASSWORD(401, "AUTH_002", "INVALID_PASSWORD");

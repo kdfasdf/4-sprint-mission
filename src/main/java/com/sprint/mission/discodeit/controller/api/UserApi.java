@@ -109,6 +109,4 @@ public interface UserApi {
                     ))
     })
     ResponseEntity<List<UserResponse>> findUsers();
-
-
 }

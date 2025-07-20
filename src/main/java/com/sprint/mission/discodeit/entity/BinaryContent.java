@@ -17,7 +17,6 @@ public class BinaryContent extends BaseEntity {
     private Long size;
     private String fileName;
 
-
     @Builder
     @JsonCreator
     public BinaryContent(
