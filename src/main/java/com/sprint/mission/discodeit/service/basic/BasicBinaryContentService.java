@@ -1,8 +1,10 @@
 package com.sprint.mission.discodeit.service.basic;
 
+import com.sprint.mission.discodeit.constant.BinaryContentErrorCode;
 import com.sprint.mission.discodeit.dto.binarycontent.BinaryContentResponse;
 import com.sprint.mission.discodeit.dto.binarycontent.request.BinaryContentCreateServiceRequest;
 import com.sprint.mission.discodeit.entity.FileType;
+import com.sprint.mission.discodeit.exception.BinaryContentException;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.service.BinaryContentService;
 import java.util.List;
@@ -33,14 +35,14 @@ public class BasicBinaryContentService implements BinaryContentService {
     public BinaryContentResponse findById(UUID binaryContentId) {
         return binaryContentRepository.findBinaryContentById(binaryContentId)
                 .map(BinaryContentResponse::new)
-                .orElseThrow(() -> new IllegalArgumentException("BinaryContent not found"));
+                .orElseThrow(() -> new BinaryContentException(BinaryContentErrorCode.BINARY_CONTENT_NOT_FOUND));
     }
 
     @Override
     public List<BinaryContentResponse> findAllByIdIn(List<UUID> ids) {
         return ids.stream()
                 .map(id -> binaryContentRepository.findBinaryContentById(id).orElseThrow(
-                                () -> new IllegalArgumentException("BinaryContent not found"))
+                                () -> new BinaryContentException(BinaryContentErrorCode.BINARY_CONTENT_NOT_FOUND))
                 )
                 .map(BinaryContentResponse::new)
                 .toList();

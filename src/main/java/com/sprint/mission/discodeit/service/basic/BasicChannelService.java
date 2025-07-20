@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.service.basic;
 
+import com.sprint.mission.discodeit.constant.ChannelErrorCode;
 import com.sprint.mission.discodeit.dto.channel.ChannelResponse;
 import com.sprint.mission.discodeit.dto.channel.PrivateChannelResponse;
 import com.sprint.mission.discodeit.dto.channel.PublicChannelResponse;
@@ -9,6 +10,7 @@ import com.sprint.mission.discodeit.dto.channel.request.PrivateChannelCreateServ
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ChannelType;
 import com.sprint.mission.discodeit.entity.ReadStatus;
+import com.sprint.mission.discodeit.exception.ChannelException;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.repository.ReadStatusRepository;
@@ -96,7 +98,7 @@ public class BasicChannelService implements ChannelService {
                 .map(channel ->
                         channel.getChannelType() == ChannelType.PUBLIC ? new PublicChannelResponse(channel) : new PrivateChannelResponse(channel)
                 )
-                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+                .orElseThrow(() -> new ChannelException(ChannelErrorCode.CHANNEL_NOT_FOUND));
 
     }
 

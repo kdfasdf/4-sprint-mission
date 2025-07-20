@@ -1,11 +1,17 @@
 package com.sprint.mission.discodeit.service.basic;
 
+import com.sprint.mission.discodeit.constant.ChannelErrorCode;
+import com.sprint.mission.discodeit.constant.ReadStatusErrorCode;
+import com.sprint.mission.discodeit.constant.UserErrorCode;
 import com.sprint.mission.discodeit.dto.readstatus.ReadStatusResponse;
 import com.sprint.mission.discodeit.dto.readstatus.request.ReadStatusCreateServiceRequest;
 import com.sprint.mission.discodeit.dto.readstatus.request.ReadStatusUpdateServiceRequest;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ReadStatus;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.exception.ChannelException;
+import com.sprint.mission.discodeit.exception.ReadStatusException;
+import com.sprint.mission.discodeit.exception.UserException;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.ReadStatusRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
@@ -32,13 +38,13 @@ public class BasicReadStatusService implements ReadStatusService {
     @Override
     public ReadStatusResponse createReadStatus(ReadStatusCreateServiceRequest request) {
         Channel channel = channelRepository.findChannelById(request.getChannelId())
-                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+                .orElseThrow(() -> new ChannelException(ChannelErrorCode.CHANNEL_NOT_FOUND));
 
         User user = userRepository.findUserById(request.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         ReadStatus readStatus = readStatusRepository.findReadStatusByUserIdAndChannelId(request.getUserId(), request.getChannelId())
-                .orElseThrow(() -> new IllegalArgumentException("ReadStatus not found."));
+                .orElseThrow(() -> new ReadStatusException(ReadStatusErrorCode.READ_STATUS_NOT_FOUND));
 
         readStatus.updateLastReadAt();
 
@@ -56,14 +62,14 @@ public class BasicReadStatusService implements ReadStatusService {
     public ReadStatusResponse findReadStatusById(UUID userId) {
         return readStatusRepository.findReadStatusById(userId)
                 .map(ReadStatusResponse::new)
-                .orElseThrow(() -> new IllegalArgumentException("ReadStatus not found."));
+                .orElseThrow(() -> new ReadStatusException(ReadStatusErrorCode.READ_STATUS_NOT_FOUND));
     }
 
     @Override
     public ReadStatusResponse findReadStatusByUserIdAndChannelId(UUID userId, UUID channelId) {
         return readStatusRepository.findReadStatusByUserIdAndChannelId(userId, channelId)
                 .map(ReadStatusResponse::new)
-                .orElseThrow(() -> new IllegalArgumentException("ReadStatus not found."));
+                .orElseThrow(() -> new ReadStatusException(ReadStatusErrorCode.READ_STATUS_NOT_FOUND));
     }
 
     @Override
@@ -78,7 +84,7 @@ public class BasicReadStatusService implements ReadStatusService {
     public ReadStatusResponse updateReadStatus(ReadStatusUpdateServiceRequest request) {
 
         ReadStatus readStatusToUpdate = readStatusRepository.findReadStatusById(request.getReadStatusId())
-                .orElseThrow(() -> new IllegalArgumentException("ReadStatus not found."));
+                .orElseThrow(() -> new ReadStatusException(ReadStatusErrorCode.READ_STATUS_NOT_FOUND));
 
 //        Channel channel = channelRepository.findChannelById(request.getChannelId())
 //                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
@@ -102,13 +108,13 @@ public class BasicReadStatusService implements ReadStatusService {
     @Override
     public void deleteReadStatus(UUID readStatusId) {
         ReadStatus readStatus = readStatusRepository.findReadStatusById(readStatusId)
-                .orElseThrow(() -> new IllegalArgumentException("ReadStatus not found."));
+                .orElseThrow(() -> new ReadStatusException(ReadStatusErrorCode.READ_STATUS_NOT_FOUND));
 
         Channel channel = channelRepository.findChannelById(readStatus.getChannelId())
-                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+                .orElseThrow(() -> new ChannelException(ChannelErrorCode.CHANNEL_NOT_FOUND));
 
         User user = userRepository.findUserById(readStatus.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         removeReadStatusesFromChannel(channel, readStatusId);
         removeReadStatusesFromUser(user, readStatusId);
@@ -124,7 +130,7 @@ public class BasicReadStatusService implements ReadStatusService {
                 .findFirst()
                 .ifPresentOrElse(
                         channel::removeUserReadStatus,
-                        () -> {throw new IllegalArgumentException("ReadStatus not found.");}
+                        () -> {throw new ReadStatusException(ReadStatusErrorCode.READ_STATUS_NOT_FOUND);}
                 );
     }
 
@@ -134,7 +140,7 @@ public class BasicReadStatusService implements ReadStatusService {
                 .findFirst()
                 .ifPresentOrElse(
                         user::removeReadStatus,
-                        () -> {throw new IllegalArgumentException("ReadStatus not found.");}
+                        () -> {throw new ReadStatusException(ReadStatusErrorCode.READ_STATUS_NOT_FOUND);}
                 );
     }
 }

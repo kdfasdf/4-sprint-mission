@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 @Tag(name = "User Status", description = "User Status API")
 public interface UserStatusApi {
 
-    @Operation(summary = "UserStatus 수정")
+    @Operation(summary = "User 온라인 상태 업데이트")
     @ApiResponses(
             value = {
                     @ApiResponse(
@@ -25,10 +25,11 @@ public interface UserStatusApi {
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "UserStatus not found"
+                            description = "해당 User의 UserStatus를 찾을 수 없음"
                     )
             }
     )
-    ResponseEntity<UserStatusResponse> updateUserStatus(@Parameter(description = "수정할 UserStatus Id") UUID userId, @Parameter(description = "UserStatus 수정 요청") UserStatusUpdateRequest userStatusUpdateRequest);
+    ResponseEntity<UserStatusResponse> updateUserStatus(@Parameter(description = "상태를 변경할 User ID") UUID userId,
+                                                        @Parameter(description = "변경할 User 온라인 상태 정보") UserStatusUpdateRequest userStatusUpdateRequest);
 
 }
