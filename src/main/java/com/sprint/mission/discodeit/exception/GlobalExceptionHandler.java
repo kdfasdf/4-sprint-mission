@@ -23,7 +23,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(BusinessException ex) {
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex) {
         return ResponseEntity.status(ex.getStatus())
                 .body(ErrorResponse.of(ex.getErrorCode()));
     }
