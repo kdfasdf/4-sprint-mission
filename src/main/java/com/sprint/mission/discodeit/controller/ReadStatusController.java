@@ -8,6 +8,7 @@ import com.sprint.mission.discodeit.service.ReadStatusService;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,7 +29,7 @@ public class ReadStatusController implements ReadStatusApi {
     @Override
     @PostMapping
     public ResponseEntity<ReadStatusResponse> createReadStatus(@RequestBody ReadStatusCreateRequest reqeust) {
-        return ResponseEntity.ok().body(readStatusService.createReadStatus(reqeust.toServiceRequest()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(readStatusService.createReadStatus(reqeust.toServiceRequest()));
     }
 
     @Override

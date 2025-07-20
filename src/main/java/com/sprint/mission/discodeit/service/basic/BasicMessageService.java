@@ -1,5 +1,9 @@
 package com.sprint.mission.discodeit.service.basic;
 
+import com.sprint.mission.discodeit.constant.BinaryContentErrorCode;
+import com.sprint.mission.discodeit.constant.ChannelErrorCode;
+import com.sprint.mission.discodeit.constant.MessageErrorCode;
+import com.sprint.mission.discodeit.constant.UserErrorCode;
 import com.sprint.mission.discodeit.dto.message.MessageResponse;
 import com.sprint.mission.discodeit.dto.message.request.MessageCreateServiceRequest;
 import com.sprint.mission.discodeit.dto.message.request.MessageUpdateServiceRequest;
@@ -7,6 +11,10 @@ import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.exception.BinaryContentException;
+import com.sprint.mission.discodeit.exception.ChannelException;
+import com.sprint.mission.discodeit.exception.MessageException;
+import com.sprint.mission.discodeit.exception.UserException;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
@@ -52,10 +60,10 @@ public class BasicMessageService implements MessageService {
         Message message = request.toEntity(binaryContents);
 
         Channel findChannel = channelRepository.findChannelById(request.getChannelId())
-                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+                .orElseThrow(() -> new ChannelException(ChannelErrorCode.CHANNEL_NOT_FOUND));
 
         User findUser = userRepository.findUserById(request.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         findChannel.addMessage(message);
         findUser.addMessage(message);
@@ -74,7 +82,7 @@ public class BasicMessageService implements MessageService {
         try {
             binaryProfile = BinaryContentConverter.toBinaryContent(profile);
         } catch(IOException e) {
-            throw new IllegalArgumentException("Failed to upload profile.");
+            throw new BinaryContentException(BinaryContentErrorCode.MULTIPART_FILE_CONVERT_FAILED);
         }
         return binaryProfile;
     }
@@ -90,7 +98,7 @@ public class BasicMessageService implements MessageService {
     @Override
     public MessageResponse findMessageById(UUID messageId) {
         Message findMessage = messageRepository.findMessageById(messageId)
-                .orElseThrow(() -> new IllegalArgumentException("Message not found."));
+                .orElseThrow(() -> new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND));
 
         return new MessageResponse(findMessage);
     }
@@ -115,16 +123,16 @@ public class BasicMessageService implements MessageService {
 
     @Override
     public MessageResponse updateContent(MessageUpdateServiceRequest request) {
-        Optional.ofNullable(request.getContent()).orElseThrow(() -> new IllegalArgumentException("Content is null."));
+        Optional.ofNullable(request.getContent()).orElseThrow(() -> new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND));
 
         Message messageToUpdate = messageRepository.findMessageById(request.getMessageId())
-               .orElseThrow(() -> new IllegalArgumentException("Message not found."));
+               .orElseThrow(() -> new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND));
 
         User author = userRepository.findUserById(request.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         Channel channel = channelRepository.findChannelById(request.getChannelId())
-                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+                .orElseThrow(() -> new ChannelException(ChannelErrorCode.CHANNEL_NOT_FOUND));
 
 
         editUserMessageContent(author, request);
@@ -144,7 +152,7 @@ public class BasicMessageService implements MessageService {
                 .filter(myMessage -> myMessage.getId().equals(request.getMessageId()))
                 .findFirst()
                 .ifPresentOrElse(myMessage -> myMessage.editContent(request.getContent()),
-                        () -> {throw new IllegalArgumentException("Message not found.");}
+                        () -> {throw new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND);}
                 );
     }
 
@@ -153,7 +161,7 @@ public class BasicMessageService implements MessageService {
                 .filter(channelMessage -> channelMessage.getId().equals(request.getMessageId()))
                 .findFirst()
                 .ifPresentOrElse(channelMessage -> channelMessage.editContent(request.getContent()),
-                        () -> {throw new IllegalArgumentException("Message not found.");}
+                        () -> {throw new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND);}
                 );
     }
 
@@ -161,13 +169,13 @@ public class BasicMessageService implements MessageService {
     public void deleteMessage(UUID messageId) {
 
         Message findMessage = messageRepository.findMessageById(messageId)
-                .orElseThrow(() -> new IllegalArgumentException("Message not found."));
+                .orElseThrow(() -> new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND));
 
         User author = userRepository.findUserById(findMessage.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         Channel channel = channelRepository.findChannelById(findMessage.getChannelId())
-                .orElseThrow(() -> new IllegalArgumentException("Channel not found."));
+                .orElseThrow(() -> new ChannelException(ChannelErrorCode.CHANNEL_NOT_FOUND));
 
 //        if(findMessage.getBinaryContents() != null && !findMessage.getBinaryContents().isEmpty()) {
 //            List<BinaryContent> binaryContent = binaryContentRepository.findBinaryContentsByMessageId(messageId);
@@ -194,7 +202,7 @@ public class BasicMessageService implements MessageService {
                 .findFirst()
                 .ifPresentOrElse(
                         author::removeMessage,
-                        () -> { throw new IllegalArgumentException("Message not found."); }
+                        () -> { throw new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND); }
                 );
     }
 
@@ -204,7 +212,7 @@ public class BasicMessageService implements MessageService {
                 .findFirst()
                 .ifPresentOrElse(
                         channel::removeMessage,
-                        () -> { throw new IllegalArgumentException("Message not found."); }
+                        () -> { throw new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND); }
                 );
     }
 
@@ -212,7 +220,7 @@ public class BasicMessageService implements MessageService {
         messageRepository.findMessageById(messageId)
                 .ifPresentOrElse(
                         message -> messageRepository.delete(messageId),
-                        () -> { throw new IllegalArgumentException("Message not found."); }
+                        () -> { throw new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND); }
                 );
     }
 }

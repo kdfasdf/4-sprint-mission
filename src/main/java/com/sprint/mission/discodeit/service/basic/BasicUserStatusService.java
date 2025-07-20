@@ -1,9 +1,13 @@
 package com.sprint.mission.discodeit.service.basic;
 
+import com.sprint.mission.discodeit.constant.UserErrorCode;
+import com.sprint.mission.discodeit.constant.UserStatusErrorCode;
 import com.sprint.mission.discodeit.dto.userstatus.UserStatusResponse;
 import com.sprint.mission.discodeit.dto.userstatus.request.UserStatusCreateServiceRequest;
 import com.sprint.mission.discodeit.dto.userstatus.request.UserStatusUpdateServiceRequest;
 import com.sprint.mission.discodeit.entity.UserStatus;
+import com.sprint.mission.discodeit.exception.UserException;
+import com.sprint.mission.discodeit.exception.UserStatusException;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.UserStatusService;
@@ -26,10 +30,10 @@ public class BasicUserStatusService implements UserStatusService {
     @Override
     public void createUserStatus(UserStatusCreateServiceRequest request) {
         userRepository.findUserById(request.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         if(userStatusRepository.findUserStatusById(request.getUserId()).isPresent()){
-            throw new IllegalArgumentException("UserStatus already exists.");
+            throw new UserStatusException(UserStatusErrorCode.USER_STATUS_ALREADY_EXIST);
         }
 
         userStatusRepository.save(request.toEntity());
@@ -41,7 +45,7 @@ public class BasicUserStatusService implements UserStatusService {
                 .filter(userStatus -> userStatus.getUserId().equals(userId))
                 .findFirst()
                 .map(UserStatusResponse::new)
-                .orElseThrow(() -> new IllegalArgumentException("UserStatus not found."));
+                .orElseThrow(() -> new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND));
     }
 
     @Override
@@ -55,7 +59,7 @@ public class BasicUserStatusService implements UserStatusService {
     @Override
     public UserStatusResponse updateUserStatus(UserStatusUpdateServiceRequest request) {
         UserStatus userStatusToUpdate = userStatusRepository.findUserStatusByUserId(request.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("UserStatus not found."));
+                .orElseThrow(() -> new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND));
 
         userStatusRepository.delete(request.getUserId());
         // 추후에 수정해야할 필드 추가되면 수정로직 추가
@@ -71,7 +75,7 @@ public class BasicUserStatusService implements UserStatusService {
     @Override
     public UserStatusResponse updateUserStatusByUserId(UUID userId) {
         UserStatus userStatusToUpdate = userStatusRepository.findUserStatusById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("UserStatus not found."));
+                .orElseThrow(() -> new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND));
 
         userStatusRepository.delete(userId);
         // 추후에 수정해야할 필드 추가되면 수정로직 추가
@@ -88,7 +92,7 @@ public class BasicUserStatusService implements UserStatusService {
         userStatusRepository.findUserStatusById(userId)
                 .ifPresentOrElse(
                         userStatus -> userStatusRepository.delete(userStatus.getId()),
-                        () -> { throw new IllegalArgumentException("UserStatus not found."); }
+                        () -> { throw new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND); }
                 );
     }
 }

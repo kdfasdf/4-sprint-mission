@@ -19,7 +19,7 @@ public class AuthController implements AuthApi {
     private final AuthService authService;
 
     @Override
-    @PostMapping( "/auth/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<UserResponse> login(@Valid @RequestBody SignIn signIn) {
         return ResponseEntity.ok().body(authService.login(signIn));
     }

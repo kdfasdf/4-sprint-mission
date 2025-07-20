@@ -24,7 +24,7 @@ public interface UserApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "User 생성 성공",
+                    description = "User가 성공적으로 생성됨",
                     content = @Content(schema = @Schema(implementation = UserResponse.class))
             ),
             @ApiResponse(
@@ -40,15 +40,19 @@ public interface UserApi {
             @Parameter(
                     description = "프로필 이미지",
                     content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE)
-                    ) MultipartFile profile);
+            ) MultipartFile profile);
 
 
     @Operation(summary = "User 정보 수정")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "User 정보 수정 성공",
+                    description = "User 정보가 성공적으로 수정됨",
                     content = @Content(schema = @Schema(implementation = UserResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User를 찾을 수 없음"
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -58,11 +62,11 @@ public interface UserApi {
     ResponseEntity<UserResponse> updateUser(
             @Parameter(description = "수정할 User Id") UUID userId,
             @Parameter(
-                    description = "User 정보 수정 요청",
+                    description = "수정할 User 정보",
                     content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE)
             ) UserUpdateRequest userCreateRequest,
             @Parameter(
-                    description = "프로필 이미지",
+                    description = "수정할 User 프로필 이미지",
                     content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE)
             ) MultipartFile profile);
 
@@ -71,8 +75,12 @@ public interface UserApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "204",
-                    description = "User 삭제 성공",
+                    description = "User가 성공적으로 삭제됨",
                     content = @Content(schema = @Schema(implementation = UserResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User를 찾을 수 없음"
             )
     })
     ResponseEntity<Void> deleteUser(@Parameter(description = "삭제할 User Id") UUID userId);
@@ -96,11 +104,11 @@ public interface UserApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "전체 User 목록 조회 성공",
+                    description = "User 목록 조회 성공",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserResponse.class))
-            ))
-    })ResponseEntity<List<UserResponse>> findUsers();
-
+                    ))
+    })
+    ResponseEntity<List<UserResponse>> findUsers();
 
 
 }

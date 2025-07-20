@@ -1,5 +1,8 @@
 package com.sprint.mission.discodeit.service.basic;
 
+import com.sprint.mission.discodeit.constant.BinaryContentErrorCode;
+import com.sprint.mission.discodeit.constant.UserErrorCode;
+import com.sprint.mission.discodeit.constant.UserStatusErrorCode;
 import com.sprint.mission.discodeit.dto.user.UserResponse;
 import com.sprint.mission.discodeit.dto.user.request.UserCreateServiceRequest;
 import com.sprint.mission.discodeit.dto.user.request.UserUpdateServiceRequest;
@@ -7,6 +10,9 @@ import com.sprint.mission.discodeit.entity.ActiveStatus;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
+import com.sprint.mission.discodeit.exception.BinaryContentException;
+import com.sprint.mission.discodeit.exception.UserException;
+import com.sprint.mission.discodeit.exception.UserStatusException;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
@@ -58,24 +64,24 @@ public class BasicUserService implements UserService {
     private void validateEmailDoesNotExist(String email) {
         userRepository.findUserByEmail(email)
                 .ifPresent(user -> {
-                    throw new IllegalArgumentException("Email is duplicated.");
+                    throw new UserException(UserErrorCode.EMAIL_DUPLICATED);
                 });
     }
 
     private void validateUserDoesNotExist(String userName) {
         userRepository.findUserByUserName(userName)
                 .ifPresent(user -> {
-                    throw new IllegalArgumentException("User name is duplicated.");
+                    throw new UserException(UserErrorCode.USER_NAME_DUPLICATED);
                 });
     }
 
     @Override
     public UserResponse findUserById(UUID userId) {
         User findUser = userRepository.findUserById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         UserStatus findUserStatus = userStatusRepository.findUserStatusByUserId(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User status not found."));
+                .orElseThrow(() -> new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND));
 
 
         return new UserResponse(findUser, findUserStatus);
@@ -88,10 +94,10 @@ public class BasicUserService implements UserService {
                 .filter(user -> user.getActiveStatus() == ActiveStatus.DORMANT)
                 .filter(user -> user.getId().equals(userId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         UserStatus findUserStatus = userStatusRepository.findUserStatusById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User status not found."));
+                .orElseThrow(() -> new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND));
 
 
         return new UserResponse(findDormantUser, findUserStatus);
@@ -104,10 +110,10 @@ public class BasicUserService implements UserService {
                 .filter(user -> user.getActiveStatus() == ActiveStatus.DELETED)
                 .filter(user -> user.getId().equals(userId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         UserStatus findUserStatus = userStatusRepository.findUserStatusById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User status not found."));
+                .orElseThrow(() -> new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND));
 
 
         return new UserResponse(findDeletedUser, findUserStatus);
@@ -119,7 +125,7 @@ public class BasicUserService implements UserService {
                 .stream()
                 .map(user ->
                     new UserResponse(user, userStatusRepository.findUserStatusByUserId(user.getId())
-                                .orElseThrow(() -> new IllegalArgumentException("User status not found.")))
+                                .orElseThrow(() -> new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND)))
                 )
                 .toList();
     }
@@ -131,7 +137,7 @@ public class BasicUserService implements UserService {
                 .filter(user -> user.getActiveStatus() == ActiveStatus.DORMANT)
                 .map(user ->
                         new UserResponse(user, userStatusRepository.findUserStatusById(user.getId())
-                                        .orElseThrow(() -> new IllegalArgumentException("User status not found.")))
+                                        .orElseThrow(() -> new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND)))
                 )
                 .toList();
     }
@@ -143,7 +149,7 @@ public class BasicUserService implements UserService {
                 .filter(user -> user.getActiveStatus() == ActiveStatus.DELETED)
                 .map(user ->
                         new UserResponse(user, userStatusRepository.findUserStatusById(user.getId())
-                                .orElseThrow(() -> new IllegalArgumentException("User status not found.")))
+                                .orElseThrow(() -> new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND)))
                 )
                 .toList();
     }
@@ -167,7 +173,7 @@ public class BasicUserService implements UserService {
         userRepository.save(userToUpdate);
 
         return new UserResponse(userToUpdate, userStatusRepository.findUserStatusByUserId(request.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User status not found.")));
+                .orElseThrow(() -> new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND)));
     }
 
     private static BinaryContent getBinaryContent(MultipartFile profile) {
@@ -175,7 +181,7 @@ public class BasicUserService implements UserService {
         try {
             binaryProfile = BinaryContentConverter.toBinaryContent(profile);
         } catch(IOException e) {
-            throw new IllegalArgumentException("Failed to upload profile.");
+            throw new BinaryContentException(BinaryContentErrorCode.MULTIPART_FILE_CONVERT_FAILED);
         }
         return binaryProfile;
     }
