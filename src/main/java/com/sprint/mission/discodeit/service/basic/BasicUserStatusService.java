@@ -1,58 +1,44 @@
 package com.sprint.mission.discodeit.service.basic;
 
-import com.sprint.mission.discodeit.constant.UserErrorCode;
 import com.sprint.mission.discodeit.constant.UserStatusErrorCode;
 import com.sprint.mission.discodeit.dto.userstatus.UserStatusResponse;
-import com.sprint.mission.discodeit.dto.userstatus.request.UserStatusCreateServiceRequest;
 import com.sprint.mission.discodeit.dto.userstatus.request.UserStatusUpdateServiceRequest;
 import com.sprint.mission.discodeit.entity.UserStatus;
-import com.sprint.mission.discodeit.exception.UserException;
 import com.sprint.mission.discodeit.exception.UserStatusException;
+import com.sprint.mission.discodeit.mapper.UserStatusMapper;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.UserStatusService;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class BasicUserStatusService implements UserStatusService {
 
-    @Qualifier("fileUserStatusRepository")
     private final UserStatusRepository userStatusRepository;
 
-    @Qualifier("fileUserRepository")
     private final UserRepository userRepository;
 
-    @Override
-    public void createUserStatus(UserStatusCreateServiceRequest request) {
-        userRepository.findUserById(request.getUserId())
-                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+    private final UserStatusMapper userStatusMapper;
 
-        if(userStatusRepository.findUserStatusById(request.getUserId()).isPresent()){
-            throw new UserStatusException(UserStatusErrorCode.USER_STATUS_ALREADY_EXIST);
-        }
-
-        userStatusRepository.save(request.toEntity());
-    }
 
     @Override
     public UserStatusResponse findUserStatusByUserId(UUID userId) {
-        return userStatusRepository.findUserStatuses().stream()
-                .filter(userStatus -> userStatus.getUserId().equals(userId))
-                .findFirst()
-                .map(UserStatusResponse::new)
+        return userStatusRepository.findUserStatusByUserId(userId)
+                .map(userStatusMapper::toResponse)
                 .orElseThrow(() -> new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND));
     }
 
     @Override
     public List<UserStatusResponse> findUserStatuses() {
-        return userStatusRepository.findUserStatuses()
+        return userStatusRepository.findAll()
                 .stream()
-                .map(UserStatusResponse::new)
+                .map(userStatusMapper::toResponse)
                 .toList();
     }
 
@@ -61,9 +47,7 @@ public class BasicUserStatusService implements UserStatusService {
         UserStatus userStatusToUpdate = userStatusRepository.findUserStatusByUserId(request.getUserId())
                 .orElseThrow(() -> new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND));
 
-        userStatusRepository.delete(request.getUserId());
-
-        userStatusToUpdate.updateLastOnlineTime();
+        userStatusToUpdate.updateLastActiveAt();
 
         userStatusRepository.save(userStatusToUpdate);
 
@@ -76,20 +60,20 @@ public class BasicUserStatusService implements UserStatusService {
         UserStatus userStatusToUpdate = userStatusRepository.findUserStatusById(userId)
                 .orElseThrow(() -> new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND));
 
-        userStatusRepository.delete(userId);
+        userStatusRepository.deleteByUserId(userId);
 
-        userStatusToUpdate.updateLastOnlineTime();
+        userStatusToUpdate.updateLastActiveAt();
 
         userStatusRepository.save(userStatusToUpdate);
 
-        return new UserStatusResponse(userStatusToUpdate);
+        return userStatusMapper.toResponse(userStatusToUpdate);
     }
 
     @Override
     public void deleteByUserId(UUID userId) {
         userStatusRepository.findUserStatusById(userId)
                 .ifPresentOrElse(
-                        userStatus -> userStatusRepository.delete(userStatus.getId()),
+                        userStatus -> userStatusRepository.deleteByUserId(userStatus.getId()),
                         () -> { throw new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND); }
                 );
     }

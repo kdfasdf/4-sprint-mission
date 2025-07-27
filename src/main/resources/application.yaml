@@ -1,11 +1,24 @@
-discodeit:
-  repository:
-    #type: jcf   # jcf | file
-    channel : ./data/channel
-    message : ./data/message
-    user : ./data/user
-    readStatus : ./data/readStatus
-    userStatus : ./data/userStatus
-    binaryContent : ./data/binaryContent
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/discodeit
+    username: discodeit_user
+    password: discode1234
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+ #   show-sql: true
 
+logging:
+  level:
+    org.springframework: INFO
+
+discodeit:
+  storage:
+    type: local
+    local:
+      root-path: ./discodeit/storage
 

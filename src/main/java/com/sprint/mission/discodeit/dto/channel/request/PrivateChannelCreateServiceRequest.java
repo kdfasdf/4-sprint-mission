@@ -12,15 +12,11 @@ import lombok.Getter;
 @Builder
 public class PrivateChannelCreateServiceRequest {
 
-//    private final UUID hostId;
-//    private final String channelTypeCode;
-
     private final List<UUID> participantIds;
 
     public Channel toEntity(ChannelType channelType) {
         return Channel.builder()
-//                .hostId(hostId)
-                .channelType(channelType)
+                .type(channelType)
                 .build();
     }
 }

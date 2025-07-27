@@ -12,6 +12,7 @@ import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.exception.ChannelException;
 import com.sprint.mission.discodeit.exception.ReadStatusException;
 import com.sprint.mission.discodeit.exception.UserException;
+import com.sprint.mission.discodeit.mapper.ReadStatusMapper;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.ReadStatusRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
@@ -19,21 +20,21 @@ import com.sprint.mission.discodeit.service.ReadStatusService;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class BasicReadStatusService implements ReadStatusService {
 
-    @Qualifier("fileReadStatusRepository")
     private final ReadStatusRepository readStatusRepository;
 
-    @Qualifier("fileChannelRepository")
     private final ChannelRepository channelRepository;
 
-    @Qualifier("fileUserRepository")
     private final UserRepository userRepository;
+
+    private final ReadStatusMapper readStatusMapper;
 
     @Override
     public ReadStatusResponse createReadStatus(ReadStatusCreateServiceRequest request) {
@@ -43,32 +44,27 @@ public class BasicReadStatusService implements ReadStatusService {
         User user = userRepository.findUserById(request.getUserId())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
-        ReadStatus readStatus = readStatusRepository.findReadStatusByUserIdAndChannelId(request.getUserId(), request.getChannelId())
-                .orElseThrow(() -> new ReadStatusException(ReadStatusErrorCode.READ_STATUS_NOT_FOUND));
+        readStatusRepository.findReadStatusByUserIdAndChannelId(request.getUserId(), request.getChannelId())
+                .ifPresent(readStatus -> {throw new ReadStatusException(ReadStatusErrorCode.READ_STATUS_ALREADY_EXIST);});
 
-        readStatus.updateLastReadAt();
+        ReadStatus readStatus = readStatusMapper.toEntity(request, user, channel);
 
-        channel.addUserReadStatus(readStatus);
-        user.addReadStatus(readStatus);
-
-        userRepository.save(user);
-        channelRepository.save(channel);
         readStatusRepository.save(readStatus);
 
-        return new ReadStatusResponse(readStatus);
+        return readStatusMapper.toResponse(readStatus);
     }
 
     @Override
     public ReadStatusResponse findReadStatusById(UUID userId) {
         return readStatusRepository.findReadStatusById(userId)
-                .map(ReadStatusResponse::new)
+                .map(readStatusMapper::toResponse)
                 .orElseThrow(() -> new ReadStatusException(ReadStatusErrorCode.READ_STATUS_NOT_FOUND));
     }
 
     @Override
     public ReadStatusResponse findReadStatusByUserIdAndChannelId(UUID userId, UUID channelId) {
         return readStatusRepository.findReadStatusByUserIdAndChannelId(userId, channelId)
-                .map(ReadStatusResponse::new)
+                .map(readStatusMapper::toResponse)
                 .orElseThrow(() -> new ReadStatusException(ReadStatusErrorCode.READ_STATUS_NOT_FOUND));
     }
 
@@ -76,7 +72,7 @@ public class BasicReadStatusService implements ReadStatusService {
     public List<ReadStatusResponse> findAllByUserId(UUID userId) {
         return readStatusRepository.findAllByUserId(userId)
                 .stream()
-                .map(ReadStatusResponse::new)
+                .map(readStatusMapper::toResponse)
                 .toList();
     }
 
@@ -90,7 +86,7 @@ public class BasicReadStatusService implements ReadStatusService {
 
         readStatusRepository.save(readStatusToUpdate);
 
-        return new ReadStatusResponse(readStatusToUpdate);
+        return readStatusMapper.toResponse(readStatusToUpdate);
 
     }
 
@@ -105,31 +101,9 @@ public class BasicReadStatusService implements ReadStatusService {
         User user = userRepository.findUserById(readStatus.getUserId())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
-        removeReadStatusesFromChannel(channel, readStatusId);
-        removeReadStatusesFromUser(user, readStatusId);
-
         channelRepository.save(channel);
         userRepository.save(user);
         readStatusRepository.deleteById(readStatusId);
     }
 
-    private void removeReadStatusesFromChannel(Channel channel, UUID readStatusId) {
-        channel.getReadStatuses().stream()
-                .filter(rs -> rs.getId().equals(readStatusId))
-                .findFirst()
-                .ifPresentOrElse(
-                        channel::removeUserReadStatus,
-                        () -> {throw new ReadStatusException(ReadStatusErrorCode.READ_STATUS_NOT_FOUND);}
-                );
-    }
-
-    private void removeReadStatusesFromUser(User user, UUID readStatusId) {
-        user.getReadStatuses().stream()
-                .filter(rs -> rs.getId().equals(readStatusId))
-                .findFirst()
-                .ifPresentOrElse(
-                        user::removeReadStatus,
-                        () -> {throw new ReadStatusException(ReadStatusErrorCode.READ_STATUS_NOT_FOUND);}
-                );
-    }
 }

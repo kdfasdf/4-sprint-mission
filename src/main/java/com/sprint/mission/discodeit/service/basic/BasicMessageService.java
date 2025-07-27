@@ -10,24 +10,27 @@ import com.sprint.mission.discodeit.dto.message.request.MessageUpdateServiceRequ
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
+import com.sprint.mission.discodeit.entity.MessageAttachment;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.exception.BinaryContentException;
 import com.sprint.mission.discodeit.exception.ChannelException;
 import com.sprint.mission.discodeit.exception.MessageException;
 import com.sprint.mission.discodeit.exception.UserException;
+import com.sprint.mission.discodeit.mapper.MessageMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.MessageService;
+import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import com.sprint.mission.discodeit.util.BinaryContentConverter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,64 +38,72 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class BasicMessageService implements MessageService {
 
-    @Qualifier("fileMessageRepository")
     private final MessageRepository messageRepository;
 
-    @Qualifier("fileChannelRepository")
     private final ChannelRepository channelRepository;
 
-    @Qualifier("fileUserRepository")
     private final UserRepository userRepository;
 
-    @Qualifier("fileBinaryContentRepository")
     private final BinaryContentRepository binaryContentRepository;
+
+    private final BinaryContentStorage binaryContentStorage;
+
+    private final MessageMapper messageMapper;
 
     @Override
     public MessageResponse createMessage(MessageCreateServiceRequest request) {
 
-        List<BinaryContent> binaryContents = new ArrayList<>();
-
-        Optional.ofNullable(request.getAttachments())
-                .ifPresent(attachments -> attachments.stream()
-                        .map(this::getBinaryContent)
-                        .forEach(binaryContents::add));
-
-        Message message = request.toEntity(binaryContents);
+        User author = userRepository.findUserById(request.getUserId())
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         Channel findChannel = channelRepository.findChannelById(request.getChannelId())
                 .orElseThrow(() -> new ChannelException(ChannelErrorCode.CHANNEL_NOT_FOUND));
 
-        User findUser = userRepository.findUserById(request.getUserId())
-                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+        Message message = messageMapper.toEntity(request, author, findChannel);
 
-        findChannel.addMessage(message);
-        findUser.addMessage(message);
+        List<MessageAttachment> attachments = new ArrayList<>();
+
+        List<MultipartFile> multipartFiles = Optional.ofNullable(request.getAttachments()).orElse(new ArrayList<>());
+
+        List<BinaryContent> binaryContents = convertMultipartFilesToBinaryContents(multipartFiles);
+
+        binaryContentRepository.saveAll(binaryContents);
 
         binaryContents.stream()
-                        .forEach(binaryContentRepository::save);
+                        .forEach(binaryContent -> binaryContentStorage.put(binaryContent.getId(), binaryContent.getBytes()));
 
-        channelRepository.save(findChannel);
-        userRepository.save(findUser);
+        attachments = convertBinaryContentsToMessageAttachment(binaryContents, message);
+
+        message.addAttachments(attachments);
+
         messageRepository.save(message);
-        return new MessageResponse(message);
+        return messageMapper.toResponse(message);
     }
 
-    private BinaryContent getBinaryContent(MultipartFile profile) {
-        BinaryContent binaryProfile;
+    private BinaryContent getBinaryContentFromMultipartFile(MultipartFile profile) {
+        BinaryContent binaryContent;
         try {
-            binaryProfile = BinaryContentConverter.toBinaryContent(profile);
+            binaryContent = BinaryContentConverter.toBinaryContent(profile);
         } catch(IOException e) {
             throw new BinaryContentException(BinaryContentErrorCode.MULTIPART_FILE_CONVERT_FAILED);
         }
-        return binaryProfile;
+        return binaryContent;
     }
 
-    private void addBinaryContentsToMessage(List<BinaryContent> binaryContents) {
-        if(!binaryContents.isEmpty()) {
-            for (BinaryContent content : binaryContents) {
-                binaryContentRepository.save(content);
-            }
-        }
+    private List<BinaryContent> convertMultipartFilesToBinaryContents(List<MultipartFile> multipartFiles) {
+        return multipartFiles.stream()
+                .map(this::getBinaryContentFromMultipartFile)
+                .toList();
+    }
+
+    private List<MessageAttachment> convertBinaryContentsToMessageAttachment(List<BinaryContent> binaryContents, Message message) {
+        return binaryContents.stream()
+                .map(binaryContent ->
+                        MessageAttachment.builder()
+                                .binaryContent(binaryContent)
+                                .message(message)
+                                .build())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -100,92 +111,48 @@ public class BasicMessageService implements MessageService {
         Message findMessage = messageRepository.findMessageById(messageId)
                 .orElseThrow(() -> new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND));
 
-        return new MessageResponse(findMessage);
+        return messageMapper.toResponse(findMessage);
     }
 
     @Override
     public List<MessageResponse> findMessagesByChannelId(UUID channelId) {
-        return messageRepository.findMessages()
+        return messageRepository.findAll()
                 .stream()
                 .filter(message -> message.getChannelId().equals(channelId))
-                .map(MessageResponse::new)
+                .map(messageMapper::toResponse)
                 .toList();
     }
 
     @Override
     public List<MessageResponse> findMessagesByUserId(UUID userId) {
-        return messageRepository.findMessages()
+        return messageRepository.findAll()
                 .stream()
-                .filter(message -> message.getUserId().equals(userId))
-                .map(MessageResponse::new)
+                .filter(message -> message.getAuthorId().equals(userId))
+                .map(messageMapper::toResponse)
                 .toList();
     }
 
     @Override
     public MessageResponse updateContent(MessageUpdateServiceRequest request) {
-        Optional.ofNullable(request.getContent()).orElseThrow(() -> new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND));
+        Optional.ofNullable(request.getContent()).orElseThrow(() -> new MessageException(MessageErrorCode.UPDATE_CONTENT_IS_NULL));
 
         Message messageToUpdate = messageRepository.findMessageById(request.getMessageId())
                .orElseThrow(() -> new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND));
 
-        User author = userRepository.findUserById(request.getUserId())
-                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
-
-        Channel channel = channelRepository.findChannelById(request.getChannelId())
-                .orElseThrow(() -> new ChannelException(ChannelErrorCode.CHANNEL_NOT_FOUND));
-
-
-        editUserMessageContent(author, request);
-        editChannelMessageContent(channel, request);
-
         messageToUpdate.editContent(request.getContent());
 
-        channelRepository.save(channel);
-        userRepository.save(author);
         messageRepository.save(messageToUpdate);
 
-        return new MessageResponse(messageToUpdate);
+        return messageMapper.toResponse(messageToUpdate);
     }
 
-    private void editUserMessageContent(User author, MessageUpdateServiceRequest request) {
-        author.getMessages().stream()
-                .filter(myMessage -> myMessage.getId().equals(request.getMessageId()))
-                .findFirst()
-                .ifPresentOrElse(myMessage -> myMessage.editContent(request.getContent()),
-                        () -> {throw new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND);}
-                );
-    }
-
-    public void editChannelMessageContent(Channel channel, MessageUpdateServiceRequest request) {
-        channel.getMessages().stream()
-                .filter(channelMessage -> channelMessage.getId().equals(request.getMessageId()))
-                .findFirst()
-                .ifPresentOrElse(channelMessage -> channelMessage.editContent(request.getContent()),
-                        () -> {throw new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND);}
-                );
-    }
 
     @Override
     public void deleteMessage(UUID messageId) {
-
         Message findMessage = messageRepository.findMessageById(messageId)
                 .orElseThrow(() -> new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND));
 
-        User author = userRepository.findUserById(findMessage.getUserId())
-                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
-
-        Channel channel = channelRepository.findChannelById(findMessage.getChannelId())
-                .orElseThrow(() -> new ChannelException(ChannelErrorCode.CHANNEL_NOT_FOUND));
-
-//        if(findMessage.getBinaryContents() != null && !findMessage.getBinaryContents().isEmpty()) {
-//            List<BinaryContent> binaryContent = binaryContentRepository.findBinaryContentsByMessageId(messageId);
-//            removeBinaryContentsOfMessage(binaryContent);
-//        }
-
-        removeMessageFromUser(author, messageId);
-        removeMessageFromChannel(channel, messageId);
         removeMessage(messageId);
-
     }
 
     private void removeBinaryContentsOfMessage(List<BinaryContent> binaryContents) {
@@ -196,30 +163,10 @@ public class BasicMessageService implements MessageService {
         }
     }
 
-    private void removeMessageFromUser(User author, UUID messageId) {
-        author.getMessages().stream()
-                .filter(myMessage -> myMessage.getId().equals(messageId))
-                .findFirst()
-                .ifPresentOrElse(
-                        author::removeMessage,
-                        () -> { throw new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND); }
-                );
-    }
-
-    private void removeMessageFromChannel(Channel channel, UUID messageId) {
-        channel.getMessages().stream()
-                .filter(channelMessage -> channelMessage.getId().equals(messageId))
-                .findFirst()
-                .ifPresentOrElse(
-                        channel::removeMessage,
-                        () -> { throw new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND); }
-                );
-    }
-
     private void removeMessage(UUID messageId) {
         messageRepository.findMessageById(messageId)
                 .ifPresentOrElse(
-                        message -> messageRepository.delete(messageId),
+                        message -> messageRepository.deleteById(messageId),
                         () -> { throw new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND); }
                 );
     }
