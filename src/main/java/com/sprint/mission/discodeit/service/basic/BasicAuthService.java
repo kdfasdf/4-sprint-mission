@@ -7,27 +7,28 @@ import com.sprint.mission.discodeit.dto.user.UserResponse;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.exception.UserAuthException;
+import com.sprint.mission.discodeit.mapper.UserMapper;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BasicAuthService implements AuthService {
 
-    @Qualifier("fileUserRepository")
     private final UserRepository userRepository;
 
-    @Qualifier("fileUserStatusRepository")
     private final UserStatusRepository userStatusRepository;
 
+    private final UserMapper userMapper;
 
     @Override
     public UserResponse login(SignIn signIn) {
-        User user = userRepository.findUserByUserName(signIn.getUsername())
+        User user = userRepository.findUserByUsername(signIn.getUsername())
                 .orElseThrow(() -> new UserAuthException(UserAuthErrorCode.INVALID_USERNAME));
 
         if (!user.getPassword().equals(signIn.getPassword())) {
@@ -37,9 +38,9 @@ public class BasicAuthService implements AuthService {
         UserStatus userStatus = userStatusRepository.findUserStatusByUserId(user.getId())
                 .orElseThrow(() -> new UserAuthException(UserStatusErrorCode.USER_STATUS_NOT_FOUND));
 
-        userStatus.updateLastOnlineTime();
+        userStatus.updateLastActiveAt();
         userStatusRepository.save(userStatus);
 
-        return new UserResponse(user, userStatus);
+        return userMapper.toResponse(user);
     }
 }

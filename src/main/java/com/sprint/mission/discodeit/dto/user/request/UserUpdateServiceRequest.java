@@ -13,7 +13,6 @@ public class UserUpdateServiceRequest {
 
     private final String newUsername;
     private final String newEmail;
-//    private final String phoneNumber;
     private final String newPassword;
     private final MultipartFile profile;
 }

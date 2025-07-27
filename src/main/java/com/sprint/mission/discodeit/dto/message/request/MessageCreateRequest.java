@@ -24,9 +24,9 @@ public class MessageCreateRequest {
     public MessageCreateServiceRequest toServiceRequest(List<MultipartFile> attachments) {
         return MessageCreateServiceRequest.builder()
             .message(content)
+            .attachments(attachments)
             .channelId(channelId)
             .userId(authorId)
-            .attachments(attachments)
             .build();
     }
 }

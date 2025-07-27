@@ -1,29 +1,46 @@
 package com.sprint.mission.discodeit.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-public class UserStatus extends BaseEntity {
+@Entity
+@Table(name = "user_status")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class UserStatus extends BaseUpdatableEntity {
 
-    private final UUID userId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    private Instant lastOnlineTime = Instant.now();;
+    @Column(name = "last_active_at" , nullable = false)
+    private Instant lastActiveAt = Instant.now();;
 
     @Builder
-    public UserStatus(UUID userId) {
-        this.userId = userId;
+    public UserStatus(User user) {
+        this.user = user;
     }
 
     public boolean isOnline() {
-        return Duration.between(lastOnlineTime, Instant.now()).toMinutes() <= 5;
+        return Duration.between(lastActiveAt, Instant.now()).toMinutes() <= 5;
     }
 
-    public void updateLastOnlineTime() {
-        this.lastOnlineTime = Instant.now();
-        this.setUpdatedAt();
+    public void updateLastActiveAt() {
+        this.lastActiveAt = Instant.now();
+    }
+
+    public UUID getUserId() {
+        return user.getId();
     }
 }

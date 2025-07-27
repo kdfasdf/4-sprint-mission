@@ -8,19 +8,19 @@ import lombok.Getter;
 @Getter
 public class UserStatusResponse {
 
+    private final UUID id;
+
     private final UUID userId;
 
     private final Instant lastActiveAt;
 
-    private final Instant createdAt;
-
     private final boolean online;
 
     public UserStatusResponse(UserStatus userStatus) {
+        this.id = userStatus.getId();
         this.userId = userStatus.getUserId();
-        this.lastActiveAt = userStatus.getLastOnlineTime();
+        this.lastActiveAt = userStatus.getLastActiveAt();
         this.online = userStatus.isOnline();
-        this.createdAt = userStatus.getCreatedAt();
     }
 
     @Override

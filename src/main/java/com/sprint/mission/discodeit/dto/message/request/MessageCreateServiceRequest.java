@@ -1,7 +1,5 @@
 package com.sprint.mission.discodeit.dto.message.request;
 
-import com.sprint.mission.discodeit.entity.BinaryContent;
-import com.sprint.mission.discodeit.entity.Message;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -21,13 +19,4 @@ public class MessageCreateServiceRequest {
 
     @Builder.Default
     private final List<MultipartFile> attachments = new ArrayList<>();
-
-    public Message toEntity(List<BinaryContent> binaryContents) {
-        return Message.builder()
-                .content(message)
-                .channelId(channelId)
-                .userId(userId)
-                .binaryContents(binaryContents)
-                .build();
-    }
 }

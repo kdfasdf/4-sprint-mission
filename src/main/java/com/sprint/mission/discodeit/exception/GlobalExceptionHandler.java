@@ -39,6 +39,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(errorResponse);
     }
 
+
     /**
      * JSON 파싱 에러 등
      */
