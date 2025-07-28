@@ -1,13 +1,18 @@
 package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.controller.api.MessageApi;
+import com.sprint.mission.discodeit.dto.PageResponse;
 import com.sprint.mission.discodeit.dto.message.MessageResponse;
 import com.sprint.mission.discodeit.dto.message.request.MessageCreateRequest;
 import com.sprint.mission.discodeit.dto.message.request.MessageUpdateRequest;
 import com.sprint.mission.discodeit.service.MessageService;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +59,14 @@ public class MessageController implements MessageApi {
 
     @Override
     @GetMapping( params = "channelId")
-    public ResponseEntity<List<MessageResponse>> findMessagesByChannelId(@RequestParam("channelId") UUID channelId) {
-        return ResponseEntity.ok().body(messageService.findMessagesByChannelId(channelId));
+    public ResponseEntity<PageResponse<MessageResponse>> findMessagesByChannelId(@RequestParam("channelId") UUID channelId,
+                                                                                 @RequestParam(value = "cursor", required = false) Instant cursor,
+                                                                                 @PageableDefault(
+                                                                                 size = 50,
+                                                                                 page = 0,
+                                                                                 sort = "createdAt",
+                                                                                 direction = Direction.DESC
+                                                                         ) Pageable pageable) {
+        return ResponseEntity.ok().body(messageService.findMessagesByChannelId(channelId, cursor, pageable));
     }
 }

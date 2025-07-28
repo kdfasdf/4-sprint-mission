@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.constant.BinaryContentErrorCode;
 import com.sprint.mission.discodeit.constant.ChannelErrorCode;
 import com.sprint.mission.discodeit.constant.MessageErrorCode;
 import com.sprint.mission.discodeit.constant.UserErrorCode;
+import com.sprint.mission.discodeit.dto.PageResponse;
 import com.sprint.mission.discodeit.dto.message.MessageResponse;
 import com.sprint.mission.discodeit.dto.message.request.MessageCreateServiceRequest;
 import com.sprint.mission.discodeit.dto.message.request.MessageUpdateServiceRequest;
@@ -17,6 +18,7 @@ import com.sprint.mission.discodeit.exception.ChannelException;
 import com.sprint.mission.discodeit.exception.MessageException;
 import com.sprint.mission.discodeit.exception.UserException;
 import com.sprint.mission.discodeit.mapper.MessageMapper;
+import com.sprint.mission.discodeit.mapper.PageResponseMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
@@ -25,12 +27,15 @@ import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import com.sprint.mission.discodeit.util.BinaryContentConverter;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,6 +54,8 @@ public class BasicMessageService implements MessageService {
     private final BinaryContentStorage binaryContentStorage;
 
     private final MessageMapper messageMapper;
+
+    private final PageResponseMapper pageResponseMapper;
 
     @Override
     public MessageResponse createMessage(MessageCreateServiceRequest request) {
@@ -115,12 +122,17 @@ public class BasicMessageService implements MessageService {
     }
 
     @Override
-    public List<MessageResponse> findMessagesByChannelId(UUID channelId) {
-        return messageRepository.findAll()
-                .stream()
-                .filter(message -> message.getChannelId().equals(channelId))
-                .map(messageMapper::toResponse)
-                .toList();
+    public PageResponse<MessageResponse> findMessagesByChannelId(UUID channelId, Instant cursor, Pageable pageable) {
+        Slice<MessageResponse> messages = messageRepository.findChannelMessagesByCursor(channelId, Optional.ofNullable(cursor).orElse(Instant.now()), pageable)
+                .map(messageMapper::toResponse);
+
+        Instant nextCursor = null;
+
+        if(!messages.getContent().isEmpty()) {
+            nextCursor = messages.getContent().get(messages.getContent().size() - 1).getCreatedAt();
+        }
+
+        return pageResponseMapper.toPageResponse(messages, nextCursor);
     }
 
     @Override
