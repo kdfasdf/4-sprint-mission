@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.controller.api;
 
+import com.sprint.mission.discodeit.dto.PageResponse;
 import com.sprint.mission.discodeit.dto.message.MessageResponse;
 import com.sprint.mission.discodeit.dto.message.request.MessageCreateRequest;
 import com.sprint.mission.discodeit.dto.message.request.MessageUpdateRequest;
@@ -11,8 +12,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -81,6 +84,9 @@ public interface MessageApi {
                     responseCode = "404", description = "Channel not found"
             )
     })
-    ResponseEntity<List<MessageResponse>> findMessagesByChannelId(
-            @Parameter(description = "Channel Id") UUID channelId);
+    ResponseEntity<PageResponse<MessageResponse>> findMessagesByChannelId(
+            @Parameter(description = "조회할 Channel Id") UUID channelId,
+            @Parameter(description = "페이징 커서 정보") Instant cursor,
+            @Parameter(description = "페이징 정보") Pageable pageable
+    );
 }
