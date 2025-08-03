@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class BasicUserService implements UserService {
 
@@ -42,6 +41,7 @@ public class BasicUserService implements UserService {
     private final UserMapper userMapper;
 
     @Override
+    @Transactional
     public UserResponse createUser(UserCreateServiceRequest request) {
         validateEmailDoesNotExist(request.getEmail());
         validateUserDoesNotExist(request.getUsername());
@@ -66,14 +66,14 @@ public class BasicUserService implements UserService {
     }
 
     private void validateEmailDoesNotExist(String email) {
-        userRepository.findUserByEmail(email)
+        userRepository.findByEmail(email)
                 .ifPresent(user -> {
                     throw new UserException(UserErrorCode.EMAIL_DUPLICATED);
                 });
     }
 
     private void validateUserDoesNotExist(String userName) {
-        userRepository.findUserByUsername(userName)
+        userRepository.findByUsername(userName)
                 .ifPresent(user -> {
                     throw new UserException(UserErrorCode.USER_NAME_DUPLICATED);
                 });
@@ -90,14 +90,16 @@ public class BasicUserService implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserResponse findUserById(UUID userId) {
-        User findUser = userRepository.findUserById(userId)
+        User findUser = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         return userMapper.toResponse(findUser);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserResponse> findUsers() {
         return userRepository.findAll()
                 .stream()
@@ -106,9 +108,10 @@ public class BasicUserService implements UserService {
     }
 
     @Override
+    @Transactional
     public UserResponse updateUser(UserUpdateServiceRequest request) {
 
-        User userToUpdate = userRepository.findUserById(request.getUserId())
+        User userToUpdate = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         Optional.ofNullable(request.getNewUsername()).ifPresent(userToUpdate::updateUserName);
@@ -127,6 +130,7 @@ public class BasicUserService implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(UUID userId) {
         userStatusRepository.deleteById(userId);
         userRepository.deleteById(userId);

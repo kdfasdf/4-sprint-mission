@@ -52,7 +52,7 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return binaryContentId;
+         return binaryContentId;
     }
 
     public Path resolvePath(UUID binaryContentId) {

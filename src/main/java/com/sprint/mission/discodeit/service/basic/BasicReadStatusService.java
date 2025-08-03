@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class BasicReadStatusService implements ReadStatusService {
 
@@ -37,11 +36,12 @@ public class BasicReadStatusService implements ReadStatusService {
     private final ReadStatusMapper readStatusMapper;
 
     @Override
+    @Transactional
     public ReadStatusResponse createReadStatus(ReadStatusCreateServiceRequest request) {
-        Channel channel = channelRepository.findChannelById(request.getChannelId())
+        Channel channel = channelRepository.findById(request.getChannelId())
                 .orElseThrow(() -> new ChannelException(ChannelErrorCode.CHANNEL_NOT_FOUND));
 
-        User user = userRepository.findUserById(request.getUserId())
+        User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         readStatusRepository.findReadStatusByUserIdAndChannelId(request.getUserId(), request.getChannelId())
@@ -55,13 +55,15 @@ public class BasicReadStatusService implements ReadStatusService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ReadStatusResponse findReadStatusById(UUID userId) {
-        return readStatusRepository.findReadStatusById(userId)
+        return readStatusRepository.findById(userId)
                 .map(readStatusMapper::toResponse)
                 .orElseThrow(() -> new ReadStatusException(ReadStatusErrorCode.READ_STATUS_NOT_FOUND));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ReadStatusResponse findReadStatusByUserIdAndChannelId(UUID userId, UUID channelId) {
         return readStatusRepository.findReadStatusByUserIdAndChannelId(userId, channelId)
                 .map(readStatusMapper::toResponse)
@@ -69,6 +71,7 @@ public class BasicReadStatusService implements ReadStatusService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ReadStatusResponse> findAllByUserId(UUID userId) {
         return readStatusRepository.findAllByUserId(userId)
                 .stream()
@@ -77,9 +80,10 @@ public class BasicReadStatusService implements ReadStatusService {
     }
 
     @Override
+    @Transactional
     public ReadStatusResponse updateReadStatus(ReadStatusUpdateServiceRequest request) {
 
-        ReadStatus readStatusToUpdate = readStatusRepository.findReadStatusById(request.getReadStatusId())
+        ReadStatus readStatusToUpdate = readStatusRepository.findById(request.getReadStatusId())
                 .orElseThrow(() -> new ReadStatusException(ReadStatusErrorCode.READ_STATUS_NOT_FOUND));
 
         readStatusToUpdate.updateLastReadAt();
@@ -91,14 +95,15 @@ public class BasicReadStatusService implements ReadStatusService {
     }
 
     @Override
+    @Transactional
     public void deleteReadStatus(UUID readStatusId) {
-        ReadStatus readStatus = readStatusRepository.findReadStatusById(readStatusId)
+        ReadStatus readStatus = readStatusRepository.findById(readStatusId)
                 .orElseThrow(() -> new ReadStatusException(ReadStatusErrorCode.READ_STATUS_NOT_FOUND));
 
-        Channel channel = channelRepository.findChannelById(readStatus.getChannelId())
+        Channel channel = channelRepository.findById(readStatus.getChannelId())
                 .orElseThrow(() -> new ChannelException(ChannelErrorCode.CHANNEL_NOT_FOUND));
 
-        User user = userRepository.findUserById(readStatus.getUserId())
+        User user = userRepository.findById(readStatus.getUserId())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         channelRepository.save(channel);

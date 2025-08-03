@@ -47,7 +47,7 @@ public abstract class ChannelMapper {
     public abstract ChannelResponse toResponse(Channel channel);
 
     public Instant getLastReadAt(Channel channel) {
-        return messageRepository.findMessageByChannelId(channel.getId())
+        return messageRepository.findAllByChannelId(channel.getId())
                 .stream()
                 .max(Comparator.comparing(BaseEntity::getCreatedAt))
                 .map(BaseEntity::getCreatedAt)
