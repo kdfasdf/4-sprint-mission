@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class BasicUserStatusService implements UserStatusService {
 
@@ -28,6 +27,7 @@ public class BasicUserStatusService implements UserStatusService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public UserStatusResponse findUserStatusByUserId(UUID userId) {
         return userStatusRepository.findUserStatusByUserId(userId)
                 .map(userStatusMapper::toResponse)
@@ -35,6 +35,7 @@ public class BasicUserStatusService implements UserStatusService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserStatusResponse> findUserStatuses() {
         return userStatusRepository.findAll()
                 .stream()
@@ -43,6 +44,7 @@ public class BasicUserStatusService implements UserStatusService {
     }
 
     @Override
+    @Transactional
     public UserStatusResponse updateUserStatus(UserStatusUpdateServiceRequest request) {
         UserStatus userStatusToUpdate = userStatusRepository.findUserStatusByUserId(request.getUserId())
                 .orElseThrow(() -> new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND));
@@ -56,11 +58,10 @@ public class BasicUserStatusService implements UserStatusService {
     }
 
     @Override
+    @Transactional
     public UserStatusResponse updateUserStatusByUserId(UUID userId) {
         UserStatus userStatusToUpdate = userStatusRepository.findUserStatusById(userId)
                 .orElseThrow(() -> new UserStatusException(UserStatusErrorCode.USER_STATUS_NOT_FOUND));
-
-        userStatusRepository.deleteByUserId(userId);
 
         userStatusToUpdate.updateLastActiveAt();
 
@@ -70,6 +71,7 @@ public class BasicUserStatusService implements UserStatusService {
     }
 
     @Override
+    @Transactional
     public void deleteByUserId(UUID userId) {
         userStatusRepository.findUserStatusById(userId)
                 .ifPresentOrElse(

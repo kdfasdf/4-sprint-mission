@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class BasicBinaryContentService implements BinaryContentService {
 
     private final BinaryContentRepository binaryContentRepository;
@@ -28,28 +27,32 @@ public class BasicBinaryContentService implements BinaryContentService {
     private final BinaryContentStorage binaryContentStorage;
 
     @Override
+    @Transactional
     public void createBinaryContent(BinaryContentCreateServiceRequest request) {
         BinaryContent binaryContent = request.toEntity();
+        binaryContentRepository.save(binaryContent);
         binaryContentStorage.put(binaryContent.getId(), request.getBytes());
-        binaryContentRepository.save(request.toEntity());
     }
 
     @Override
+    @Transactional
     public void deleteById(UUID binaryContentId) {
         binaryContentRepository.deleteById(binaryContentId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BinaryContentResponse findById(UUID binaryContentId) {
-        return binaryContentRepository.findBinaryContentById(binaryContentId)
+        return binaryContentRepository.findById(binaryContentId)
                 .map(binaryContentMapper::toResponse)
                 .orElseThrow(() -> new BinaryContentException(BinaryContentErrorCode.BINARY_CONTENT_NOT_FOUND));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<BinaryContentResponse> findAllByIdIn(List<UUID> ids) {
         return ids.stream()
-                .map(id -> binaryContentRepository.findBinaryContentById(id).orElseThrow(
+                .map(id -> binaryContentRepository.findById(id).orElseThrow(
                                 () -> new BinaryContentException(BinaryContentErrorCode.BINARY_CONTENT_NOT_FOUND))
                 )
                 .map(binaryContentMapper::toResponse)

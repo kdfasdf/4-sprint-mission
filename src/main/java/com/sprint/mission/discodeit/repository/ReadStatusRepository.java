@@ -9,8 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ReadStatusRepository extends JpaRepository<ReadStatus, UUID> {
 
-    Optional<ReadStatus> findReadStatusById(UUID id);
-
     @Query("SELECT rs FROM ReadStatus rs WHERE rs.user.id = :userId")
     List<ReadStatus> findAllByUserId(UUID userId);
 
@@ -19,8 +17,6 @@ public interface ReadStatusRepository extends JpaRepository<ReadStatus, UUID> {
 
     @Query("SELECT rs FROM ReadStatus rs WHERE rs.user.id = :id AND rs.channel.id = :channelId")
     Optional<ReadStatus> findReadStatusByUserIdAndChannelId(UUID id, UUID channelId);
-
-    void deleteById(UUID id);
 
     @Query("DELETE FROM ReadStatus rs WHERE rs.user.id = :userId AND rs.channel.id = :channelId")
     void deleteByUserIdAndChannelId(UUID userId, UUID channelId);

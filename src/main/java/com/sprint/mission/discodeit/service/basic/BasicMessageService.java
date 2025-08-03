@@ -21,6 +21,7 @@ import com.sprint.mission.discodeit.mapper.MessageMapper;
 import com.sprint.mission.discodeit.mapper.PageResponseMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
+import com.sprint.mission.discodeit.repository.MessageAttachmentRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.MessageService;
@@ -37,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -44,26 +46,24 @@ import org.springframework.web.multipart.MultipartFile;
 public class BasicMessageService implements MessageService {
 
     private final MessageRepository messageRepository;
-
     private final ChannelRepository channelRepository;
-
     private final UserRepository userRepository;
-
     private final BinaryContentRepository binaryContentRepository;
+    private final MessageAttachmentRepository messageAttachmentRepository;
 
     private final BinaryContentStorage binaryContentStorage;
 
     private final MessageMapper messageMapper;
-
     private final PageResponseMapper pageResponseMapper;
 
     @Override
+    @Transactional
     public MessageResponse createMessage(MessageCreateServiceRequest request) {
 
-        User author = userRepository.findUserById(request.getUserId())
+        User author = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
-        Channel findChannel = channelRepository.findChannelById(request.getChannelId())
+        Channel findChannel = channelRepository.findById(request.getChannelId())
                 .orElseThrow(() -> new ChannelException(ChannelErrorCode.CHANNEL_NOT_FOUND));
 
         Message message = messageMapper.toEntity(request, author, findChannel);
@@ -77,7 +77,9 @@ public class BasicMessageService implements MessageService {
         binaryContentRepository.saveAll(binaryContents);
 
         binaryContents.stream()
-                        .forEach(binaryContent -> binaryContentStorage.put(binaryContent.getId(), binaryContent.getBytes()));
+                        .forEach(binaryContent -> {
+                            binaryContentStorage.put(binaryContent.getId(), binaryContent.getBytes());
+                        });
 
         attachments = convertBinaryContentsToMessageAttachment(binaryContents, message);
 
@@ -114,14 +116,16 @@ public class BasicMessageService implements MessageService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public MessageResponse findMessageById(UUID messageId) {
-        Message findMessage = messageRepository.findMessageById(messageId)
+        Message findMessage = messageRepository.findById(messageId)
                 .orElseThrow(() -> new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND));
 
         return messageMapper.toResponse(findMessage);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PageResponse<MessageResponse> findMessagesByChannelId(UUID channelId, Instant cursor, Pageable pageable) {
         Slice<MessageResponse> messages = messageRepository.findChannelMessagesByCursor(channelId, Optional.ofNullable(cursor).orElse(Instant.now()), pageable)
                 .map(messageMapper::toResponse);
@@ -136,6 +140,7 @@ public class BasicMessageService implements MessageService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MessageResponse> findMessagesByUserId(UUID userId) {
         return messageRepository.findAll()
                 .stream()
@@ -145,10 +150,11 @@ public class BasicMessageService implements MessageService {
     }
 
     @Override
+    @Transactional
     public MessageResponse updateContent(MessageUpdateServiceRequest request) {
         Optional.ofNullable(request.getContent()).orElseThrow(() -> new MessageException(MessageErrorCode.UPDATE_CONTENT_IS_NULL));
 
-        Message messageToUpdate = messageRepository.findMessageById(request.getMessageId())
+        Message messageToUpdate = messageRepository.findById(request.getMessageId())
                .orElseThrow(() -> new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND));
 
         messageToUpdate.editContent(request.getContent());
@@ -160,8 +166,9 @@ public class BasicMessageService implements MessageService {
 
 
     @Override
+    @Transactional
     public void deleteMessage(UUID messageId) {
-        Message findMessage = messageRepository.findMessageById(messageId)
+        messageRepository.findById(messageId)
                 .orElseThrow(() -> new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND));
 
         removeMessage(messageId);
@@ -176,7 +183,7 @@ public class BasicMessageService implements MessageService {
     }
 
     private void removeMessage(UUID messageId) {
-        messageRepository.findMessageById(messageId)
+        messageRepository.findById(messageId)
                 .ifPresentOrElse(
                         message -> messageRepository.deleteById(messageId),
                         () -> { throw new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND); }

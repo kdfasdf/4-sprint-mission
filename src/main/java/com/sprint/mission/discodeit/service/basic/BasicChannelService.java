@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class BasicChannelService implements ChannelService {
 
     private final ChannelRepository channelRepository;
@@ -40,6 +39,7 @@ public class BasicChannelService implements ChannelService {
     private final ChannelMapper channelMapper;
 
     @Override
+    @Transactional
     public ChannelResponse createPublicChannel(ChannelCreateServiceRequest request) {
         Channel channel = channelMapper.toEntity(request, ChannelType.PUBLIC);
         channelRepository.save(channel);
@@ -47,12 +47,13 @@ public class BasicChannelService implements ChannelService {
     }
 
     @Override
+    @Transactional
     public ChannelResponse createPrivateChannel(PrivateChannelCreateServiceRequest request) {
         Channel channel = channelMapper.toEntity(request, ChannelType.PRIVATE);
         channelRepository.save(channel);
 
         List<ReadStatus> readStatuses = request.getParticipantIds().stream()
-                .map(userId -> userRepository.findUserById(userId)
+                .map(userId -> userRepository.findById(userId)
                         .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND)))
                 .map(user -> new ReadStatus(user, channel))
                 .toList();
@@ -62,14 +63,16 @@ public class BasicChannelService implements ChannelService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ChannelResponse findChannelById(UUID channelId) {
 
-        return channelRepository.findChannelById(channelId)
+        return channelRepository.findById(channelId)
                 .map(channelMapper::toResponse)
                 .orElseThrow(() -> new ChannelException(ChannelErrorCode.CHANNEL_NOT_FOUND));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public  List<ChannelResponse> findAllChannelsByUserId(UUID userId) {
         List<UUID> joinChannels = readStatusRepository.findAllByUserId(userId)
                 .stream()
@@ -83,10 +86,10 @@ public class BasicChannelService implements ChannelService {
                 .toList();
     }
 
-    //현재 privateChannel은 수정 불가
     @Override
+    @Transactional
     public ChannelResponse updateChannel(ChannelUpdateServiceRequest request) {
-        Channel channelToUpdate = channelRepository.findChannelById(request.getChannelId())
+        Channel channelToUpdate = channelRepository.findById(request.getChannelId())
                 .orElseThrow(() -> new ChannelException(ChannelErrorCode.CHANNEL_NOT_FOUND));
 
         Optional.ofNullable(request.getName()).ifPresent(channelToUpdate::editChannelName);
@@ -98,6 +101,7 @@ public class BasicChannelService implements ChannelService {
     }
 
     @Override
+    @Transactional
     public void deleteChannel(UUID channelId) {
         messageRepository.deleteAllByChannelId(channelId);
         readStatusRepository.deleteAllByChannelId(channelId);
