@@ -53,7 +53,7 @@ public class BasicBinaryContentService implements BinaryContentService {
     public List<BinaryContentResponse> findAllByIdIn(List<UUID> ids) {
         return ids.stream()
                 .map(id -> binaryContentRepository.findById(id).orElseThrow(
-                                () -> new BinaryContentException(BinaryContentErrorCode.BINARY_CONTENT_NOT_FOUND))
+                        () -> new BinaryContentException(BinaryContentErrorCode.BINARY_CONTENT_NOT_FOUND))
                 )
                 .map(binaryContentMapper::toResponse)
                 .toList();
