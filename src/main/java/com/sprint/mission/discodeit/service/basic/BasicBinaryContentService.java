@@ -12,12 +12,14 @@ import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class BasicBinaryContentService implements BinaryContentService {
 
@@ -29,9 +31,11 @@ public class BasicBinaryContentService implements BinaryContentService {
     @Override
     @Transactional
     public void createBinaryContent(BinaryContentCreateServiceRequest request) {
+        log.info("binary content to create - fileName : {}", request.getFileName());
         BinaryContent binaryContent = request.toEntity();
         binaryContentRepository.save(binaryContent);
         binaryContentStorage.put(binaryContent.getId(), request.getBytes());
+        log.info("binary content save sucessfully - id : {}", binaryContent.getId());
     }
 
     @Override
@@ -61,6 +65,7 @@ public class BasicBinaryContentService implements BinaryContentService {
 
     @Override
     public ResponseEntity<Resource> download(BinaryContentResponse response) {
+        log.info("binary content to download - id : {}", response.getId());
         return binaryContentStorage.download(response);
     }
 }
