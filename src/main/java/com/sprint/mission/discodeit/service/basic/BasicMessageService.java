@@ -35,6 +35,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class BasicMessageService implements MessageService {
 
@@ -68,6 +70,8 @@ public class BasicMessageService implements MessageService {
 
         Message message = messageMapper.toEntity(request, author, findChannel);
 
+        log.info("message to create - content={}", message.getContent());
+
         List<MessageAttachment> attachments = new ArrayList<>();
 
         List<MultipartFile> multipartFiles = Optional.ofNullable(request.getAttachments()).orElse(new ArrayList<>());
@@ -86,6 +90,7 @@ public class BasicMessageService implements MessageService {
         message.addAttachments(attachments);
 
         messageRepository.save(message);
+        log.info("message created sucessfully - id={}", message.getId());
         return messageMapper.toResponse(message);
     }
 
@@ -157,10 +162,12 @@ public class BasicMessageService implements MessageService {
         Message messageToUpdate = messageRepository.findById(request.getMessageId())
                .orElseThrow(() -> new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND));
 
+        log.info("message to update - content={}", messageToUpdate.getContent());
         messageToUpdate.editContent(request.getContent());
 
         messageRepository.save(messageToUpdate);
 
+        log.info("message updated - content={}", messageToUpdate.getContent());
         return messageMapper.toResponse(messageToUpdate);
     }
 
@@ -172,6 +179,7 @@ public class BasicMessageService implements MessageService {
                 .orElseThrow(() -> new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND));
 
         removeMessage(messageId);
+        log.info("message deleted - id={}", messageId);
     }
 
     private void removeBinaryContentsOfMessage(List<BinaryContent> binaryContents) {

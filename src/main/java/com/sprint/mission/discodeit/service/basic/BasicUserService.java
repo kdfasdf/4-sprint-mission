@@ -22,10 +22,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BasicUserService implements UserService {
@@ -43,6 +45,7 @@ public class BasicUserService implements UserService {
     @Override
     @Transactional
     public UserResponse createUser(UserCreateServiceRequest request) {
+        log.info("User attempting registeration - username : {}, userEmail : {}", request.getUsername(), request.getEmail());
         validateEmailDoesNotExist(request.getEmail());
         validateUserDoesNotExist(request.getUsername());
 
@@ -51,7 +54,7 @@ public class BasicUserService implements UserService {
         UserStatus newUserStatus = new UserStatus(newUser);
         BinaryContent binaryProfile;
 
-         newUser.updateUserStatus(newUserStatus);
+        newUser.updateUserStatus(newUserStatus);
 
         if(profile != null) {
             binaryProfile = getBinaryContent(profile);
@@ -62,6 +65,7 @@ public class BasicUserService implements UserService {
 
         userRepository.save(newUser);
         userStatusRepository.save(newUserStatus);
+        log.info("user created successfully - userId : {}", newUser.getId());
         return userMapper.toResponse(newUser);
     }
 
@@ -70,6 +74,7 @@ public class BasicUserService implements UserService {
                 .ifPresent(user -> {
                     throw new UserException(UserErrorCode.EMAIL_DUPLICATED);
                 });
+        log.debug("email is not duplicated : {}", email);
     }
 
     private void validateUserDoesNotExist(String userName) {
@@ -77,6 +82,7 @@ public class BasicUserService implements UserService {
                 .ifPresent(user -> {
                     throw new UserException(UserErrorCode.USER_NAME_DUPLICATED);
                 });
+        log.debug("username is not duplicated : {}", userName);
     }
 
     private static BinaryContent getBinaryContent(MultipartFile profile) {
@@ -84,6 +90,7 @@ public class BasicUserService implements UserService {
         try {
             binaryProfile = BinaryContentConverter.toBinaryContent(profile);
         } catch(IOException e) {
+            log.error("binary content convert failed", e);
             throw new BinaryContentException(BinaryContentErrorCode.MULTIPART_FILE_CONVERT_FAILED);
         }
         return binaryProfile;
@@ -114,6 +121,8 @@ public class BasicUserService implements UserService {
         User userToUpdate = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
+        log.info("User before update - userId : {}, username : {}, userEmail : {}", userToUpdate.getId(), userToUpdate.getUsername(), userToUpdate.getEmail());
+
         Optional.ofNullable(request.getNewUsername()).ifPresent(userToUpdate::updateUserName);
         Optional.ofNullable(request.getNewEmail()).ifPresent(userToUpdate::updateEmail);
         Optional.ofNullable(request.getNewPassword()).ifPresent(userToUpdate::updatePassword);
@@ -125,7 +134,7 @@ public class BasicUserService implements UserService {
             binaryContentStorage.put(updateBinaryContent.getId(), updateBinaryContent.getBytes());
         }, () -> userRepository.save(userToUpdate));
 
-
+        log.info("User after update - userId : {}, username : {}, userEmail : {}", userToUpdate.getId(), userToUpdate.getUsername(), userToUpdate.getEmail());
         return userMapper.toResponse(userToUpdate);
     }
 
@@ -134,5 +143,6 @@ public class BasicUserService implements UserService {
     public void deleteUser(UUID userId) {
         userStatusRepository.deleteById(userId);
         userRepository.deleteById(userId);
+        log.info("deleted user - userId : {}", userId);
     }
 }

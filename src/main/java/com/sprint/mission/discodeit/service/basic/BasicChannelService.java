@@ -21,10 +21,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class BasicChannelService implements ChannelService {
 
@@ -41,8 +43,10 @@ public class BasicChannelService implements ChannelService {
     @Override
     @Transactional
     public ChannelResponse createPublicChannel(ChannelCreateServiceRequest request) {
+        log.info("public channel to create - name : {}, description : {}", request.getName(), request.getDescription());
         Channel channel = channelMapper.toEntity(request, ChannelType.PUBLIC);
         channelRepository.save(channel);
+        log.info("public channel created successfully - id : {}", channel.getId());
         return channelMapper.toResponse(channel);
     }
 
@@ -59,6 +63,8 @@ public class BasicChannelService implements ChannelService {
                 .toList();
 
         readStatusRepository.saveAll(readStatuses);
+
+        log.info("private channel created successfully - id : {}", channel.getId());
         return channelMapper.toResponse(channel);
     }
 
@@ -92,11 +98,12 @@ public class BasicChannelService implements ChannelService {
         Channel channelToUpdate = channelRepository.findById(request.getChannelId())
                 .orElseThrow(() -> new ChannelException(ChannelErrorCode.CHANNEL_NOT_FOUND));
 
+        log.info("channel to update - name : {}, description : {}", request.getName(), request.getDescription());
         Optional.ofNullable(request.getName()).ifPresent(channelToUpdate::editChannelName);
         Optional.ofNullable(request.getDescription()).ifPresent(channelToUpdate::editDescription);
 
         channelRepository.save(channelToUpdate);
-
+        log.info("channel updated - name : {}, description : {}", channelToUpdate.getName(), channelToUpdate.getDescription());
         return channelMapper.toResponse(channelToUpdate);
     }
 
@@ -106,6 +113,7 @@ public class BasicChannelService implements ChannelService {
         messageRepository.deleteAllByChannelId(channelId);
         readStatusRepository.deleteAllByChannelId(channelId);
         channelRepository.deleteById(channelId);
+        log.info("deleted channel - id : {}", channelId);
     }
 }
 
