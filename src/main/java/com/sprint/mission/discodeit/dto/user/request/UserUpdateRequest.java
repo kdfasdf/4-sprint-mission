@@ -13,11 +13,13 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class UserUpdateRequest {
 
+    @NotBlank(message = "유저 네임은 null이거나 공백이면 안됨")
     private String newUsername;
 
-    @NotBlank(message = "이메일은 필수입니다.")
     @Email(message = "이메일 형식이 올바르지 않음")
     private String newEmail;
+
+    //선택적으로 들어오는 필드라 null 허용해야함
     private String newPassword;
 
     public UserUpdateServiceRequest toServiceRequest(UUID userId, MultipartFile profile) {
