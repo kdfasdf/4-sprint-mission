@@ -1,7 +1,7 @@
 package com.sprint.mission.discodeit.exception;
 
-import com.sprint.mission.discodeit.constant.ErrorCode;
 import com.sprint.mission.discodeit.constant.ClientRequestErrorCode;
+import com.sprint.mission.discodeit.constant.ErrorCode;
 import jakarta.validation.ConstraintViolation;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
@@ -32,6 +33,17 @@ public class ErrorResponse {
         this.violationErrors = violationErrors;
     }
 
+    private ErrorResponse(String message) {
+        this.message = message;
+        this.status = HttpStatus.BAD_REQUEST.value();
+        this.code = HttpStatus.BAD_REQUEST.name();
+        this.errors = new ArrayList<>();
+        this.violationErrors = new ArrayList<>();
+    }
+
+    public static ErrorResponse of (String message) {
+        return new ErrorResponse(message);
+    }
 
     public static ErrorResponse of(ErrorCode code, BindingResult bindingResult) {
         return new ErrorResponse(code, FieldError.of(bindingResult), new ArrayList<>());

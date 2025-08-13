@@ -90,7 +90,6 @@ public class BasicUserService implements UserService {
         try {
             binaryProfile = BinaryContentConverter.toBinaryContent(profile);
         } catch(IOException e) {
-            log.error("binary content convert failed", e);
             throw new BinaryContentException(BinaryContentErrorCode.MULTIPART_FILE_CONVERT_FAILED);
         }
         return binaryProfile;

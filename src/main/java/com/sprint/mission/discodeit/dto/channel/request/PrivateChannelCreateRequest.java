@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.dto.channel.request;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.List;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import lombok.Getter;
 public class PrivateChannelCreateRequest {
 
     @Size(min = 2, message = "비밀 채팅방은 최소 2명이 있어야 함")
+    @NotNull(message = "participantIds는 null이면 안됨")
     private final List<UUID> participantIds;
 
     public PrivateChannelCreateServiceRequest toServiceRequest() {
