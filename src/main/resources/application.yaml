@@ -8,3 +8,45 @@ logging:
 
 server:
   port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,loggers
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: never
+    info:
+      enabled: true
+    metrics:
+      enabled: true
+    loggers:
+      enabled: true
+
+info:
+  app:
+    name: Discodeit
+    version: 1.7.0
+  java:
+    version: 17
+  spring:
+    boot:
+      version: 3.5.0
+  config:
+    datasource:
+      url: jdbc:postgresql://localhost:5432/discodeit                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+      username: discodeit_user
+      password: discode1234
+      driver-class-name: org.postgresql.Driver
+    jpa:
+      ddl-auto: none
+    storage:
+      type: local
+      path: ./discodeit/local/storage
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+
