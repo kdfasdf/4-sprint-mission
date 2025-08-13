@@ -26,4 +26,4 @@ discodeit:
   storage:
     type: local
     local:
-      root-path: ./discodeit/prod/storage
+      root-path: ./discodeit/local/storage/prod
