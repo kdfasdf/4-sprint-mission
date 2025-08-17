@@ -171,7 +171,6 @@ public class BasicMessageService implements MessageService {
         return messageMapper.toResponse(messageToUpdate);
     }
 
-
     @Override
     @Transactional
     public void deleteMessage(UUID messageId) {
