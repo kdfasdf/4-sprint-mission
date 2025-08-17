@@ -98,6 +98,10 @@ public class BasicChannelService implements ChannelService {
         Channel channelToUpdate = channelRepository.findById(request.getChannelId())
                 .orElseThrow(() -> new ChannelException(ChannelErrorCode.CHANNEL_NOT_FOUND));
 
+        if(channelToUpdate.getType() == ChannelType.PRIVATE) {
+            throw new ChannelException(ChannelErrorCode.PRIVATE_CHANNEL_NOT_EDITABLE);
+        }
+
         log.info("channel to update - name : {}, description : {}", request.getName(), request.getDescription());
         Optional.ofNullable(request.getName()).ifPresent(channelToUpdate::editChannelName);
         Optional.ofNullable(request.getDescription()).ifPresent(channelToUpdate::editDescription);

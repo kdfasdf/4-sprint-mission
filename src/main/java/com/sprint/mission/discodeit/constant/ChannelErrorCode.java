@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 public enum ChannelErrorCode implements ErrorCode {
 
 
-    CHANNEL_NOT_FOUND(404, "CHANNEL_001", "CHANNEL_NOT_FOUND");
+    CHANNEL_NOT_FOUND(404, "CHANNEL_001", "CHANNEL_NOT_FOUND"),
+    PRIVATE_CHANNEL_NOT_EDITABLE(400, "CHANNEL_002", "PRIVATECHANNEL_NOT_EDITABLE");
 
     private final int status;
     private final String code;
