@@ -1,5 +1,7 @@
 package com.sprint.mission.discodeit.entity;
 
+import com.sprint.mission.discodeit.constant.ChannelErrorCode;
+import com.sprint.mission.discodeit.exception.ChannelException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -28,9 +30,14 @@ public class Channel extends BaseUpdatableEntity {
 
     @Builder
     private Channel(String name, String description, ChannelType type) {
-        this.name = name;
-        this.description = description;
-        this.type = type;
+        if(type == ChannelType.PUBLIC) {
+            this.name = name;
+            this.description = description;
+            this.type = type;
+        } else {
+            validatePrivateChannelDoesNotHaveNameOrDescription(name, description);
+            this.type = type;
+        }
     }
 
     public void editChannelName(String channelName) {
@@ -39,5 +46,18 @@ public class Channel extends BaseUpdatableEntity {
 
     public void editDescription(String description) {
         this.description = description;
+    }
+
+
+    private void validatePrivateChannelDoesNotHaveNameOrDescription(String name, String description) {
+        if(name != null && description != null) {
+            throw new ChannelException(ChannelErrorCode.PRIVATE_CHANNEL_DOES_NOT_HAVE_NAME_AND_DESCRIPTION);
+        }
+        if(name != null) {
+            throw new ChannelException(ChannelErrorCode.PRIVATE_CHANNEL_DOES_NOT_HAVE_NAME);
+        }
+        if(description!=null) {
+            throw new ChannelException(ChannelErrorCode.PRIVATE_CHANNEL_DOES_NOT_HAVE_DESCRIPTION);
+        }
     }
 }
