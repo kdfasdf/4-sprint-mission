@@ -81,8 +81,6 @@ public class BasicChannelServiceTest extends MockTest {
                 .build();
 
         privateChannel = Channel.builder()
-                .name("private")
-                .description("private")
                 .type(ChannelType.PRIVATE)
                 .build();
 

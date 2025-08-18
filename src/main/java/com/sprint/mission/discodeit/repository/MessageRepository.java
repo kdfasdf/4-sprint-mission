@@ -7,10 +7,12 @@ import java.util.UUID;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface MessageRepository extends JpaRepository<Message, UUID> {
 
+    @Modifying
     @Query("DELETE FROM Message m WHERE m.channel.id = :channelId")
     void deleteAllByChannelId(UUID channelId);
 

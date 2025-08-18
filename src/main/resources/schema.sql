@@ -1,3 +1,23 @@
+CREATE DOMAIN IF NOT EXISTS TIMESTAMPTZ AS TIMESTAMP;
+
+CREATE TABLE binary_contents (
+     id UUID PRIMARY KEY,
+     created_at TIMESTAMPTZ NOT NULL,
+     file_name VARCHAR(255) NOT NULL,
+     size BIGINT NOT NULL,
+     content_type VARCHAR(100) NOT NULL,
+     bytes BYTEA NOT NULL
+);
+
+CREATE TABLE channels (
+    id UUID PRIMARY KEY,
+    created_at TIMESTAMPTZ NOT NULL,
+    updated_at TIMESTAMPTZ NOT NULL,
+    name VARCHAR(100),
+    description VARCHAR(500),
+    type VARCHAR(10) NOT NULL CHECK (type IN ('PUBLIC', 'PRIVATE'))
+);
+
 CREATE TABLE users (
     id UUID PRIMARY KEY,
     created_at TIMESTAMPTZ NOT NULL,
@@ -6,15 +26,6 @@ CREATE TABLE users (
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(60) NOT NULL,
     profile_id UUID REFERENCES binary_contents(id) ON DELETE SET NULL
-);
-
-CREATE TABLE binary_contents (
-    id UUID PRIMARY KEY,
-    created_at TIMESTAMPTZ NOT NULL,
-    file_name VARCHAR(255) NOT NULL,
-    size BIGINT NOT NULL,
-    content_type VARCHAR(100) NOT NULL,
-    bytes BYTEA NOT NULL
 );
 
 CREATE TABLE user_statuses (
@@ -35,21 +46,12 @@ CREATE TABLE read_statuses (
     UNIQUE(user_id, channel_id)
 );
 
-CREATE TABLE channels (
-    id UUID PRIMARY KEY,
-    created_at TIMESTAMPTZ NOT NULL,
-    updated_at TIMESTAMPTZ NOT NULL,
-    name VARCHAR(100),
-    description VARCHAR(500),
-    type VARCHAR(10) NOT NULL CHECK (type IN ('PUBLIC', 'PRIVATE'))
-);
-
 CREATE TABLE messages (
     id UUID PRIMARY KEY,
     created_at TIMESTAMPTZ NOT NULL,
     updated_at TIMESTAMPTZ,
     content TEXT,
-    channel_id UUID REFERENCES channels(id) NOT NULL ON DELETE CASCADE,
+    channel_id UUID NOT NULL REFERENCES channels(id) ON DELETE CASCADE,
     author_id UUID REFERENCES users(id) ON DELETE SET NULL
 );
 
