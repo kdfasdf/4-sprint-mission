@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 public class ChannelCreateRequest {
 
-    @Length(min = 0 , max = 100, message = "채널 이름은 1 ~ 100자 이어야함")
+    @Length(min = 1 , max = 100, message = "채널 이름은 1 ~ 100자 이어야함")
     @NotBlank(message = "채널 이름은 null이거나 공백이면 안됨")
     private final String name;
 
