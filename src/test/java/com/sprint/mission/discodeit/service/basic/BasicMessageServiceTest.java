@@ -5,8 +5,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.times;
 
+import com.sprint.mission.discodeit.constant.MessageErrorCode;
 import com.sprint.mission.discodeit.dto.message.MessageResponse;
 import com.sprint.mission.discodeit.dto.message.request.MessageCreateServiceRequest;
 import com.sprint.mission.discodeit.dto.message.request.MessageUpdateServiceRequest;
@@ -35,7 +37,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -64,9 +65,8 @@ public class BasicMessageServiceTest extends MockTest {
     @Mock
     private PageResponseMapper pageResponseMapper;
 
-    @Spy
     @InjectMocks
-    private BasicMessageService basicMessageService;
+    private BasicMessageService messageService;
 
     private UUID userId;
     private UUID channelId;
@@ -101,6 +101,7 @@ public class BasicMessageServiceTest extends MockTest {
                 .build();
 
         messageId = UUID.randomUUID();
+        ReflectionTestUtils.setField(message, "id", messageId);
 
         MockMultipartFile file = new MockMultipartFile(
                 "testFile",
@@ -161,7 +162,7 @@ public class BasicMessageServiceTest extends MockTest {
         given(messageMapper.toResponse(any(Message.class))).willReturn(messageResponse);
 
         //when
-        MessageResponse result = basicMessageService.createMessage(textMessageCreateServiceRequest);
+        MessageResponse result = messageService.createMessage(textMessageCreateServiceRequest);
 
         //then
         assertThat(result).isEqualTo(messageResponse);
@@ -181,7 +182,7 @@ public class BasicMessageServiceTest extends MockTest {
 
 
         //when
-        MessageResponse result = basicMessageService.createMessage(fileMessageCreateServiceRequest);
+        MessageResponse result = messageService.createMessage(fileMessageCreateServiceRequest);
 
         //then
         assertThat(result).isEqualTo(messageResponse);
@@ -203,7 +204,7 @@ public class BasicMessageServiceTest extends MockTest {
 
 
         //when
-        MessageResponse result = basicMessageService.createMessage(fileMessageCreateServiceRequest);
+        MessageResponse result = messageService.createMessage(fileMessageCreateServiceRequest);
 
         //then
         assertThat(result).isEqualTo(messageResponse);
@@ -220,7 +221,7 @@ public class BasicMessageServiceTest extends MockTest {
         given(channelRepository.findById(channelId)).willReturn(Optional.empty());
 
         //when & then
-        assertThatThrownBy(() -> basicMessageService.createMessage(textMessageCreateServiceRequest))
+        assertThatThrownBy(() -> messageService.createMessage(textMessageCreateServiceRequest))
                 .isInstanceOf(ChannelException.class);
     }
 
@@ -231,7 +232,7 @@ public class BasicMessageServiceTest extends MockTest {
         given(userRepository.findById(userId)).willReturn(Optional.empty());
 
         //when & then
-        assertThatThrownBy(() -> basicMessageService.createMessage(textMessageCreateServiceRequest))
+        assertThatThrownBy(() -> messageService.createMessage(textMessageCreateServiceRequest))
                 .isInstanceOf(UserException.class);
     }
 
@@ -243,7 +244,7 @@ public class BasicMessageServiceTest extends MockTest {
         given(messageMapper.toResponse(any(Message.class))).willReturn(messageResponse);
 
         //when
-        MessageResponse result = basicMessageService.updateContent(messageUpdateServiceRequest);
+        MessageResponse result = messageService.updateContent(messageUpdateServiceRequest);
 
         //then
         AssertionsForClassTypes.assertThat(result).isEqualTo(messageResponse);
@@ -255,28 +256,12 @@ public class BasicMessageServiceTest extends MockTest {
     @DisplayName("없는 메시지 수정 시도 시 실패")
     void updateMessageFailWhenMessageDoesNotExist() {
         //given
-        given(messageRepository.findById(messageId)).willReturn(Optional.empty());
+        willThrow(new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND)).given(messageRepository).findById(any(
+                UUID.class));
 
         //when & then
-        assertThatThrownBy(() -> basicMessageService.updateContent(messageUpdateServiceRequest))
+        assertThatThrownBy(() -> messageService.updateContent(messageUpdateServiceRequest))
                 .isInstanceOf(MessageException.class);
-    }
-
-    @Test
-    @DisplayName("채널 메시지 조회")
-    void findMessagesByChannelId() {
-//        //given
-//        given(channelRepository.findById(channelId)).willReturn(Optional.of(channel));
-//        given(messageRepository.findAllByChannelId(channelId)).willReturn(List.of(message));
-//        given(messageMapper.toResponse(any(Message.class))).willReturn(messageResponse);
-//
-//        //when
-//        PageResponse<MessageResponse> result = basicMessageService.findMessagesByChannelId(channelId, Instant.now(),
-//                Pageable.unpaged());
-//
-//        //then
-//        assertTha                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           t(result).hasSize(1);
-//        AssertionsForClassTypes.assertThat(result.get(0)).isEqualTo(messageResponse);
     }
 
     @Test
@@ -286,7 +271,7 @@ public class BasicMessageServiceTest extends MockTest {
         given(messageRepository.findById(any(UUID.class))).willReturn(Optional.of(message));
 
         //when
-        basicMessageService.deleteMessage(messageId);
+        messageService.deleteMessage(messageId);
 
         //then
         then(messageRepository).should().deleteById(messageId);

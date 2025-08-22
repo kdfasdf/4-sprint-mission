@@ -1,0 +1,63 @@
+2025-08-20 15:12:11.744 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-20 15:12:11.889 [main] INFO  c.s.m.d.c.UserControllerTest - Starting UserControllerTest using Java 17.0.11 with PID 15348 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-20 15:12:11.891 [main] DEBUG c.s.m.d.c.UserControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-20 15:12:11.892 [main] INFO  c.s.m.d.c.UserControllerTest - The following 1 profile is active: "dev"
+2025-08-20 15:12:16.572 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-20 15:12:17.862 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-20 15:12:17.863 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-20 15:12:17.867 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2025-08-20 15:12:17.973 [main] INFO  c.s.m.d.c.UserControllerTest - Started UserControllerTest in 8.272 seconds (process running for 13.891)
+2025-08-20 15:13:51.167 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-20 15:13:51.294 [main] INFO  c.s.m.d.c.UserControllerTest - Starting UserControllerTest using Java 17.0.11 with PID 2772 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-20 15:13:51.295 [main] DEBUG c.s.m.d.c.UserControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-20 15:13:51.296 [main] INFO  c.s.m.d.c.UserControllerTest - The following 1 profile is active: "dev"
+2025-08-20 15:13:55.237 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-20 15:13:56.368 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-20 15:13:56.369 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-20 15:13:56.372 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2025-08-20 15:13:56.474 [main] INFO  c.s.m.d.c.UserControllerTest - Started UserControllerTest in 6.732 seconds (process running for 9.343)
+2025-08-20 15:17:51.329 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-20 15:17:51.464 [main] INFO  c.s.m.d.c.UserControllerTest - Starting UserControllerTest using Java 17.0.11 with PID 15608 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-20 15:17:51.466 [main] DEBUG c.s.m.d.c.UserControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-20 15:17:51.467 [main] INFO  c.s.m.d.c.UserControllerTest - The following 1 profile is active: "dev"
+2025-08-20 15:17:56.349 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-20 15:17:58.494 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-20 15:17:58.495 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-20 15:17:58.502 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 5 ms
+2025-08-20 15:17:58.774 [main] INFO  c.s.m.d.c.UserControllerTest - Started UserControllerTest in 8.853 seconds (process running for 11.444)
+2025-08-20 16:24:08.284 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-20 16:24:08.444 [main] INFO  c.s.m.d.c.UserControllerTest - Starting UserControllerTest using Java 17.0.11 with PID 27112 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-20 16:24:08.446 [main] DEBUG c.s.m.d.c.UserControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-20 16:24:08.448 [main] INFO  c.s.m.d.c.UserControllerTest - The following 1 profile is active: "dev"
+2025-08-20 16:24:12.283 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-20 16:24:12.986 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-20 16:24:12.986 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-20 16:24:12.990 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 4 ms
+2025-08-20 16:24:13.070 [main] INFO  c.s.m.d.c.UserControllerTest - Started UserControllerTest in 6.264 seconds (process running for 9.003)
+2025-08-20 16:44:54.901 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-20 16:44:55.017 [main] INFO  c.s.m.d.c.UserControllerTest - Starting UserControllerTest using Java 17.0.11 with PID 13956 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-20 16:44:55.019 [main] DEBUG c.s.m.d.c.UserControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-20 16:44:55.020 [main] INFO  c.s.m.d.c.UserControllerTest - The following 1 profile is active: "dev"
+2025-08-20 16:44:58.994 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-20 16:45:00.221 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-20 16:45:00.221 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-20 16:45:00.226 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 4 ms
+2025-08-20 16:45:00.346 [main] INFO  c.s.m.d.c.UserControllerTest - Started UserControllerTest in 7.047 seconds (process running for 9.892)
+2025-08-20 23:51:47.766 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-20 23:51:47.897 [main] INFO  c.s.m.d.c.UserControllerTest - Starting UserControllerTest using Java 17.0.11 with PID 38332 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-20 23:51:47.899 [main] DEBUG c.s.m.d.c.UserControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-20 23:51:47.900 [main] INFO  c.s.m.d.c.UserControllerTest - The following 1 profile is active: "dev"
+2025-08-20 23:51:51.639 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-20 23:51:52.625 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-20 23:51:52.626 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-20 23:51:52.630 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2025-08-20 23:51:52.712 [main] INFO  c.s.m.d.c.UserControllerTest - Started UserControllerTest in 6.356 seconds (process running for 9.311)
+2025-08-20 23:56:07.120 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-20 23:56:07.272 [main] INFO  c.s.m.d.c.UserControllerTest - Starting UserControllerTest using Java 17.0.11 with PID 39904 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-20 23:56:07.273 [main] DEBUG c.s.m.d.c.UserControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-20 23:56:07.276 [main] INFO  c.s.m.d.c.UserControllerTest - The following 1 profile is active: "dev"
+2025-08-20 23:56:10.865 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-20 23:56:11.767 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-20 23:56:11.768 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-20 23:56:11.772 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+2025-08-20 23:56:11.839 [main] INFO  c.s.m.d.c.UserControllerTest - Started UserControllerTest in 5.986 seconds (process running for 8.396)

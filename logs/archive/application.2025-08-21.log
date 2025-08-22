@@ -1,0 +1,270 @@
+2025-08-21 00:00:28.481 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 00:00:28.616 [main] INFO  c.s.m.d.c.UserControllerTest - Starting UserControllerTest using Java 17.0.11 with PID 27268 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 00:00:28.618 [main] DEBUG c.s.m.d.c.UserControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 00:00:28.620 [main] INFO  c.s.m.d.c.UserControllerTest - The following 1 profile is active: "dev"
+2025-08-21 00:00:32.111 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 00:00:32.934 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 00:00:32.935 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 00:00:32.938 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+2025-08-21 00:00:33.020 [main] INFO  c.s.m.d.c.UserControllerTest - Started UserControllerTest in 5.755 seconds (process running for 7.979)
+2025-08-21 00:02:16.116 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 00:02:16.238 [main] INFO  c.s.m.d.c.UserControllerTest - Starting UserControllerTest using Java 17.0.11 with PID 30892 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 00:02:16.238 [main] DEBUG c.s.m.d.c.UserControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 00:02:16.240 [main] INFO  c.s.m.d.c.UserControllerTest - The following 1 profile is active: "dev"
+2025-08-21 00:02:20.064 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 00:02:20.886 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 00:02:20.887 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 00:02:20.890 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2025-08-21 00:02:20.949 [main] INFO  c.s.m.d.c.UserControllerTest - Started UserControllerTest in 6.14 seconds (process running for 8.446)
+2025-08-21 00:17:02.283 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 00:17:02.407 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 21540 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 00:17:02.410 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 00:17:02.411 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 00:17:06.140 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 00:17:07.124 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 00:17:07.125 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 00:17:07.128 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2025-08-21 00:17:07.213 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 6.3 seconds (process running for 8.914)
+2025-08-21 00:18:13.682 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 00:18:13.849 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 31508 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 00:18:13.851 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 00:18:13.853 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 00:18:17.665 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 00:18:18.552 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 00:18:18.553 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 00:18:18.556 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2025-08-21 00:18:18.623 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 6.373 seconds (process running for 8.736)
+2025-08-21 00:33:30.325 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 00:33:30.544 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 4796 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 00:33:30.548 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 00:33:30.550 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 00:33:34.312 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 00:33:35.259 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 00:33:35.260 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 00:33:35.263 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2025-08-21 00:33:35.360 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 6.78 seconds (process running for 9.644)
+2025-08-21 00:35:40.241 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 00:35:40.379 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 24892 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 00:35:40.381 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 00:35:40.383 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 00:35:44.021 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 00:35:44.859 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 00:35:44.860 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 00:35:44.863 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2025-08-21 00:35:44.935 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 6.014 seconds (process running for 8.605)
+2025-08-21 00:39:57.601 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 00:39:57.738 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 32620 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 00:39:57.742 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 00:39:57.745 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 00:40:01.651 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 00:40:02.519 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 00:40:02.520 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 00:40:02.522 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+2025-08-21 00:40:02.596 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 6.147 seconds (process running for 8.795)
+2025-08-21 00:40:30.905 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 00:40:31.061 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 19584 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 00:40:31.063 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 00:40:31.065 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 00:40:34.851 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 00:40:35.831 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 00:40:35.832 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 00:40:35.835 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+2025-08-21 00:40:35.914 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 6.265 seconds (process running for 8.467)
+2025-08-21 00:43:06.090 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 00:43:06.247 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 33236 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 00:43:06.250 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 00:43:06.252 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 00:43:09.622 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 00:43:10.327 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 00:43:10.327 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 00:43:10.330 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+2025-08-21 00:43:10.387 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 5.487 seconds (process running for 7.819)
+2025-08-21 00:48:56.600 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 00:48:56.732 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 17572 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 00:48:56.733 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 00:48:56.735 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 00:49:00.442 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 00:49:01.378 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 00:49:01.379 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 00:49:01.382 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+2025-08-21 00:49:01.449 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 6.202 seconds (process running for 8.612)
+2025-08-21 00:50:54.958 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 00:50:55.117 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 36192 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 00:50:55.120 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 00:50:55.123 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 00:50:58.841 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 00:50:59.690 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 00:50:59.690 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 00:50:59.695 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2025-08-21 00:50:59.783 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 6.346 seconds (process running for 8.874)
+2025-08-21 00:52:30.363 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 00:52:30.474 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 296 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 00:52:30.475 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 00:52:30.476 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 00:52:34.116 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 00:52:34.956 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 00:52:34.957 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 00:52:34.960 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+2025-08-21 00:52:35.046 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 5.888 seconds (process running for 8.225)
+2025-08-21 15:17:43.362 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 15:17:43.666 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 41024 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 15:17:43.669 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 15:17:43.671 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 15:18:05.998 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 15:18:10.722 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 15:18:10.722 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 15:18:10.724 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+2025-08-21 15:18:12.291 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 29.393 seconds (process running for 33.76)
+2025-08-21 15:20:04.695 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 15:20:04.828 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 1372 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 15:20:04.829 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 15:20:04.830 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 15:20:09.186 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 15:20:10.525 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 15:20:10.525 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 15:20:10.530 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 5 ms
+2025-08-21 15:20:10.642 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 7.952 seconds (process running for 10.588)
+2025-08-21 15:22:21.555 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 15:22:21.734 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 25660 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 15:22:21.735 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 15:22:21.736 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 15:22:25.463 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 15:22:26.315 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 15:22:26.317 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 15:22:26.320 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2025-08-21 15:22:26.385 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 6.518 seconds (process running for 9.742)
+2025-08-21 15:23:57.214 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 15:23:57.351 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 41116 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 15:23:57.360 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 15:23:57.362 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 15:24:01.236 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 15:24:02.135 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 15:24:02.135 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 15:24:02.138 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2025-08-21 15:24:02.210 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 6.232 seconds (process running for 9.077)
+2025-08-21 15:25:21.216 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 15:25:22.114 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 24796 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 15:25:22.116 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 15:25:22.118 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 15:25:32.930 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 15:25:34.936 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 15:25:34.937 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 15:25:34.944 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 6 ms
+2025-08-21 15:25:35.066 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 16.004 seconds (process running for 27.384)
+2025-08-21 17:50:35.122 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 17:50:35.263 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 29232 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 17:50:35.265 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 17:50:35.267 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 17:50:39.473 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 17:50:40.254 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 17:50:40.254 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 17:50:40.257 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+2025-08-21 17:50:40.334 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 6.49 seconds (process running for 8.799)
+2025-08-21 18:01:56.175 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 18:01:56.373 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 19216 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 18:01:56.376 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 18:01:56.378 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 18:02:01.662 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 18:02:03.400 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 18:02:03.404 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 18:02:03.428 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 20 ms
+2025-08-21 18:02:03.587 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 9.418 seconds (process running for 13.369)
+2025-08-21 18:02:30.736 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 18:02:32.748 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 34580 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 18:02:32.749 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 18:02:32.750 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 18:02:44.622 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 18:02:47.675 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 18:02:47.676 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 18:02:47.681 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 4 ms
+2025-08-21 18:02:47.808 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 22.011 seconds (process running for 28.035)
+2025-08-21 18:03:16.307 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 18:03:16.618 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 27624 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 18:03:16.653 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 18:03:16.656 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 18:03:22.747 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 18:03:24.265 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 18:03:24.267 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 18:03:24.273 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 6 ms
+2025-08-21 18:03:24.370 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 10.363 seconds (process running for 15.7)
+2025-08-21 18:07:22.216 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 18:07:22.376 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 17580 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 18:07:22.378 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 18:07:22.382 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 18:07:27.440 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 18:07:28.409 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 18:07:28.410 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 18:07:28.414 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 4 ms
+2025-08-21 18:07:28.514 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 7.923 seconds (process running for 10.566)
+2025-08-21 18:08:16.284 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 18:08:16.407 [main] INFO  c.s.m.d.c.ChannelControllerTest - Starting ChannelControllerTest using Java 17.0.11 with PID 16780 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 18:08:16.408 [main] DEBUG c.s.m.d.c.ChannelControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 18:08:16.410 [main] INFO  c.s.m.d.c.ChannelControllerTest - The following 1 profile is active: "dev"
+2025-08-21 18:08:20.104 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 18:08:21.032 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 18:08:21.033 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 18:08:21.038 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2025-08-21 18:08:21.110 [main] INFO  c.s.m.d.c.ChannelControllerTest - Started ChannelControllerTest in 6.241 seconds (process running for 8.954)
+2025-08-21 23:22:28.190 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 23:22:28.307 [main] INFO  c.s.m.d.c.MessageControllerTest - Starting MessageControllerTest using Java 17.0.11 with PID 42916 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 23:22:28.308 [main] DEBUG c.s.m.d.c.MessageControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 23:22:28.309 [main] INFO  c.s.m.d.c.MessageControllerTest - The following 1 profile is active: "dev"
+2025-08-21 23:22:34.125 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 23:22:35.985 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 23:22:35.986 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 23:22:35.990 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2025-08-21 23:22:36.135 [main] INFO  c.s.m.d.c.MessageControllerTest - Started MessageControllerTest in 9.14 seconds (process running for 12.003)
+2025-08-21 23:24:27.826 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 23:24:27.996 [main] INFO  c.s.m.d.c.MessageControllerTest - Starting MessageControllerTest using Java 17.0.11 with PID 40316 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 23:24:27.997 [main] DEBUG c.s.m.d.c.MessageControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 23:24:27.999 [main] INFO  c.s.m.d.c.MessageControllerTest - The following 1 profile is active: "dev"
+2025-08-21 23:24:31.799 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 23:24:32.999 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 23:24:33.000 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 23:24:33.005 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 4 ms
+2025-08-21 23:24:33.095 [main] INFO  c.s.m.d.c.MessageControllerTest - Started MessageControllerTest in 6.867 seconds (process running for 9.198)
+2025-08-21 23:28:06.750 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 23:28:06.886 [main] INFO  c.s.m.d.c.MessageControllerTest - Starting MessageControllerTest using Java 17.0.11 with PID 41352 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 23:28:06.887 [main] DEBUG c.s.m.d.c.MessageControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 23:28:06.888 [main] INFO  c.s.m.d.c.MessageControllerTest - The following 1 profile is active: "dev"
+2025-08-21 23:28:10.724 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 23:28:11.511 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 23:28:11.512 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 23:28:11.515 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2025-08-21 23:28:11.582 [main] INFO  c.s.m.d.c.MessageControllerTest - Started MessageControllerTest in 6.141 seconds (process running for 8.552)
+2025-08-21 23:28:56.093 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 23:28:56.241 [main] INFO  c.s.m.d.c.MessageControllerTest - Starting MessageControllerTest using Java 17.0.11 with PID 10564 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 23:28:56.243 [main] DEBUG c.s.m.d.c.MessageControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 23:28:56.245 [main] INFO  c.s.m.d.c.MessageControllerTest - The following 1 profile is active: "dev"
+2025-08-21 23:28:59.927 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 23:29:00.906 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 23:29:00.907 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 23:29:00.911 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2025-08-21 23:29:00.978 [main] INFO  c.s.m.d.c.MessageControllerTest - Started MessageControllerTest in 6.102 seconds (process running for 8.271)
+2025-08-21 23:39:14.845 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 23:39:14.962 [main] INFO  c.s.m.d.c.MessageControllerTest - Starting MessageControllerTest using Java 17.0.11 with PID 30072 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 23:39:14.963 [main] DEBUG c.s.m.d.c.MessageControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 23:39:14.964 [main] INFO  c.s.m.d.c.MessageControllerTest - The following 1 profile is active: "dev"
+2025-08-21 23:39:18.968 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 23:39:19.950 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 23:39:19.953 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 23:39:19.957 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 4 ms
+2025-08-21 23:39:20.053 [main] INFO  c.s.m.d.c.MessageControllerTest - Started MessageControllerTest in 6.449 seconds (process running for 8.793)
+2025-08-21 23:40:59.962 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 23:41:00.121 [main] INFO  c.s.m.d.c.MessageControllerTest - Starting MessageControllerTest using Java 17.0.11 with PID 25844 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 23:41:00.123 [main] DEBUG c.s.m.d.c.MessageControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 23:41:00.124 [main] INFO  c.s.m.d.c.MessageControllerTest - The following 1 profile is active: "dev"
+2025-08-21 23:41:03.667 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 23:41:04.499 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 23:41:04.500 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 23:41:04.502 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+2025-08-21 23:41:04.574 [main] INFO  c.s.m.d.c.MessageControllerTest - Started MessageControllerTest in 5.975 seconds (process running for 8.152)
+2025-08-21 23:58:37.650 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-08-21 23:58:37.802 [main] INFO  c.s.m.d.c.MessageControllerTest - Starting MessageControllerTest using Java 17.0.11 with PID 18728 (started by tntls in C:\Users\tntls\IdeaProjects\discodeit)
+2025-08-21 23:58:37.803 [main] DEBUG c.s.m.d.c.MessageControllerTest - Running with Spring Boot v3.5.0, Spring v6.2.7
+2025-08-21 23:58:37.805 [main] INFO  c.s.m.d.c.MessageControllerTest - The following 1 profile is active: "dev"
+2025-08-21 23:58:42.655 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+2025-08-21 23:58:43.720 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2025-08-21 23:58:43.720 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2025-08-21 23:58:43.723 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2025-08-21 23:58:43.806 [main] INFO  c.s.m.d.c.MessageControllerTest - Started MessageControllerTest in 7.522 seconds (process running for 9.967)

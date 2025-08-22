@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,7 +43,7 @@ public class UserController implements UserApi {
     public ResponseEntity<UserResponse> createUser(@Valid @RequestPart("userCreateRequest") UserCreateRequest request,
                                                                 @RequestPart(value = "profile", required = false)
                                                                 MultipartFile profile) {
-        return ResponseEntity.ok().body(userService.createUser(request.toServiceRequest(profile)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(request.toServiceRequest(profile)));
     }
 
     @Override
@@ -55,7 +56,7 @@ public class UserController implements UserApi {
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable("userId") UUID userId) {
         userService.deleteUser(userId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @Override
