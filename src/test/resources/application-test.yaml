@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:discodeit;MODE=PostgreSQL
-    username: discodeit_user
-    password: discode1234
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL
+    username: sa
+    password:
     driver-class-name: org.h2.Driver
     hikari:
       maximum-pool-size: 10
@@ -26,3 +26,9 @@ spring:
         orm:
           jdbc:
             bind: TRACE
+
+discodeit:
+  storage:
+    type: local
+    local:
+      root-path: ./discodeit/local/storage/dev
