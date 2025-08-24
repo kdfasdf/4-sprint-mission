@@ -116,7 +116,6 @@ public class BasicUserService implements UserService {
     @Override
     @Transactional
     public UserResponse updateUser(UserUpdateServiceRequest request) {
-
         User userToUpdate = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 

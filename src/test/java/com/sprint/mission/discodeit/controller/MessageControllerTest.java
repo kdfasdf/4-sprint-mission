@@ -225,6 +225,9 @@ public class MessageControllerTest {
         //given
         UUID channelId = UUID.randomUUID();
         UUID authorId = UUID.randomUUID();
+        UUID firstMessageId = UUID.randomUUID();
+        UUID secondMessageId = UUID.randomUUID();
+
         Instant cursor = Instant.now();
         Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "createdAt");
 
@@ -239,11 +242,15 @@ public class MessageControllerTest {
                 .type(ChannelType.PUBLIC)
                 .build();
 
-        Message message = new Message("test", channel, user);
+        Message firstMessage = new Message("test", channel, user);
+        ReflectionTestUtils.setField(firstMessage, "id", firstMessageId);
+
+        Message secondMessage = new Message("test2", channel, user);
+        ReflectionTestUtils.setField(secondMessage, "id", secondMessageId);
 
         List<MessageResponse> messageResponses = new ArrayList<>();
-        messageResponses.add(new MessageResponse(message.getId(), Instant.now(),Instant.now(),"test", channelId, new UserResponse(user), new ArrayList<>()));
-        messageResponses.add(new MessageResponse(UUID.randomUUID(), Instant.now(),Instant.now(),"test2", channelId, new UserResponse(user), new ArrayList<>()));
+        messageResponses.add(new MessageResponse(firstMessage.getId(), Instant.now(), Instant.now(), "test", channelId, new UserResponse(user), new ArrayList<>()));
+        messageResponses.add(new MessageResponse(secondMessage.getId(), Instant.now(), Instant.now(), "test2", channelId, new UserResponse(user), new ArrayList<>()));
 
         PageResponse<MessageResponse> pageResponse = new PageResponse<>(
                 pageable.getPageSize(),
@@ -256,12 +263,23 @@ public class MessageControllerTest {
         given(messageService.findMessagesByChannelId(any(UUID.class), any(Instant.class), any(Pageable.class))).willReturn(pageResponse);
 
         //when & then
-        mockMvc.perform(get("/api/messages?channelId={channelId}", channelId))
+        mockMvc.perform(get("/api/messages")
+                        .param("channelId", channelId.toString())
+                        .param("cursor", cursor.toString())
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(messageResponses.get(0).getId().toString()))
-                .andExpect(jsonPath("$[0].content").value(messageResponses.get(0).getContent()))
-                .andExpect(jsonPath("$[0].author.id").value(authorId.toString()))
-                .andExpect(jsonPath("$[0].author.username").value("testUser"))
-                .andExpect(jsonPath("$[0].channelId").value(channelId.toString()));
+                .andExpect(jsonPath("$.content[0].id").value(messageResponses.get(0).getId().toString()))
+                .andExpect(jsonPath("$.content[0].content").value(messageResponses.get(0).getContent()))
+                .andExpect(jsonPath("$.content[0].author.id").value(authorId.toString()))
+                .andExpect(jsonPath("$.content[0].author.username").value("testUser"))
+                .andExpect(jsonPath("$.content[0].channelId").value(channelId.toString()))
+                .andExpect(jsonPath("$.content[1].id").value(messageResponses.get(1).getId().toString()))
+                .andExpect(jsonPath("$.content[1].content").value(messageResponses.get(1).getContent()))
+                .andExpect(jsonPath("$.content[1].author.id").value(authorId.toString()))
+                .andExpect(jsonPath("$.content[1].author.username").value("testUser"))
+                .andExpect(jsonPath("$.content[1].channelId").value(channelId.toString()))
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$.hasNext").value(true))
+                .andExpect(jsonPath("$.totalElements").value(2));
     }
 }
