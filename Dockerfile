@@ -43,9 +43,7 @@ ENV PROJECT_NAME=discodeit
 #JVM_OPTS: JVM 옵션
 ENV JVM_OPTS=""
 # Spring Boot 프로필을 운영(prod)으로 설정
-ENV SPRING_PROFILES_ACTIVE=dev
+ENV SPRING_PROFILES_ACTIVE=prod
 # 컨테이너 시작 시 JAR 실행
 #CMD["sh", "-c", "exec", "java", "${JVM_OPTS}", "-jar", "${PROJECT_NAME}-${PROJECT_VERSION}.jar"]
 ENTRYPOINT ["java", "-jar", "app.jar"]
-
-
