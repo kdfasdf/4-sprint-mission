@@ -1,5 +1,5 @@
 <configuration scan="true">
-    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - [%X{requestId}] [%X{requestHttpMethod}] [%X{requestPath}] %msg%n"/>
     <property name="LOG_PATH" value="logs"/>
     <property name="LOG_FILE_NAME" value="application.log"/>
 

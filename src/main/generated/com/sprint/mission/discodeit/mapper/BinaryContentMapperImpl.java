@@ -2,12 +2,13 @@ package com.sprint.mission.discodeit.mapper;
 
 import com.sprint.mission.discodeit.dto.binarycontent.BinaryContentResponse;
 import com.sprint.mission.discodeit.entity.BinaryContent;
+import java.util.Arrays;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-08-25T18:31:04+0900",
+    date = "2025-08-26T03:27:57+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.11 (Oracle Corporation)"
 )
 @Component
@@ -19,8 +20,17 @@ public class BinaryContentMapperImpl implements BinaryContentMapper {
             return null;
         }
 
-        BinaryContentResponse binaryContentResponse = new BinaryContentResponse();
+        BinaryContentResponse.BinaryContentResponseBuilder binaryContentResponse = BinaryContentResponse.builder();
 
-        return binaryContentResponse;
+        binaryContentResponse.id( binaryContent.getId() );
+        binaryContentResponse.fileName( binaryContent.getFileName() );
+        binaryContentResponse.size( binaryContent.getSize() );
+        binaryContentResponse.contentType( binaryContent.getContentType() );
+        byte[] bytes = binaryContent.getBytes();
+        if ( bytes != null ) {
+            binaryContentResponse.bytes( Arrays.copyOf( bytes, bytes.length ) );
+        }
+
+        return binaryContentResponse.build();
     }
 }

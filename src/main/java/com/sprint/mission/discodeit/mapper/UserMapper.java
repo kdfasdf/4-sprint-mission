@@ -1,7 +1,9 @@
 package com.sprint.mission.discodeit.mapper;
 
+import com.sprint.mission.discodeit.dto.binarycontent.BinaryContentResponse;
 import com.sprint.mission.discodeit.dto.user.UserResponse;
 import com.sprint.mission.discodeit.dto.user.request.UserCreateServiceRequest;
+import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -18,7 +20,12 @@ public interface UserMapper {
     @Mapping(target = "userStatus", ignore = true) //비즈니스 로직에서 처리
     User toEntity(UserCreateServiceRequest userCreateServiceRequest);
 
-    default UserResponse toResponse(User user) {
-        return new UserResponse(user);
+
+    @Mapping(target = "profile", expression = "java(map(user.getProfile()))")
+    UserResponse toResponse(User user);
+
+    default BinaryContentResponse map(BinaryContent binaryContent) {
+        return new BinaryContentResponse(binaryContent);
     }
+
 }

@@ -7,6 +7,7 @@ import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.MessageAttachment;
 import com.sprint.mission.discodeit.entity.User;
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -21,8 +22,15 @@ public interface MessageMapper {
     Message toEntity(MessageCreateServiceRequest request, User user, Channel channel);
 
 
+    @Mapping(target = "attachments", expression = "java(map(message.getAttachments()))")
     @Mapping(target = "channelId", source = "channel.id")
     MessageResponse toResponse(Message message);
 
-    BinaryContentResponse map(MessageAttachment messageAttachment);
+    default List<BinaryContentResponse> map(List<MessageAttachment> messageAttachments) {
+        return messageAttachments.stream()
+                .map(MessageAttachment::getBinaryContent)
+                .map(BinaryContentResponse::new)
+                .toList();
+    }
+
 }
