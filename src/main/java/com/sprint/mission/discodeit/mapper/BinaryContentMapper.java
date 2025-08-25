@@ -9,6 +9,5 @@ import org.mapstruct.Mapper;
 )
 public interface BinaryContentMapper {
 
-
     BinaryContentResponse toResponse(BinaryContent binaryContent);
 }

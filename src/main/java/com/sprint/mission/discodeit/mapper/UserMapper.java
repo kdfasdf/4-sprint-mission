@@ -18,5 +18,7 @@ public interface UserMapper {
     @Mapping(target = "userStatus", ignore = true) //비즈니스 로직에서 처리
     User toEntity(UserCreateServiceRequest userCreateServiceRequest);
 
-    UserResponse toResponse(User user);
+    default UserResponse toResponse(User user) {
+        return new UserResponse(user);
+    }
 }
