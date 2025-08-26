@@ -1,13 +1,21 @@
 spring:
+  application:
+    name: discodeit
   profiles:
     active: prod
+  boot:
+    admin:
+      client:
+        url: http://localhost:9090
+        instance:
+          name: discodeit
 
 logging:
   level:
     root: INFO
 
 server:
-  port: 8080
+  port: 80
 
 management:
   endpoints:
@@ -50,3 +58,15 @@ info:
       max-request-size: 50MB
 
 
+discodeit:
+  storage:
+    type: ${STORAGE_TYPE:local} # 기본 값 local
+    local:
+      root-path: ${STORAGE_LOCAL_ROOT_PATH:.discoedit/storage}
+    s3:
+      access-key: ${AWS_S3_ACCESS_KEY}
+      secret-key: ${AWS_S3_SECRET_KEY}
+      region: ${AWS_S3_REGION}
+      bucket: ${AWS_S3_BUCKET}
+      presigned-url-expiration: ${AWS_S3_PRESIGNED_URL_EXPIRATION:600} # 기본값 10분
+    path: ./discodeit/local/storage

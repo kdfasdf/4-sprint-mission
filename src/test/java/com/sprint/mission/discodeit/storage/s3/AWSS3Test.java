@@ -40,7 +40,7 @@ public class AWSS3Test {
     private String testKey;
 
     @BeforeAll
-    public static void loadProperties() throws IOException {
+    static void loadProperties() throws IOException {
         Properties properties = new Properties();
         try (FileInputStream fis = new FileInputStream(".env")) {
             properties.load(fis);
@@ -55,7 +55,7 @@ public class AWSS3Test {
     }
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         testKey = UUID.randomUUID().toString();
 
         s3Client = S3Client.builder()
@@ -182,8 +182,6 @@ public class AWSS3Test {
         }
 
     }
-
-
 
     @AfterEach
     void cleanup() {

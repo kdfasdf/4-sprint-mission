@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,7 +63,7 @@ public class BasicBinaryContentService implements BinaryContentService {
     }
 
     @Override
-    public ResponseEntity<Resource> download(BinaryContentResponse response) {
+    public ResponseEntity<?> download(BinaryContentResponse response) {
         log.info("binary content to download - id : {}", response.getId());
         return binaryContentStorage.download(response);
     }
