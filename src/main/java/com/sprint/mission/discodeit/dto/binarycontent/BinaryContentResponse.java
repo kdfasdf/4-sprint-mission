@@ -1,11 +1,16 @@
 package com.sprint.mission.discodeit.dto.binarycontent;
 
 import com.sprint.mission.discodeit.entity.BinaryContent;
-import java.util.Arrays;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BinaryContentResponse {
 
     private UUID id;
@@ -26,13 +31,4 @@ public class BinaryContentResponse {
         this.size = binaryContent.getSize();
     }
 
-    @Override
-    public String toString() {
-        return "BinaryContentResponse{" +
-                ", fileName='" + fileName + '\'' +
-                ", extension='" + contentType + '\'' +
-                ", size=" + size +
-                ", data=" + Arrays.toString(bytes) +
-                '}';
-    }
 }

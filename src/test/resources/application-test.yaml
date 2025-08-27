@@ -29,6 +29,7 @@ spring:
         orm:
           jdbc:
             bind: TRACE
+
 discodeit:
   storage:
   type: ${STORAGE_TYPE:s3} # 기본 값 local

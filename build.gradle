@@ -51,9 +51,6 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	testCompileOnly 'org.projectlombok:lombok'
-	testAnnotationProcessor 'org.projectlombok:lombok'
-
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
@@ -65,8 +62,11 @@ dependencies {
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
-	implementation 'software.amazon.awssdk:s3:2.20.70'
-	implementation 'software.amazon.awssdk:auth:2.20.70'
+    implementation 'de.codecentric:spring-boot-admin-starter-server:3.4.5'
+
+    implementation 'software.amazon.awssdk:s3:2.20.70'
+    implementation 'software.amazon.awssdk:auth:2.20.70'
+
 }
 
 tasks.named('test') {

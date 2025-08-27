@@ -1,26 +1,14 @@
 spring:
+  application:
+    name: discodeit
   profiles:
     active: prod
-  info:
-    app:
-      name: Discodeit
-      version: 1.7.0
-    java:
-      version: 17
-    spring:
-      boot:
-        version: 3.5.0
-    config:
-      datasource:
-        url: jdbc:postgresql://localhost:5432/discodeit
-        username: discodeit_user
-        password: discode1234
-        driver-class-name: org.postgresql.Driver
-      jpa:
-        ddl-auto: none
-      multipart:
-        max-file-size: 50MB
-        max-request-size: 50MB
+  boot:
+    admin:
+      client:
+        url: http://localhost:9090
+        instance:
+          name: discodeit
 
 logging:
   level:
@@ -44,6 +32,31 @@ management:
       enabled: true
     loggers:
       enabled: true
+
+info:
+  app:
+    name: Discodeit
+    version: 1.7.0
+  java:
+    version: 17
+  spring:
+    boot:
+      version: 3.5.0
+  config:
+    datasource:
+      url: jdbc:postgresql://localhost:5432/discodeit                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+      username: discodeit_user
+      password: discode1234
+      driver-class-name: org.postgresql.Driver
+    jpa:
+      ddl-auto: none
+    storage:
+      type: local
+      path: ./discodeit/local/storage
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
 
 discodeit:
   storage:

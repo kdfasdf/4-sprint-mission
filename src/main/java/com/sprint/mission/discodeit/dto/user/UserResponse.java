@@ -3,16 +3,23 @@ package com.sprint.mission.discodeit.dto.user;
 import com.sprint.mission.discodeit.dto.binarycontent.BinaryContentResponse;
 import com.sprint.mission.discodeit.entity.User;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class UserResponse {
 
-    private final UUID id;
-    private final String username;
-    private final String email;
+    private UUID id;
+    private String username;
+    private String email;
     private BinaryContentResponse profile;
-    private final boolean online;
+    private boolean online;
+
 
     public UserResponse(User user) {
         this.id = user.getId();
