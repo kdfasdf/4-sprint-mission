@@ -5,6 +5,7 @@ import com.sprint.mission.discodeit.dto.user.UserResponse;
 import com.sprint.mission.discodeit.dto.user.request.UserCreateServiceRequest;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
+import java.util.Optional;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -21,11 +22,11 @@ public interface UserMapper {
     User toEntity(UserCreateServiceRequest userCreateServiceRequest);
 
 
-    @Mapping(target = "profile", expression = "java(map(user.getProfile()))")
+    @Mapping(target = "profile", expression = "java(map(user.getOptionalProfile()))")
     UserResponse toResponse(User user);
 
-    default BinaryContentResponse map(BinaryContent binaryContent) {
-        return new BinaryContentResponse(binaryContent);
+    default BinaryContentResponse map(Optional<BinaryContent> binaryContent) {
+        return binaryContent.map(BinaryContentResponse::new).orElse(null);
     }
 
 }
