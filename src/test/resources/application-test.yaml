@@ -4,17 +4,6 @@ spring:
     username: discodeit_user
     password: discode1234
     driver-class-name: org.h2.Driver
-  storage:
-    type: ${STORAGE_TYPE:local} # 기본 값 local
-    local:
-      root-path: ${STORAGE_LOCAL_ROOT_PATH:.discoedit/storage}
-    s3:
-      access-key: ${AWS_S3_ACCESS_KEY}
-      secret-key: ${AWS_S3_SECRET_KEY}
-      region: ${AWS_S3_REGION}
-      bucket: ${AWS_S3_BUCKET}
-      presigned-url-expiration: ${AWS_S3_PRESIGNED_URL_EXPIRATION:600} # 기본값 10분
-    path: ./discodeit/local/storage
   multipart:
     max-file-size: 50MB
     max-request-size: 50MB
@@ -40,3 +29,15 @@ spring:
         orm:
           jdbc:
             bind: TRACE
+discodeit:
+  storage:
+  type: ${STORAGE_TYPE:s3} # 기본 값 local
+  local:
+    root-path: ${STORAGE_LOCAL_ROOT_PATH:.discoedit/storage}
+  s3:
+    access-key: ${AWS_S3_ACCESS_KEY}
+    secret-key: ${AWS_S3_SECRET_KEY}
+    region: ${AWS_S3_REGION}
+    bucket: ${AWS_S3_BUCKET}
+    presigned-url-expiration: ${AWS_S3_PRESIGNED_URL_EXPIRATION:600} # 기본값 10분
+  path: ./discodeit/local/storage

@@ -23,8 +23,8 @@ RUN chmod +x ./gradlew
 RUN ./gradlew --no-daemon --refresh-dependencies dependencies || true
 # 실제 소스코드 복사 (이 시점 이후 변경 시 빌드 다시 수행됨)
 COPY --chown=gradle:gradle src ./src
-# 애플리케이션 빌드 (테스트 제외, 속도 향상)
-RUN ./gradlew clean build --no-daemon --no-parallel -x test
+# 애플리케이션 빌드
+RUN ./gradlew clean build --no-daemon
 
 
 # ============ (2) Runtime ============
