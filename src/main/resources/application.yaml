@@ -1,14 +1,26 @@
 spring:
-  application:
-    name: discodeit
   profiles:
     active: prod
-  boot:
-    admin:
-      client:
-        url: http://localhost:9090
-        instance:
-          name: discodeit
+  info:
+    app:
+      name: Discodeit
+      version: 1.7.0
+    java:
+      version: 17
+    spring:
+      boot:
+        version: 3.5.0
+    config:
+      datasource:
+        url: jdbc:postgresql://localhost:5432/discodeit
+        username: discodeit_user
+        password: discode1234
+        driver-class-name: org.postgresql.Driver
+      jpa:
+        ddl-auto: none
+      multipart:
+        max-file-size: 50MB
+        max-request-size: 50MB
 
 logging:
   level:
@@ -33,34 +45,9 @@ management:
     loggers:
       enabled: true
 
-info:
-  app:
-    name: Discodeit
-    version: 1.7.0
-  java:
-    version: 17
-  spring:
-    boot:
-      version: 3.5.0
-  config:
-    datasource:
-      url: jdbc:postgresql://localhost:5432/discodeit
-      username: discodeit_user
-      password: discode1234
-      driver-class-name: org.postgresql.Driver
-    jpa:
-      ddl-auto: none
-    storage:
-      type: local
-      path: ./discodeit/local/storage
-    multipart:
-      max-file-size: 50MB
-      max-request-size: 50MB
-
-
 discodeit:
   storage:
-    type: ${STORAGE_TYPE:local} # 기본 값 local
+    type: ${STORAGE_TYPE:s3} # 기본 값 local
     local:
       root-path: ${STORAGE_LOCAL_ROOT_PATH:.discoedit/storage}
     s3:

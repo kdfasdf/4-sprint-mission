@@ -2,9 +2,11 @@ package com.sprint.mission.discodeit.storage.s3;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,11 +19,12 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
-import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
+@Slf4j
 @Disabled
-@SpringBootTest
 @ActiveProfiles("test")
+@SpringBootTest
 @DisplayName("S3BinaryContentStorage 테스트")
 class S3BinaryContentStorageTest {
 
@@ -43,42 +46,6 @@ class S3BinaryContentStorageTest {
     private final UUID testId = UUID.randomUUID();
     private final byte[] testData = "테스트 데이터".getBytes();
 
-    @BeforeEach
-    void setUp() {
-        // 테스트 준비 작업
-        // 실제 S3BinaryContentStorage는 스프링이 의존성 주입으로 제공
-    }
-
-    @AfterEach
-    void tearDown() {
-        // 테스트 종료 후 생성된 S3 객체 삭제
-        try {
-            // S3 클라이언트 생성
-            S3Client s3Client = S3Client.builder()
-                    .region(Region.of(region))
-                    .credentialsProvider(
-                            StaticCredentialsProvider.create(
-                                    AwsBasicCredentials.create(accessKey, secretKey)
-                            )
-                    )
-                    .build();
-
-            // 테스트에서 생성한 객체 삭제
-            DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
-                    .bucket(bucket)
-                    .key(testId.toString())
-                    .build();
-
-            s3Client.deleteObject(deleteRequest);
-            System.out.println("테스트 객체 삭제 완료: " + testId);
-        } catch (NoSuchKeyException e) {
-            // 객체가 이미 없는 경우는 무시
-            System.out.println("삭제할 객체가 없음: " + testId);
-        } catch (Exception e) {
-            // 정리 실패 시 로그만 남기고 테스트는 실패로 처리하지 않음
-            System.err.println("테스트 객체 정리 실패: " + e.getMessage());
-        }
-    }
 
     @Test
     @DisplayName("S3에 파일 업로드 성공 테스트")
@@ -90,5 +57,52 @@ class S3BinaryContentStorageTest {
         assertThat(resultId).isEqualTo(testId);
     }
 
+    @Test
+    @DisplayName("S3에서 파일 다운로드 성공 테스트")
+    void get_success() throws IOException {
+        //given
+        s3BinaryContentStorage.put(testId, testData);
 
+        // when
+        InputStream result = s3BinaryContentStorage.get(testId);
+
+        // then
+        assertThat(result).isNotNull();
+        byte[] bytes = result.readAllBytes();
+        assertThat(bytes).isEqualTo(testData);
+    }
+
+    @Test
+    @DisplayName("Presigned URL 생성 성공 테스트")
+    void generatePresignedUrl_success() {
+        // when
+        String result = s3BinaryContentStorage.generatePresignedUrl(testId.toString(), "application/octet-stream");
+
+        // then
+        assertThat(result).isNotNull();
+    }
+
+    @AfterEach()
+    void cleanup() {
+        try{
+            S3Client s3Client = S3Client.builder()
+                    .region(Region.of(region))
+                    .credentialsProvider(
+                            StaticCredentialsProvider.create(
+                                    AwsBasicCredentials.create(accessKey, secretKey)
+                            )
+                    )
+                    .build();
+
+            DeleteObjectRequest request = DeleteObjectRequest.builder()
+                    .bucket(bucket)
+                    .key(testId.toString())
+                    .build();
+
+            s3Client.deleteObject(request);
+            log.info("clean up 성공");
+        } catch (S3Exception e) {
+            log.error("clean up 실패 : {}", e.getMessage());
+        }
+    }
 }

@@ -25,7 +25,7 @@ import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequ
 
 @Slf4j
 @Component
-@ConditionalOnProperty(name = "discodeit.spring.storage.type", havingValue = "s3")
+@ConditionalOnProperty(name = "discodeit.storage.type", havingValue = "s3")
 public class S3BinaryContentStorage implements BinaryContentStorage {
 
     private final String accessKey;
@@ -41,7 +41,7 @@ public class S3BinaryContentStorage implements BinaryContentStorage {
 
     public S3BinaryContentStorage(
             @Value("${discodeit.storage.s3.access-key}") String accessKey,
-            @Value("${discodeit.storage.s3.secret-key") String secretKey,
+            @Value("${discodeit.storage.s3.secret-key}") String secretKey,
             @Value("${discodeit.storage.s3.region}") String region,
             @Value("${discodeit.storage.s3.bucket}") String bucket) {
         this.accessKey = accessKey;
