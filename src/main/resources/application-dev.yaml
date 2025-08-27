@@ -1,4 +1,10 @@
 spring:
+  application:
+    name: discodeit
+  boot:
+    admin:
+      client:
+        url: http://localhost:9090
   datasource:
     url: jdbc:postgresql://localhost:5432/discodeit
     username: discodeit_user
@@ -30,3 +36,4 @@ discodeit:
     type: local
     local:
       root-path: ./discodeit/local/storage/dev
+

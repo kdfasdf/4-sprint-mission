@@ -1,7 +1,14 @@
 spring:
+  application:
+    name: discodeit
   profiles:
-    active: prod
-
+    active: dev
+  boot:
+    admin:
+      client:
+        url: http://localhost:9090
+        instance:
+          name: discodeit
 logging:
   level:
     root: INFO
@@ -48,5 +55,6 @@ info:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
+
 
 
