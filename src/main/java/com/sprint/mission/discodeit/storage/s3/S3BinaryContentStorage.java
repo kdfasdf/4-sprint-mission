@@ -121,23 +121,19 @@ public class S3BinaryContentStorage implements BinaryContentStorage {
                 )
                 .build();
 
-        //when & then
-        try {
-            GetObjectRequest request = GetObjectRequest.builder()
-                    .bucket(bucket)
-                    .key(secretKey)
-                    .build();
 
-            GetObjectPresignRequest presignedRequest = GetObjectPresignRequest.builder()
-                    .signatureDuration(Duration.ofMinutes(15))
-                    .getObjectRequest(request)
-                    .build();
+        GetObjectRequest request = GetObjectRequest.builder()
+                .bucket(bucket)
+                .key(key)
+                .build();
 
-            PresignedGetObjectRequest presignedUrl = s3Presigner.presignGetObject(presignedRequest);
-            return presignedUrl.url().toString();
+        GetObjectPresignRequest presignedRequest = GetObjectPresignRequest.builder()
+                .signatureDuration(Duration.ofMinutes(15))
+                .getObjectRequest(request)
+                .build();
 
-        } catch (S3Exception e) {
-        }
-        return null;
+        PresignedGetObjectRequest presignedUrl = s3Presigner.presignGetObject(presignedRequest);
+        return presignedUrl.url().toString();
     }
+
 }

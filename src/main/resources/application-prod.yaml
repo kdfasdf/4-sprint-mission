@@ -1,3 +1,4 @@
+
 spring:
   application:
     name: discodeit
@@ -6,13 +7,13 @@ spring:
       client:
         url: ${SPRING_BOOT_ADMIN_CLIENT_URL}
   datasource:
-    url: jdbc:postgresql://localhost:5432/discodeit
-    username: discodeit_user
-    password: discode1234
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: false
@@ -28,8 +29,3 @@ logging:
       hibernate:
         SQL: INFO
 
-discodeit:
-  storage:
-    type: local
-    local:
-      root-path: ./discodeit/local/storage/prod
