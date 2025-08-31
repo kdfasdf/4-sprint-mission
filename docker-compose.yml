@@ -12,8 +12,13 @@ services:                         #컨테이너 정의
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/discodeit  #도커 네트워크 브릿지
+      - STORAGE_TYPE=${STORAGE_TYPE}
       - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - AWS_S3_ACCESS_KEY=${AWS_S3_ACCESS_KEY}
+      - AWS_S3_SECRET_KEY=${AWS_S3_SECRET_KEY}
+      - AWS_S3_REGION=${AWS_S3_REGION}
+      - AWS_S3_BUCKET=${AWS_S3_BUCKET}
     depends_on:                    #DB 컨테이너 실행 후 실행
       - db
     volumes:

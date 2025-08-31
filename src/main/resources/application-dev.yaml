@@ -31,9 +31,4 @@ logging:
           jdbc:
             bind: TRACE
 
-discodeit:
-  storage:
-    type: local
-    local:
-      root-path: ./discodeit/local/storage/dev
 
