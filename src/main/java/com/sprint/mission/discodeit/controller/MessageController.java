@@ -57,6 +57,7 @@ public class MessageController implements MessageApi {
         return ResponseEntity.noContent().build();
     }
 
+    // API 스펙 요규사항에 따른 설계 더 restful 한 api 설계 가능
     @Override
     @GetMapping( params = "channelId")
     public ResponseEntity<PageResponse<MessageResponse>> findMessagesByChannelId(@RequestParam("channelId") UUID channelId,
