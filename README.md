@@ -1,3 +1,5 @@
+
+[![codecov](https://codecov.io/github/kdfasdf/4-sprint-mission/branch/sprint8/graph/badge.svg?token=Z4ZWRVXB5J)](https://codecov.io/github/kdfasdf/4-sprint-mission)
 ### REST API 설계원칙 준수
 - 리소스 중심의 URI 설계
   - GET /api/users/{userId}
@@ -23,16 +25,24 @@
 
 ### Test Code
 - 슬라이스 테스트
-  - mockito 라이브러리를 사용하여 controller, repository계층 슬라이스 테스트, 서비스 계층 단위테스트를 진행하여 계층 별 동작 검증
+  - mockito 라이브러리를 사용하여 controller, repository계층 슬라이스 테스트, 서비스 계층 단위테스트를 통한 계층 별 동작 검증
 - 통합 테스트
   - controller 계층 통합테스트를 진행하여 프로덕션 코드 안정성 보장
+
+### Logging
+- MDC Interceptor
+  - 요청별 고유 ID(requestId) 요청 생성 및 HTTP 메서드, 요청 경로 정보 자동 수집
+  - afterCompletion에서 MDC 정리를 통한 메모리 누수 방지
+- AOP
+  - MethodLoggingAspect를 통한 비즈니스 로직 요청 응답 추적
+  - LogParameterFormatter를 통한 로그 출력 형식 표준화
+    - 리플렉션을 통한 요청 필드 상세 분석
+    - 민감정보 마스킹
 
 ### Deploy
 - docker
   - 멀티 스테이지 빌드를 통한 이미지 경량화
-- CI/CD
+
+### CI/CD
   - 
-### Todo
-- dto record로 변경
-  - 불변성을 보장함과 동시에 MapStruct 라이브러리와의 호환을 위해
-    - 일반 dto로는 불변성을 보장하면 @RequiredArgsConstructor를 사용해야하는데 MapStruct가 필드 바인딩을 하지 못하게됨
+
