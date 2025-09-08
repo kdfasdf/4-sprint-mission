@@ -29,7 +29,10 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 .env
-.discodeit/**
+discodeit/**
+src/main/resources/static/**
+.logs
+logs
 
 ### NetBeans ###
 /nbproject/private/
