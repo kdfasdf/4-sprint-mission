@@ -41,7 +41,6 @@ compileTestJava {
     ]
 }
 
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -66,7 +65,7 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
-    implementation 'de.codecentric:spring-boot-admin-starter-server:3.4.5'
+    implementation 'de.codecentric:spring-boot-admin-starter-client:3.3.3'
 
     implementation 'software.amazon.awssdk:s3:2.20.70'
     implementation 'software.amazon.awssdk:auth:2.20.70'
@@ -75,6 +74,7 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
 
 jacoco {

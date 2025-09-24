@@ -29,10 +29,10 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 .env
-discodeit/**
+.discoedit/**
 src/main/resources/static/**
-.logs
-logs
+logs/**
+{discodeit.storage.local.root-path}
 
 ### NetBeans ###
 /nbproject/private/

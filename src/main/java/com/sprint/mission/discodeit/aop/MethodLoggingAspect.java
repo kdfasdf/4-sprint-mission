@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class MethodLoggingAspect {
 
+    private final ThreadLocal<Long> startTimeHolder = new ThreadLocal<>();
+
     @Before("execution(* com.sprint.mission.discodeit.service.*.*(..))")
     public void methodCallLogging(JoinPoint joinPoint) {
         String className = joinPoint.getSignature().getDeclaringType().getSimpleName();
@@ -20,6 +22,8 @@ public class MethodLoggingAspect {
         Object[] args = joinPoint.getArgs();
 
         String parameterStr = LogParameterFormatter.getFormattedParameters(args);
+
+        startTimeHolder.set(System.currentTimeMillis());
 
         log.info("Method call: (class={}, method={}, parameters=({})", className, methodName, parameterStr);
     }
@@ -29,7 +33,16 @@ public class MethodLoggingAspect {
         String className = joinPoint.getSignature().getDeclaringType().getSimpleName();
         String methodName = joinPoint.getSignature().getName();
 
-        log.info("Method return: (class : {}, method : {})", className, methodName);
+        //실행 시간 계산
+        Long startTime = startTimeHolder.get();
+        long executionTime = 0;
+
+        if(startTime != null) {
+            executionTime = System.currentTimeMillis() - startTime;
+            startTimeHolder.remove();
+        }
+
+        log.info("Method return: (class : {}, method : {}, executionTime = {}ms)", className, methodName, executionTime);
     }
 
 }

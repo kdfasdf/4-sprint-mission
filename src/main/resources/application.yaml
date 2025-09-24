@@ -1,15 +1,16 @@
 spring:
   profiles:
-    active: prod
+    active: dev
   info:
     app:
       name: Discodeit
       version: 1.7.0
     java:
       version: 17
-    spring:
-      boot:
-        version: 3.5.0
+  boot:
+    version: 3.5.0
+  application:
+    name: discodeit
     config:
       datasource:
         url: jdbc:postgresql://localhost:5432/discodeit
@@ -33,7 +34,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,loggers
+        include: "*"
       base-path: /actuator
   endpoint:
     health:
