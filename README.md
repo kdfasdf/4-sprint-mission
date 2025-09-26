@@ -39,10 +39,25 @@
     - 리플렉션을 통한 요청 필드 상세 분석
     - 민감정보 마스킹
 
-### Deploy
-- docker
-  - 멀티 스테이지 빌드를 통한 이미지 경량화
+### API 문서화
+- swagger를 통한 API 문서화
+  - 인터페이스로 추상화하여 controller 계층에 non-invasive하도록 문서화
+
+### Docker
+- 멀티스테이지 빌드: Build와 Runtime 스테이지 분리로 최종 이미지 크기 최적화 
+  - Build 스테이지: Gradle 기반 애플리케이션 컴파일 및 의존성 관리 
+  - Runtime 스테이지: Amazon Corretto JDK17 경량 런타임 환경 
+- 레이어 캐싱 최적화: 의존성과 소스코드 복사 단계 분리로 빌드 성능 향상 
+  - Gradle 설정 파일 우선 복사 후 의존성 다운로드 
+  - 소스코드 변경 시에도 의존성 레이어 캐시 재사용
 
 ### CI/CD
-  - 
+- GitHub Actions를 통한 자동화된 빌드 및 배포 파이프라인 구성 
+  - Pull Request 시 자동 테스트 실행 및 코드 커버리지 측정
+  - CI 
+    - JDK 17 (Amazon Corretto) 기반 빌드 환경 구성 
+    - Gradle 캐싱을 통한 빌드 성능 최적화
+  - CD 
+    - Docker 기반 컨테이너화된 애플리케이션 배포 
+    - AWS ECR를 통한 컨테이너 이미지 저장 및 ECS를 정의를 통한 배포
 
