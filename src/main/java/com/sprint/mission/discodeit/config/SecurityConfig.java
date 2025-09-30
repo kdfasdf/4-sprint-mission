@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sprint.mission.discodeit.security.HttpStatusReturningLogoutSuccessHandler;
 import com.sprint.mission.discodeit.security.LoginFailureHandler;
 import com.sprint.mission.discodeit.security.LoginSuccessHandler;
 import com.sprint.mission.discodeit.security.SpaCsrfTokenRequestHandler;
@@ -29,6 +30,11 @@ public class SecurityConfig {
                         .failureUrl("/")
                         .successHandler(new LoginSuccessHandler(new ObjectMapper()))
                         .failureHandler(new LoginFailureHandler(new ObjectMapper()))
+                )
+                .logout(
+                        logout -> logout
+                        .logoutUrl("/api/auth/logout")
+                                .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(new ObjectMapper()))
                 )
                 .build();
     }
