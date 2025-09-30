@@ -12,6 +12,7 @@ import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,12 +27,14 @@ public class BasicAuthService implements AuthService {
 
     private final UserMapper userMapper;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     public UserResponse login(SignIn signIn) {
         User user = userRepository.findByUsername(signIn.getUsername())
                 .orElseThrow(() -> new UserAuthException(UserAuthErrorCode.INVALID_USERNAME));
 
-        if (!user.getPassword().equals(signIn.getPassword())) {
+        if (!passwordEncoder.matches(signIn.getPassword(), user.getPassword())) {
             throw new UserAuthException(UserAuthErrorCode.INVALID_PASSWORD);
         }
 
@@ -43,4 +46,5 @@ public class BasicAuthService implements AuthService {
 
         return userMapper.toResponse(user);
     }
+
 }

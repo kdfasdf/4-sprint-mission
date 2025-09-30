@@ -16,6 +16,7 @@ import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
+import com.sprint.mission.discodeit.util.AuthorityRolesUtils;
 import com.sprint.mission.discodeit.util.BinaryContentConverter;
 import java.io.IOException;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,6 +43,10 @@ public class BasicUserService implements UserService {
     private final BinaryContentStorage binaryContentStorage;
 
     private final UserMapper userMapper;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final AuthorityRolesUtils authorityRolesUtils;
 
     @Override
     @Transactional
@@ -62,6 +68,13 @@ public class BasicUserService implements UserService {
             binaryContentRepository.save(binaryProfile);
             binaryContentStorage.put(binaryProfile.getId(), binaryProfile.getBytes());
         }
+
+        String password = request.getPassword();
+        String hashedPassword = passwordEncoder.encode(password);
+        newUser.updatePassword(hashedPassword);
+
+        List<String> roles = authorityRolesUtils.createRoles(request.getEmail());
+        newUser.updateRoles(roles);
 
         userRepository.save(newUser);
         userStatusRepository.save(newUserStatus);

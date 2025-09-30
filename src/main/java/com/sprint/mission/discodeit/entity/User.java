@@ -2,11 +2,14 @@ package com.sprint.mission.discodeit.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -37,6 +40,9 @@ public class User extends BaseUpdatableEntity {
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", nullable = true)
     private BinaryContent profile;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
     public User(String username, String email, String password, BinaryContent profile) {
         this.username = username;
@@ -71,5 +77,9 @@ public class User extends BaseUpdatableEntity {
 
     public void updateUserStatus(UserStatus userStatus) {
         this.userStatus = userStatus;
+    }
+
+    public void updateRoles(List<String> roles) {
+        this.roles = roles;
     }
 }

@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.dto.user;
 
 import com.sprint.mission.discodeit.dto.binarycontent.BinaryContentResponse;
 import com.sprint.mission.discodeit.entity.User;
+import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,7 @@ public class UserResponse {
     private String email;
     private BinaryContentResponse profile;
     private boolean online;
-
+    private List<String> roles;
 
     public UserResponse(User user) {
         this.id = user.getId();
@@ -27,6 +28,7 @@ public class UserResponse {
         this.email = user.getEmail();
         assignBinaryContentResponseIfUserProfilePresent(user);
         this.online = user.isOnline();
+        this.roles = user.getRoles();
     }
 
     private void assignBinaryContentResponseIfUserProfilePresent(User user) {
