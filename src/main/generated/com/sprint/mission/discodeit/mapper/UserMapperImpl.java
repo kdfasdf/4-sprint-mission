@@ -3,14 +3,12 @@ package com.sprint.mission.discodeit.mapper;
 import com.sprint.mission.discodeit.dto.user.UserResponse;
 import com.sprint.mission.discodeit.dto.user.request.UserCreateServiceRequest;
 import com.sprint.mission.discodeit.entity.User;
-import java.util.ArrayList;
-import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-09-30T16:04:34+0900",
+    date = "2025-10-01T10:31:12+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.11 (Oracle Corporation)"
 )
 @Component
@@ -43,10 +41,7 @@ public class UserMapperImpl implements UserMapper {
         userResponse.username( user.getUsername() );
         userResponse.email( user.getEmail() );
         userResponse.online( user.isOnline() );
-        List<String> list = user.getRoles();
-        if ( list != null ) {
-            userResponse.roles( new ArrayList<String>( list ) );
-        }
+        userResponse.role( user.getRole() );
 
         userResponse.profile( map(user.getOptionalProfile()) );
 

@@ -3,11 +3,13 @@ package com.sprint.mission.discodeit.dto.userstatus.request;
 import java.time.Instant;
 import java.util.UUID;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class UserStatusUpdateRequest {
 
-    private final Instant newLastActiveAt;
+    private Instant newLastActiveAt;
 
     public UserStatusUpdateRequest(Instant newLastActiveAt) {
         validate(newLastActiveAt);

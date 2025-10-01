@@ -6,6 +6,7 @@ import com.sprint.mission.discodeit.dto.user.UserResponse;
 import com.sprint.mission.discodeit.dto.user.request.UserCreateServiceRequest;
 import com.sprint.mission.discodeit.dto.user.request.UserUpdateServiceRequest;
 import com.sprint.mission.discodeit.entity.BinaryContent;
+import com.sprint.mission.discodeit.entity.Role;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.exception.BinaryContentException;
@@ -16,7 +17,6 @@ import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
-import com.sprint.mission.discodeit.util.AuthorityRolesUtils;
 import com.sprint.mission.discodeit.util.BinaryContentConverter;
 import java.io.IOException;
 import java.util.List;
@@ -46,8 +46,6 @@ public class BasicUserService implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final AuthorityRolesUtils authorityRolesUtils;
-
     @Override
     @Transactional
     public UserResponse createUser(UserCreateServiceRequest request) {
@@ -73,10 +71,10 @@ public class BasicUserService implements UserService {
         String hashedPassword = passwordEncoder.encode(password);
         newUser.updatePassword(hashedPassword);
 
-        List<String> roles = authorityRolesUtils.createRoles(request.getEmail());
-        newUser.updateRoles(roles);
+        newUser.updateRole(Role.USER);
 
         userRepository.save(newUser);
+
         userStatusRepository.save(newUserStatus);
         log.info("user created successfully - userId : {}", newUser.getId());
         return userMapper.toResponse(newUser);

@@ -1,7 +1,7 @@
 package com.sprint.mission.discodeit.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sprint.mission.discodeit.constant.UserAuthErrorCode;
+import com.sprint.mission.discodeit.constant.AuthErrorCode;
 import com.sprint.mission.discodeit.exception.ErrorResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write(objectMapper.writeValueAsString(ErrorResponse.of(UserAuthErrorCode.AUTHENTICATION_FAILED)));
+        response.getWriter().write(objectMapper.writeValueAsString(ErrorResponse.of(AuthErrorCode.AUTHENTICATION_FAILED)));
     }
 }
 

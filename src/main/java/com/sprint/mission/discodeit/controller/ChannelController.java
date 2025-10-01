@@ -12,6 +12,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -30,12 +31,14 @@ public class ChannelController implements ChannelApi {
     private final ChannelService channelService;
 
     @Override
+    @PreAuthorize("hasAnyRole('CHANNEL_MANAGER', 'ADMIN')")
     @PostMapping( "/channels/public")
     public ResponseEntity<ChannelResponse> createPublicChannel(@Valid @RequestBody ChannelCreateRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(channelService.createPublicChannel(request.toServiceRequest()));
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('CHANNEL_MANAGER', 'ADMIN')")
     @PostMapping("/channels/private")
     public ResponseEntity<ChannelResponse> createPrivateChannel(@RequestBody PrivateChannelCreateRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(channelService.createPrivateChannel(request.toServiceRequest()));
@@ -54,12 +57,14 @@ public class ChannelController implements ChannelApi {
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('CHANNEL_MANAGER', 'ADMIN')")
     @PatchMapping("/channels/{channelId}")
     public ResponseEntity<ChannelResponse> updateChannel(@PathVariable("channelId") UUID channelId, @RequestBody ChannelUpdateRequest request) {
         return ResponseEntity.ok().body(channelService.updateChannel(request.toServiceRequest(channelId)));
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('CHANNEL_MANAGER', 'ADMIN')")
     @DeleteMapping( "/channels/{channelId}")
     public ResponseEntity<Void> deleteChannel(@PathVariable("channelId") UUID channelId) {
         channelService.deleteChannel(channelId);

@@ -19,6 +19,7 @@ public interface UserMapper {
 
     @Mapping(target = "profile", ignore = true) // 비즈니스 로직에서 처리
     @Mapping(target = "userStatus", ignore = true) //비즈니스 로직에서 처리
+    @Mapping(target = "role", ignore = true)
     User toEntity(UserCreateServiceRequest userCreateServiceRequest);
 
 

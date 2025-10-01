@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 /**
@@ -12,10 +13,11 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ReadStatusUpdateRequest {
 
     @NotNull(message = "읽음 상태가 null 이면 안됨")
-    private final Instant newLastReadAt;
+    private Instant newLastReadAt;
 
     public ReadStatusUpdateServiceRequest toServiceRequest(UUID readStatusId) {
         return ReadStatusUpdateServiceRequest.builder()
