@@ -21,6 +21,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -40,7 +41,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,
-                                           SessionRegistry sessionRegistry) throws Exception {
+                                           SessionRegistry sessionRegistry,
+                                           UserDetailsService userDetailsService) throws Exception {
         return http
                 .authorizeHttpRequests(
                         auth -> auth
@@ -77,6 +79,14 @@ public class SecurityConfig {
                         csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler()))
                 .formLogin(Customizer.withDefaults())
+                .rememberMe(remember -> remember
+                        .rememberMeParameter("remember-me")
+                        .rememberMeCookieName("my-remember-me") // 쿠키 이름
+                        .tokenValiditySeconds(7 * 24 * 60 * 60) // 7일 유지
+                        .key("my-remember-key") // 쿠키 생성 시 서명 키
+                        // UserDetailsService구현체가 빈으로 여러개 등록 되어있으면 어떻게 대응할지 고민해보기
+                        .userDetailsService(userDetailsService)
+                )
                 .sessionManagement(
                         management -> management
                                 .sessionConcurrency(
