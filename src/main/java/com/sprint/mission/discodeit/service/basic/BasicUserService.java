@@ -8,22 +8,24 @@ import com.sprint.mission.discodeit.dto.user.request.UserUpdateServiceRequest;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.Role;
 import com.sprint.mission.discodeit.entity.User;
-import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.exception.BinaryContentException;
 import com.sprint.mission.discodeit.exception.UserException;
 import com.sprint.mission.discodeit.mapper.UserMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
-import com.sprint.mission.discodeit.repository.UserStatusRepository;
+import com.sprint.mission.discodeit.security.DiscodeitUserDetails;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import com.sprint.mission.discodeit.util.BinaryContentConverter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,8 +38,6 @@ public class BasicUserService implements UserService {
 
     private final UserRepository userRepository;
 
-    private final UserStatusRepository userStatusRepository;
-
     private final BinaryContentRepository binaryContentRepository;
 
     private final BinaryContentStorage binaryContentStorage;
@@ -45,6 +45,8 @@ public class BasicUserService implements UserService {
     private final UserMapper userMapper;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final SessionRegistry sessionRegistry;
 
     @Override
     @Transactional
@@ -55,10 +57,7 @@ public class BasicUserService implements UserService {
 
         MultipartFile profile = request.getProfile();
         User newUser = userMapper.toEntity(request);
-        UserStatus newUserStatus = new UserStatus(newUser);
         BinaryContent binaryProfile;
-
-        newUser.updateUserStatus(newUserStatus);
 
         if(profile != null) {
             binaryProfile = getBinaryContent(profile);
@@ -75,7 +74,6 @@ public class BasicUserService implements UserService {
 
         userRepository.save(newUser);
 
-        userStatusRepository.save(newUserStatus);
         log.info("user created successfully - userId : {}", newUser.getId());
         return userMapper.toResponse(newUser);
     }
@@ -118,9 +116,20 @@ public class BasicUserService implements UserService {
     @Override
     @Transactional(readOnly = true)
     public List<UserResponse> findUsers() {
+        Set<UUID> onlineUsersId = sessionRegistry.getAllPrincipals()
+                .stream()
+                .filter(principal -> principal instanceof DiscodeitUserDetails)
+                .map(principal -> (((DiscodeitUserDetails) principal).getUserResponse().getId()))
+                .collect(Collectors.toSet());
+
         return userRepository.findAll()
                 .stream()
-                .map(userMapper::toResponse)
+                .filter(user -> onlineUsersId.contains(user.getId()))
+                .map(user -> {
+                    UserResponse userResponse = userMapper.toResponse(user);
+                    userResponse.isOnline(true);
+                    return userResponse;
+                })
                 .toList();
     }
 
@@ -134,7 +143,7 @@ public class BasicUserService implements UserService {
 
         Optional.ofNullable(request.getNewUsername()).ifPresent(userToUpdate::updateUserName);
         Optional.ofNullable(request.getNewEmail()).ifPresent(userToUpdate::updateEmail);
-        Optional.ofNullable(request.getNewPassword()).ifPresent(userToUpdate::updatePassword);
+        Optional.ofNullable(request.getNewPassword()).ifPresent(newPassword -> userToUpdate.updatePassword(passwordEncoder.encode(newPassword)));
         Optional.ofNullable(request.getProfile()).ifPresentOrElse(binaryContent -> {
             BinaryContent updateBinaryContent = getBinaryContent(binaryContent);
             userToUpdate.updateProfile(updateBinaryContent);
@@ -150,7 +159,6 @@ public class BasicUserService implements UserService {
     @Override
     @Transactional
     public void deleteUser(UUID userId) {
-        userStatusRepository.deleteById(userId);
         userRepository.deleteById(userId);
         log.info("deleted user - userId : {}", userId);
     }

@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
-import com.sprint.mission.discodeit.entity.UserStatus;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,6 @@ public class UserRepositoryTest extends RepositoryTest {
 
     private User user;
     private BinaryContent profile;
-    private UserStatus userStatus;
 
     @Test
     @DisplayName("중복된 이메일의 사용자는 저장할 수 없다")
@@ -142,10 +140,8 @@ public class UserRepositoryTest extends RepositoryTest {
     }
 
     private void setRelationEntity(User user) {
-        userStatus = new UserStatus(user);
         profile = new BinaryContent("test", "test", 1024L, "test".getBytes());
         user.updateProfile(profile);
-        user.updateUserStatus(userStatus);
     }
 
 }

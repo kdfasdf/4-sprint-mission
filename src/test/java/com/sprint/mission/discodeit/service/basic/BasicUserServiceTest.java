@@ -14,13 +14,11 @@ import com.sprint.mission.discodeit.dto.user.request.UserCreateServiceRequest;
 import com.sprint.mission.discodeit.dto.user.request.UserUpdateServiceRequest;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
-import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.exception.UserException;
 import com.sprint.mission.discodeit.mapper.BinaryContentMapper;
 import com.sprint.mission.discodeit.mapper.UserMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
-import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.MockTest;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import java.util.Optional;
@@ -40,9 +38,6 @@ class BasicUserServiceTest extends MockTest {
     private UserRepository userRepository;
 
     @Mock
-    private UserStatusRepository userStatusRepository;
-
-    @Mock
     private UserMapper userMapper;
 
     @Mock
@@ -60,7 +55,6 @@ class BasicUserServiceTest extends MockTest {
 
     private User userWithoutProfile;
     private User userWithProfile;
-    private UserStatus userStatus;
     private UUID defaultProfileUserId;
     private UUID profileUserId;
     private String username;
@@ -94,8 +88,6 @@ class BasicUserServiceTest extends MockTest {
                 .password(password)
                 .build();
 
-        userStatus = new UserStatus(userWithoutProfile);
-        userWithoutProfile.updateUserStatus(userStatus);
         userResponse = new UserResponse(userWithoutProfile);
 
         // user with profile
@@ -122,9 +114,6 @@ class BasicUserServiceTest extends MockTest {
                 .password(password)
                 .profile(profile)
                 .build();
-
-        userStatus = new UserStatus(userWithProfile);
-        userWithProfile.updateUserStatus(userStatus);
 
         userResponse = new UserResponse(userWithProfile);
 

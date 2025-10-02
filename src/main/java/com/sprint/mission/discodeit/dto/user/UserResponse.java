@@ -27,11 +27,14 @@ public class UserResponse {
         this.username = user.getUsername();
         this.email = user.getEmail();
         assignBinaryContentResponseIfUserProfilePresent(user);
-        this.online = user.isOnline();
         this.role = user.getRole();
     }
 
     private void assignBinaryContentResponseIfUserProfilePresent(User user) {
         user.getOptionalProfile().ifPresent(binaryContent -> this.profile = new BinaryContentResponse(binaryContent));
+    }
+
+    public void isOnline(boolean online) {
+        this.online = online;
     }
 }

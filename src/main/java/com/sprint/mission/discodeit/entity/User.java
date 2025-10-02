@@ -33,9 +33,6 @@ public class User extends BaseUpdatableEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
-    private UserStatus userStatus;
-
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", nullable = true)
     private BinaryContent profile;
@@ -56,10 +53,6 @@ public class User extends BaseUpdatableEntity {
         return Optional.ofNullable(profile);
     }
 
-    public boolean isOnline() {
-        return userStatus.isOnline();
-    }
-
     public void updateEmail(String email) {
         this.email = email;
     }
@@ -74,10 +67,6 @@ public class User extends BaseUpdatableEntity {
 
     public void updateProfile(BinaryContent profile) {
         this.profile = profile;
-    }
-
-    public void updateUserStatus(UserStatus userStatus) {
-        this.userStatus = userStatus;
     }
 
     public void updateRole(Role role) {

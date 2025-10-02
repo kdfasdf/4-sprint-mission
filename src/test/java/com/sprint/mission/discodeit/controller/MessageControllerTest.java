@@ -24,7 +24,6 @@ import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ChannelType;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
-import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.exception.MessageException;
 import com.sprint.mission.discodeit.service.MessageService;
 import java.time.Instant;
@@ -67,7 +66,6 @@ public class MessageControllerTest {
         MessageCreateRequest messageCreateRequest = new MessageCreateRequest("test", channelId, authorId);
 
         User user = new User("testUser", "testUser", "testUser", null);
-        user.updateUserStatus(new UserStatus(user));
 
         ReflectionTestUtils.setField(user, "id", authorId);
 
@@ -112,7 +110,6 @@ public class MessageControllerTest {
         MessageCreateRequest messageCreateRequest = new MessageCreateRequest("content", channelId, authorId);
 
         User user = new User("testUser", "testUser", "testUser", null);
-        user.updateUserStatus(new UserStatus(user));
 
         ReflectionTestUtils.setField(user, "id", authorId);
 
@@ -162,7 +159,6 @@ public class MessageControllerTest {
         MessageUpdateRequest messageUpdateRequest = new MessageUpdateRequest("update", channelId, authorId);
 
         User user = new User("testUser", "testUser", "testUser", null);
-        user.updateUserStatus(new UserStatus(user));
 
         ReflectionTestUtils.setField(user, "id", authorId);
 
@@ -232,7 +228,6 @@ public class MessageControllerTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "createdAt");
 
         User user = new User("testUser", "testUser", "testUser", null);
-        user.updateUserStatus(new UserStatus(user));
 
         ReflectionTestUtils.setField(user, "id", authorId);
 

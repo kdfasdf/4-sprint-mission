@@ -23,7 +23,6 @@ import com.sprint.mission.discodeit.dto.channel.request.PrivateChannelCreateServ
 import com.sprint.mission.discodeit.dto.user.UserResponse;
 import com.sprint.mission.discodeit.entity.ChannelType;
 import com.sprint.mission.discodeit.entity.User;
-import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.exception.ChannelException;
 import com.sprint.mission.discodeit.service.ChannelService;
 import java.time.Instant;
@@ -106,7 +105,6 @@ public class ChannelControllerTest {
         for (UUID participantId : participantIds) {
             User user = new User("user", "user@user.com", "user", null);
             ReflectionTestUtils.setField(user, "id", participantId);
-            user.updateUserStatus(new UserStatus(user));
             users.add(new UserResponse(user));
         }
 
@@ -214,11 +212,9 @@ public class ChannelControllerTest {
         UUID secondUserId = UUID.randomUUID();
 
         User firstUser = new User("test", "test@test.com", "test", null);
-        firstUser.updateUserStatus(new UserStatus(firstUser));
         ReflectionTestUtils.setField(firstUser, "id", firstUserId);
 
         User secondUser = new User("test", "test@test.com", "test", null);
-        secondUser.updateUserStatus(new UserStatus(secondUser));
         ReflectionTestUtils.setField(secondUser, "id", secondUserId);
         List<UserResponse> users = List.of(new UserResponse(firstUser), new UserResponse(secondUser));
 

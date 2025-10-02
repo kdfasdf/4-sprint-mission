@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.security;
 
 import com.sprint.mission.discodeit.dto.user.UserResponse;
 import java.util.Collection;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,7 +22,26 @@ public class DiscodeitUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return "";
+        return userResponse.getUsername();
     }
 
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof DiscodeitUserDetails that)) {
+            return false;
+        }
+
+        return Objects.equals(userResponse, that.userResponse) && Objects.equals(password,
+                that.password);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(userResponse);
+        result = 31 * result + Objects.hashCode(password);
+        return result;
+    }
 }

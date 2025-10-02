@@ -5,6 +5,7 @@ import com.sprint.mission.discodeit.dto.auth.request.RoleUpdateRequest;
 import com.sprint.mission.discodeit.dto.user.UserResponse;
 import com.sprint.mission.discodeit.security.DiscodeitUserDetails;
 import com.sprint.mission.discodeit.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,7 @@ public class AuthController implements AuthApi {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/role")
-    public ResponseEntity<UserResponse> updateRole(@Valid @RequestBody RoleUpdateRequest roleUpdateRequest) {
+    public ResponseEntity<UserResponse> updateRole(@Valid @RequestBody RoleUpdateRequest roleUpdateRequest, HttpServletRequest request) {
         return ResponseEntity.ok().body(authService.updateRole(roleUpdateRequest));
     }
 }

@@ -19,7 +19,6 @@ import com.sprint.mission.discodeit.dto.user.request.UserUpdateRequest;
 import com.sprint.mission.discodeit.dto.user.request.UserUpdateServiceRequest;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
-import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.exception.UserException;
 import com.sprint.mission.discodeit.service.UserService;
 import java.util.Arrays;
@@ -55,8 +54,6 @@ public class UserControllerTest {
         User user = new User("test","test@test.com","test",null);
         UUID uuid = UUID.randomUUID();
         ReflectionTestUtils.setField(user, "id", uuid);
-        UserStatus userStatus = new UserStatus(user);
-        user.updateUserStatus(userStatus);
         given(userService.createUser(any(UserCreateServiceRequest.class))).willReturn(new UserResponse(user));
 
         //when & then
@@ -79,8 +76,7 @@ public class UserControllerTest {
         UserCreateRequest userCreateRequest = new UserCreateRequest("test","test@test.com","test",null );
         User user = new User("test","test@test.com","test",null);
         UUID uuid = UUID.randomUUID();
-        UserStatus userStatus = new UserStatus(user);
-        user.updateUserStatus(userStatus);
+
         user.updateProfile(new BinaryContent("file", "image/jpeg", profile.getSize(), "content".getBytes()));
         ReflectionTestUtils.setField(user, "id", uuid);
         given(userService.createUser(any(UserCreateServiceRequest.class))).willReturn(new UserResponse(user));
@@ -130,7 +126,6 @@ public class UserControllerTest {
         //given
         UUID uuid = UUID.randomUUID();
         User user = new User("test","test@test.com","test",null);
-        user.updateUserStatus(new UserStatus(user));
         ReflectionTestUtils.setField(user, "id", uuid);
         given(userService.findUserById(any(UUID.class))).willReturn(new UserResponse(user));
 
@@ -149,7 +144,6 @@ public class UserControllerTest {
         //given
         UUID uuid = UUID.randomUUID();
         User user = new User("test","test@test.com","test",null);
-        user.updateUserStatus(new UserStatus(user));
         given(userService.findUserById(any(UUID.class))).willThrow(new UserException(UserErrorCode.USER_NOT_FOUND));
 
         //when & then
@@ -163,11 +157,9 @@ public class UserControllerTest {
     void findAllUsers() throws Exception {
         //given
         User firstUser = new User("test","test@test.com","test",null);
-        firstUser.updateUserStatus(new UserStatus(firstUser));
         UUID firstUserId = UUID.randomUUID();
 
         User secondUser = new User("test2","test2@test.com","test2",null);
-        secondUser.updateUserStatus(new UserStatus(secondUser));
         UUID secondUserId = UUID.randomUUID();
 
         ReflectionTestUtils.setField(firstUser, "id", firstUserId);
@@ -196,12 +188,10 @@ public class UserControllerTest {
         //given
         UUID uuid = UUID.randomUUID();
         User user = new User("test","test@test.com","test",null);
-        user.updateUserStatus(new UserStatus(user));
         ReflectionTestUtils.setField(user, "id", uuid);
         UserUpdateRequest updateRequest = new UserUpdateRequest("update","update@update.com","update");
 
         User updatedUser = new User("update","update@update.com","update",null);
-        updatedUser.updateUserStatus(new UserStatus(updatedUser));
         ReflectionTestUtils.setField(updatedUser, "id", uuid);
 
 

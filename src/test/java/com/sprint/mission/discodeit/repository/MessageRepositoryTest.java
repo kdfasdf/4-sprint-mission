@@ -6,7 +6,6 @@ import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ChannelType;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
-import com.sprint.mission.discodeit.entity.UserStatus;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -33,8 +32,6 @@ public class MessageRepositoryTest extends RepositoryTest {
 
     private User firstUser;
     private User secondUser;
-    private UserStatus firstUserStatus;
-    private UserStatus secondUserStatus;
     private Channel firstChannel;
     private Channel secondChannel;
     private Message firstMessage;
@@ -53,10 +50,6 @@ public class MessageRepositoryTest extends RepositoryTest {
                 .email("second@second.com")
                 .password("second")
                 .build();
-        firstUserStatus = new UserStatus(firstUser);
-        secondUserStatus = new UserStatus(secondUser);
-        firstUser.updateUserStatus(firstUserStatus);
-        secondUser.updateUserStatus(secondUserStatus);
         firstChannel = Channel.builder()
                 .type(ChannelType.PRIVATE)
                 .build();
