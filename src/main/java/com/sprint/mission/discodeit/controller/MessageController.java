@@ -16,6 +16,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -45,12 +46,14 @@ public class MessageController implements MessageApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('USER') and @messageService.isAuthor(authentication.principal.userResponse.id, #messageId) == true")
     @PatchMapping( "/{messageId}")
     public ResponseEntity<MessageResponse> updateMessage(@PathVariable("messageId") UUID messageId, @RequestBody MessageUpdateRequest request) {
         return ResponseEntity.ok().body(messageService.updateContent(request.toServiceRequest(messageId)));
     }
 
     @Override
+    @PreAuthorize("hasRole('USER') and @messageService.isAuthor(authentication.principal.userResponse.id, #messageId) == true")
     @DeleteMapping( "/{messageId}")
     public ResponseEntity<Void> deleteMessage(@PathVariable("messageId") UUID messageId) {
         messageService.deleteMessage(messageId);

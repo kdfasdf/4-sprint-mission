@@ -54,10 +54,10 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
 
-                                .requestMatchers(HttpMethod.POST,"/api/channels/public").hasAnyRole("CHANNEL_MANAGER", "ADMIN")
-                                .requestMatchers(HttpMethod.POST,"/api/channels/private").hasAnyRole("CHANNEL_MANAGER","ADMIN")
-                                .requestMatchers(HttpMethod.PATCH,"/api/channels/").hasAnyRole("CHANNEL_MANAGER","ADMIN")
-                                .requestMatchers(HttpMethod.DELETE,"/api/channels/").hasAnyRole("CHANNEL_MANAGER","ADMIN")
+                                .requestMatchers(HttpMethod.POST,"/api/channels/public").hasAnyRole("CHANNEL_MANAGER")
+                                .requestMatchers(HttpMethod.POST,"/api/channels/private").hasAnyRole("CHANNEL_MANAGER")
+                                .requestMatchers(HttpMethod.PATCH,"/api/channels/").hasAnyRole("CHANNEL_MANAGER")
+                                .requestMatchers(HttpMethod.DELETE,"/api/channels/").hasAnyRole("CHANNEL_MANAGER")
                                 .requestMatchers(HttpMethod.PUT,"/api/auth/me").hasRole("ADMIN")
 
                         .anyRequest().authenticated()

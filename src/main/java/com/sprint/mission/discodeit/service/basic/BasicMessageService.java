@@ -42,7 +42,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-@Service
+@Service("messageService")
 @Slf4j
 @RequiredArgsConstructor
 public class BasicMessageService implements MessageService {
@@ -195,5 +195,11 @@ public class BasicMessageService implements MessageService {
                         message -> messageRepository.deleteById(messageId),
                         () -> { throw new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND); }
                 );
+    }
+
+    public boolean isAuthor(UUID authorId, UUID messageId) {
+        return messageRepository.findById(messageId)
+                .map(message -> message.getAuthorId().equals(authorId))
+                .orElseThrow(() -> new MessageException(MessageErrorCode.MESSAGE_NOT_FOUND));
     }
 }

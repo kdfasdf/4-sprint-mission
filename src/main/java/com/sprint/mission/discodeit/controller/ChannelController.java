@@ -31,14 +31,14 @@ public class ChannelController implements ChannelApi {
     private final ChannelService channelService;
 
     @Override
-    @PreAuthorize("hasAnyRole('CHANNEL_MANAGER', 'ADMIN')")
+    @PreAuthorize("hasRole('CHANNEL_MANAGER')")
     @PostMapping( "/channels/public")
     public ResponseEntity<ChannelResponse> createPublicChannel(@Valid @RequestBody ChannelCreateRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(channelService.createPublicChannel(request.toServiceRequest()));
     }
 
     @Override
-    @PreAuthorize("hasAnyRole('CHANNEL_MANAGER', 'ADMIN')")
+    @PreAuthorize("hasRole('CHANNEL_MANAGER')")
     @PostMapping("/channels/private")
     public ResponseEntity<ChannelResponse> createPrivateChannel(@RequestBody PrivateChannelCreateRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(channelService.createPrivateChannel(request.toServiceRequest()));
@@ -57,14 +57,14 @@ public class ChannelController implements ChannelApi {
     }
 
     @Override
-    @PreAuthorize("hasAnyRole('CHANNEL_MANAGER', 'ADMIN')")
+    @PreAuthorize("hasRole('CHANNEL_MANAGER')")
     @PatchMapping("/channels/{channelId}")
     public ResponseEntity<ChannelResponse> updateChannel(@PathVariable("channelId") UUID channelId, @RequestBody ChannelUpdateRequest request) {
         return ResponseEntity.ok().body(channelService.updateChannel(request.toServiceRequest(channelId)));
     }
 
     @Override
-    @PreAuthorize("hasAnyRole('CHANNEL_MANAGER', 'ADMIN')")
+    @PreAuthorize("hasRole('CHANNEL_MANAGER')")
     @DeleteMapping( "/channels/{channelId}")
     public ResponseEntity<Void> deleteChannel(@PathVariable("channelId") UUID channelId) {
         channelService.deleteChannel(channelId);
