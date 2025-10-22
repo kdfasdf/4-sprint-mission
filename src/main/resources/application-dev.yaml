@@ -20,6 +20,12 @@ spring:
         format_sql: true
     open-in-view: false
 
+jwt:
+  secret: "85u092j4aa023jfk320fawjoi3thta0hataljnvh289ht4thafhkwghkfgg2ita4thjlfhi2u3falbtbgiuy"
+  access-token-expiration: 3600 # 1시간
+  refresh-token-expiration: 172800 # 1일
+  max-active-count: 1
+
 logging:
   level:
     com:

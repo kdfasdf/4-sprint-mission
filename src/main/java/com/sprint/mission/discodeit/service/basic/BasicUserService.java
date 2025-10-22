@@ -13,19 +13,16 @@ import com.sprint.mission.discodeit.exception.UserException;
 import com.sprint.mission.discodeit.mapper.UserMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
-import com.sprint.mission.discodeit.security.DiscodeitUserDetails;
+import com.sprint.mission.discodeit.security.jwt.JwtRegistry;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import com.sprint.mission.discodeit.util.BinaryContentConverter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +43,8 @@ public class BasicUserService implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final SessionRegistry sessionRegistry;
+    private final JwtRegistry jwtRegistry;
+//    private final SessionRegistry sessionRegistry;
 
     @Override
     @Transactional
@@ -75,7 +73,8 @@ public class BasicUserService implements UserService {
         userRepository.save(newUser);
 
         log.info("user created successfully - userId : {}", newUser.getId());
-        return userMapper.toResponse(newUser);
+        UserResponse userResponse = userMapper.toResponse(newUser);
+        return userResponse;
     }
 
     private void validateEmailDoesNotExist(String email) {
@@ -116,18 +115,14 @@ public class BasicUserService implements UserService {
     @Override
     @Transactional(readOnly = true)
     public List<UserResponse> findUsers() {
-        Set<UUID> onlineUsersId = sessionRegistry.getAllPrincipals()
-                .stream()
-                .filter(principal -> principal instanceof DiscodeitUserDetails)
-                .map(principal -> (((DiscodeitUserDetails) principal).getUserResponse().getId()))
-                .collect(Collectors.toSet());
 
         return userRepository.findAll()
                 .stream()
-                .filter(user -> onlineUsersId.contains(user.getId()))
                 .map(user -> {
                     UserResponse userResponse = userMapper.toResponse(user);
-                    userResponse.isOnline(true);
+                    if(jwtRegistry.hasActiveJwtInformationByUserId(user.getId())) {
+                        userResponse.updateOnline(true);
+                    }
                     return userResponse;
                 })
                 .toList();
@@ -160,6 +155,7 @@ public class BasicUserService implements UserService {
     @Transactional
     public void deleteUser(UUID userId) {
         userRepository.deleteById(userId);
+        jwtRegistry.invalidateJwtInformationByUserId(userId);
         log.info("deleted user - userId : {}", userId);
     }
 }

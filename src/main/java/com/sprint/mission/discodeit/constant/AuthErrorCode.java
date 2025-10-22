@@ -10,7 +10,8 @@ public enum AuthErrorCode implements ErrorCode {
     INVALID_USERNAME(401, "AUTH_002", "INVALID_USERNAME"),
     INVALID_PASSWORD(401, "AUTH_002", "INVALID_PASSWORD"),
     AUTHENTICATION_FAILED(401, "AUTH_003", "AUTHENTICATION_FAILED"),
-    FORBIDDEN(403, "AUTH_004", "FORBIDDEN");
+    FORBIDDEN(403, "AUTH_004", "FORBIDDEN"),
+    INVALID_USER(401, "AUTH_005", "INVALID_USER");
 
     private final int status;
     private final String code;

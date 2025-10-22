@@ -34,7 +34,7 @@ public class UserResponse {
         user.getOptionalProfile().ifPresent(binaryContent -> this.profile = new BinaryContentResponse(binaryContent));
     }
 
-    public void isOnline(boolean online) {
+    public void updateOnline(boolean online) {
         this.online = online;
     }
 }

@@ -12,6 +12,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(
+        componentModel = "spring",
         uses = {UserMapper.class, BinaryContentMapper.class}
 )
 public interface MessageMapper {

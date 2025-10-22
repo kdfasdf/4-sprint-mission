@@ -19,6 +19,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper (
+        componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL
 )
 public abstract class ChannelMapper {

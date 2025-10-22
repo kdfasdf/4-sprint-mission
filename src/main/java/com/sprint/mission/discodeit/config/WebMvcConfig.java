@@ -18,4 +18,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // 모든 경로에 적용
         registry.addInterceptor(mdcLoggingInterceptor()).addPathPatterns("/**");
     }
+
 }

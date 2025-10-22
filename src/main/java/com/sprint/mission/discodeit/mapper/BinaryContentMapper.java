@@ -5,6 +5,7 @@ import com.sprint.mission.discodeit.entity.BinaryContent;
 import org.mapstruct.Mapper;
 
 @Mapper(
+        componentModel = "spring",
         uses = {UserMapper.class}
 )
 public interface BinaryContentMapper {

@@ -18,12 +18,12 @@ public class DiscodeitUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    private final UserMapper useMapper;
+    private final UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
-        UserResponse userResponse = useMapper.toResponse(user);
+        UserResponse userResponse = userMapper.toResponse(user);
         return new DiscodeitUserDetails(userResponse, user.getPassword());
     }
 }

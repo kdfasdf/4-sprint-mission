@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.sprint.mission'
-version = '0.0.1-SNAPSHOT'
+version =  '2.1-M10'
 
 java {
     toolchain {
@@ -72,6 +72,7 @@ dependencies {
     implementation 'software.amazon.awssdk:s3:2.20.70'
     implementation 'software.amazon.awssdk:auth:2.20.70'
 
+    implementation 'com.nimbusds:nimbus-jose-jwt:10.3'
 
 
 }

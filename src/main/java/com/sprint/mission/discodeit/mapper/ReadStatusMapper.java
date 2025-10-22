@@ -8,7 +8,7 @@ import com.sprint.mission.discodeit.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ReadStatusMapper {
 
     @Mapping(source = "user", target = "user")          // User -> ReadStatus.user
