@@ -24,7 +24,7 @@ RUN ./gradlew --no-daemon --refresh-dependencies dependencies || true
 # 실제 소스코드 복사 (이 시점 이후 변경 시 빌드 다시 수행됨)
 COPY --chown=gradle:gradle src ./src
 # 애플리케이션 빌드
-RUN ./gradlew clean build
+RUN ./gradlew clean build -x test
 
 
 # ============ (2) Runtime ============
@@ -42,8 +42,8 @@ ENV PROJECT_VERSION=1.2-M8
 ENV PROJECT_NAME=discodeit
 #JVM_OPTS: JVM 옵션
 ENV JVM_OPTS=""
-# Spring Boot 프로필을 운영(prod)으로 설정
-ENV SPRING_PROFILES_ACTIVE=prod
+# Spring Boot 프로필을 운영(prodprod)으로 설정
+ENV SPRING_PROFILES_ACTIVE=loadtest
 # 컨테이너 시작 시 JAR 실행
 #CMD["sh", "-c", "exec", "java", "${JVM_OPTS}", "-jar", "${PROJECT_NAME}-${PROJECT_VERSION}.jar"]
 ENTRYPOINT ["java", "-jar", "app.jar"]

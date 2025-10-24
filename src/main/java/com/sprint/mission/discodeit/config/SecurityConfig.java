@@ -18,7 +18,6 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,7 +30,6 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 @Configuration
 @RequiredArgsConstructor
 @EnableMethodSecurity
-@EnableWebSecurity(debug = true)
 public class SecurityConfig {
 
     private final LoginSuccessHandler loginSuccessHandler;

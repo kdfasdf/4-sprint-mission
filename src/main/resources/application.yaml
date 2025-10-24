@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: loadtest
   info:
     app:
       name: Discodeit
@@ -12,20 +12,9 @@ spring:
   application:
     name: discodeit
     config:
-      datasource:
-        url: jdbc:postgresql://localhost:5432/discodeit
-        username: discodeit_user
-        password: discode1234
-        driver-class-name: org.postgresql.Driver
-      jpa:
-        ddl-auto: none
       multipart:
         max-file-size: 50MB
         max-request-size: 50MB
-
-logging:
-  level:
-    root: INFO
 
 server:
   port: 80

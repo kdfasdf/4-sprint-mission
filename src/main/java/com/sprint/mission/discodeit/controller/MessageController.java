@@ -6,6 +6,7 @@ import com.sprint.mission.discodeit.dto.message.MessageResponse;
 import com.sprint.mission.discodeit.dto.message.request.MessageCreateRequest;
 import com.sprint.mission.discodeit.dto.message.request.MessageUpdateRequest;
 import com.sprint.mission.discodeit.service.MessageService;
+import com.sprint.mission.discodeit.service.basic.BatchMessageService;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -36,13 +38,39 @@ public class MessageController implements MessageApi {
 
     private final MessageService messageService;
 
+    private final BatchMessageService batchMessageService;
+
+//    @Override
+//    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<MessageResponse> createMessage(
+//            @RequestPart("messageCreateRequest") MessageCreateRequest request,
+//            @RequestPart(value = "attachments", required = false) List<MultipartFile> attachments
+//    ) {
+//        return ResponseEntity.status(HttpStatus.CREATED).body(messageService.createMessage(request.toServiceRequest(attachments)));
+//    }
+
     @Override
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MessageResponse> createMessage(
             @RequestPart("messageCreateRequest") MessageCreateRequest request,
             @RequestPart(value = "attachments", required = false) List<MultipartFile> attachments
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(messageService.createMessage(request.toServiceRequest(attachments)));
+//        DeferredResult<MessageResponse> messageDeferredResult =
+//                batchMessageService.createMessage(request.toServiceRequest(attachments));
+//
+//        // DeferredResult를 ResponseEntity로 변환
+//        DeferredResult<ResponseEntity<MessageResponse>> result = new DeferredResult<>(10000L);
+//
+//        messageDeferredResult.onCompletion(() -> {
+//            MessageResponse response = (MessageResponse) messageDeferredResult.getResult();
+//            result.setResult(ResponseEntity.status(HttpStatus.CREATED).body(response));
+//        });
+//
+//        messageDeferredResult.onError(throwable -> {
+//            result.setErrorResult(throwable);
+//        });
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(batchMessageService.createMessage(request.toServiceRequest(attachments)));
     }
 
     @Override
