@@ -32,9 +32,9 @@ public class BinaryContentController implements BinaryContentApi {
         return ResponseEntity.ok().body(binaryContentService.findAllByIdIn(binaryContentsIds));
     }
 
-    @Override
-    @GetMapping("/{binaryContentId}/download")
-    public ResponseEntity<?> download(@PathVariable("binaryContentId") UUID binaryContentId) {
-        return binaryContentService.download(binaryContentService.findById(binaryContentId));
-    }
+//    @Override
+//    @GetMapping("/{binaryContentId}/download")
+//    public ResponseEntity<?> download(@PathVariable("binaryContentId") UUID binaryContentId) {
+//        return binaryContentService.download(binaryContentService.findById(binaryContentId));
+//    }
 }

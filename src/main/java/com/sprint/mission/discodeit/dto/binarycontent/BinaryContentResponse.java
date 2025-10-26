@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.dto.binarycontent;
 
 import com.sprint.mission.discodeit.entity.BinaryContent;
+import com.sprint.mission.discodeit.entity.BinaryContentStatus;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +22,8 @@ public class BinaryContentResponse {
 
     private String contentType;
 
+    private BinaryContentStatus status;
+
     private byte[] bytes;
 
     public BinaryContentResponse(BinaryContent binaryContent) {
@@ -29,6 +32,7 @@ public class BinaryContentResponse {
         this.contentType = binaryContent.getContentType();
         this.bytes = binaryContent.getBytes();
         this.size = binaryContent.getSize();
+        this.status = binaryContent.getBinaryContentStatus();
     }
 
 }

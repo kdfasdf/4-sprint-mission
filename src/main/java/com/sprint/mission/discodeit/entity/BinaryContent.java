@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "binary_contents")
-public class BinaryContent extends BaseEntity {
+public class BinaryContent extends BaseUpdatableEntity {
 
     @Column(name = "bytes", nullable = false)
     private byte[] bytes;
@@ -28,6 +30,10 @@ public class BinaryContent extends BaseEntity {
     @Column(name = "file_name", nullable = false)
     private String fileName;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private BinaryContentStatus binaryContentStatus = BinaryContentStatus.PROCESSING;
+
     @Builder
     @JsonCreator
     public BinaryContent(
@@ -39,5 +45,9 @@ public class BinaryContent extends BaseEntity {
         this.contentType = contentType;
         this.size = size;
         this.fileName = fileName;
+    }
+
+    public void updateStatus(BinaryContentStatus binaryContentStatus) {
+        this.binaryContentStatus = binaryContentStatus;
     }
 }

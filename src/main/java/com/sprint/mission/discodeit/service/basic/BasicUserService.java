@@ -8,6 +8,7 @@ import com.sprint.mission.discodeit.dto.user.request.UserUpdateServiceRequest;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.Role;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.event.BinaryContentCreatedEvent;
 import com.sprint.mission.discodeit.exception.BinaryContentException;
 import com.sprint.mission.discodeit.exception.UserException;
 import com.sprint.mission.discodeit.mapper.UserMapper;
@@ -15,7 +16,6 @@ import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.security.jwt.JwtRegistry;
 import com.sprint.mission.discodeit.service.UserService;
-import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import com.sprint.mission.discodeit.util.BinaryContentConverter;
 import java.io.IOException;
 import java.util.List;
@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,14 +38,13 @@ public class BasicUserService implements UserService {
 
     private final BinaryContentRepository binaryContentRepository;
 
-    private final BinaryContentStorage binaryContentStorage;
-
     private final UserMapper userMapper;
 
     private final PasswordEncoder passwordEncoder;
 
     private final JwtRegistry jwtRegistry;
-//    private final SessionRegistry sessionRegistry;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     @Transactional
@@ -61,7 +61,9 @@ public class BasicUserService implements UserService {
             binaryProfile = getBinaryContent(profile);
             newUser.updateProfile(binaryProfile);
             binaryContentRepository.save(binaryProfile);
-            binaryContentStorage.put(binaryProfile.getId(), binaryProfile.getBytes());
+            BinaryContentCreatedEvent binaryContentCreatedEvent =
+                    new BinaryContentCreatedEvent(binaryProfile.getId(), binaryProfile.getBytes());
+            applicationEventPublisher.publishEvent(binaryContentCreatedEvent);
         }
 
         String password = request.getPassword();
@@ -144,7 +146,11 @@ public class BasicUserService implements UserService {
             userToUpdate.updateProfile(updateBinaryContent);
             userRepository.save(userToUpdate);
             binaryContentRepository.save(updateBinaryContent);
-            binaryContentStorage.put(updateBinaryContent.getId(), updateBinaryContent.getBytes());
+            BinaryContentCreatedEvent binaryContentCreatedEvent = new BinaryContentCreatedEvent(
+                    updateBinaryContent.getId(),
+                    updateBinaryContent.getBytes()
+            );
+            applicationEventPublisher.publishEvent(binaryContentCreatedEvent);
         }, () -> userRepository.save(userToUpdate));
 
         log.info("User after update - userId : {}, username : {}, userEmail : {}", userToUpdate.getId(), userToUpdate.getUsername(), userToUpdate.getEmail());

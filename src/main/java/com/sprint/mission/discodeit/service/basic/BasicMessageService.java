@@ -13,6 +13,7 @@ import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.MessageAttachment;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.event.BinaryContentCreatedEvent;
 import com.sprint.mission.discodeit.exception.BinaryContentException;
 import com.sprint.mission.discodeit.exception.ChannelException;
 import com.sprint.mission.discodeit.exception.MessageException;
@@ -25,7 +26,6 @@ import com.sprint.mission.discodeit.repository.MessageAttachmentRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.MessageService;
-import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import com.sprint.mission.discodeit.util.BinaryContentConverter;
 import java.io.IOException;
 import java.time.Instant;
@@ -36,6 +36,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -53,10 +54,10 @@ public class BasicMessageService implements MessageService {
     private final BinaryContentRepository binaryContentRepository;
     private final MessageAttachmentRepository messageAttachmentRepository;
 
-    private final BinaryContentStorage binaryContentStorage;
-
     private final MessageMapper messageMapper;
     private final PageResponseMapper pageResponseMapper;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     @Transactional
@@ -82,7 +83,9 @@ public class BasicMessageService implements MessageService {
 
         binaryContents.stream()
                         .forEach(binaryContent -> {
-                            binaryContentStorage.put(binaryContent.getId(), binaryContent.getBytes());
+                            BinaryContentCreatedEvent binaryContentCreatedEvent =
+                                    new BinaryContentCreatedEvent(binaryContent.getId(), binaryContent.getBytes());
+                            applicationEventPublisher.publishEvent(binaryContentCreatedEvent);
                         });
 
         attachments = convertBinaryContentsToMessageAttachment(binaryContents, message);
