@@ -40,5 +40,7 @@ logging:
             bind: DEBUG
       springframework:
         security: DEBUG
+        cache: DEBUG
+        interceptor: TRACE
 
 

@@ -22,6 +22,13 @@ spring:
       multipart:
         max-file-size: 50MB
         max-request-size: 50MB
+  cache:
+    caffeine:
+      spec:
+        initialCapacity=100,
+        maximumSize=1000,
+        expireAfterAccess=30m,
+        recordStats
 
 logging:
   level:
@@ -48,6 +55,9 @@ management:
       enabled: true
     loggers:
       enabled: true
+    caches:
+      enabled: true
+
 
 discodeit:
   storage:

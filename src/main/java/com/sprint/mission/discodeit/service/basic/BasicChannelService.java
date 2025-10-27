@@ -22,6 +22,8 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +44,7 @@ public class BasicChannelService implements ChannelService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "channels", allEntries = true)
     public ChannelResponse createPublicChannel(ChannelCreateServiceRequest request) {
         log.info("public channel to create - name : {}, description : {}", request.getName(), request.getDescription());
         Channel channel = channelMapper.toEntity(request, ChannelType.PUBLIC);
@@ -52,6 +55,7 @@ public class BasicChannelService implements ChannelService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "channels", allEntries = true)
     public ChannelResponse createPrivateChannel(PrivateChannelCreateServiceRequest request) {
         Channel channel = channelMapper.toEntity(request, ChannelType.PRIVATE);
         channelRepository.save(channel);
@@ -79,6 +83,7 @@ public class BasicChannelService implements ChannelService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "channels", key = "#userId")
     public  List<ChannelResponse> findAllChannelsByUserId(UUID userId) {
         List<UUID> joinChannels = readStatusRepository.findAllByUserId(userId)
                 .stream()
@@ -94,6 +99,7 @@ public class BasicChannelService implements ChannelService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "channels", allEntries = true)
     public ChannelResponse updateChannel(ChannelUpdateServiceRequest request) {
         Channel channelToUpdate = channelRepository.findById(request.getChannelId())
                 .orElseThrow(() -> new ChannelException(ChannelErrorCode.CHANNEL_NOT_FOUND));
@@ -113,6 +119,7 @@ public class BasicChannelService implements ChannelService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "channels", allEntries = true)
     public void deleteChannel(UUID channelId) {
         messageRepository.deleteAllByChannelId(channelId);
         readStatusRepository.deleteAllByChannelId(channelId);

@@ -23,6 +23,8 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -48,6 +50,7 @@ public class BasicUserService implements UserService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "users", allEntries = true)
     public UserResponse createUser(UserCreateServiceRequest request) {
         log.info("User attempting registeration - username : {}, userEmail : {}", request.getUsername(), request.getEmail());
         validateEmailDoesNotExist(request.getEmail());
@@ -116,6 +119,7 @@ public class BasicUserService implements UserService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "users", key = "'users:all'")
     public List<UserResponse> findUsers() {
 
         return userRepository.findAll()
@@ -132,6 +136,7 @@ public class BasicUserService implements UserService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "users", allEntries = true)
     public UserResponse updateUser(UserUpdateServiceRequest request) {
         User userToUpdate = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
@@ -159,6 +164,7 @@ public class BasicUserService implements UserService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "users", allEntries = true)
     public void deleteUser(UUID userId) {
         userRepository.deleteById(userId);
         jwtRegistry.invalidateJwtInformationByUserId(userId);

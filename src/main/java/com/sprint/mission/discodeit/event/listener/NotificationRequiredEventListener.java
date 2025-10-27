@@ -3,7 +3,6 @@ package com.sprint.mission.discodeit.event.listener;
 import com.sprint.mission.discodeit.constant.ChannelErrorCode;
 import com.sprint.mission.discodeit.constant.UserErrorCode;
 import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.entity.Notification;
 import com.sprint.mission.discodeit.entity.ReadStatus;
 import com.sprint.mission.discodeit.entity.Role;
 import com.sprint.mission.discodeit.entity.User;
@@ -16,6 +15,7 @@ import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.NotificationRepository;
 import com.sprint.mission.discodeit.repository.ReadStatusRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
+import com.sprint.mission.discodeit.service.NotificationService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +30,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @RequiredArgsConstructor
 public class NotificationRequiredEventListener {
 
+    private final NotificationService notificationService;
     private final ReadStatusRepository readStatusRepository;
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
@@ -48,9 +49,8 @@ public class NotificationRequiredEventListener {
 
         readStatuses.stream()
                 .filter(readStatus -> !readStatus.getUserId().equals(event.getAuthorId()))
-                .map(readStatus ->
-                        new Notification(readStatus.getUserId(),title,event.getContent()))
-                .forEach(notificationRepository::save);
+                .forEach(readStatus ->
+                        notificationService.create(readStatus.getUser(),title,event.getContent()));
     }
 
     @Async
@@ -61,8 +61,7 @@ public class NotificationRequiredEventListener {
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
         String title = "권한이 변경되었습니다.";
         String content = String.format("%s -> %s", event.getOldRole().name(), event.getNewRole().name());
-        Notification notification = new Notification(changedUser.getId(), title, content);
-        notificationRepository.save(notification);
+        notificationService.create(changedUser, title, content);
     }
 
     @Async
@@ -74,10 +73,10 @@ public class NotificationRequiredEventListener {
                                 admin ->
                                 {
                                     String Content = String.format("""
-                                            RequestId: %s
-                                            BinaryContentId: %s
-                                            Error: %s""",event.getRequestId(),event.getBinaryContentId(),event.getReason());
-                                notificationRepository.save(new Notification(admin.getId(), "Binary Content 업로드 실패", Content));
+                                        RequestId: %s
+                                        BinaryContentId: %s
+                                        Error: %s""",event.getRequestId(),event.getBinaryContentId(),event.getReason());
+                                    notificationService.create(admin, "Binary Content 업로드 실패", Content);
                                 }
                         );
     }
