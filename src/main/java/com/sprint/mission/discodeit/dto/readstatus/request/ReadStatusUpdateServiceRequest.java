@@ -12,4 +12,6 @@ public class ReadStatusUpdateServiceRequest {
     private final UUID readStatusId;
 
     private final Instant newLastReadAt;
+
+    private Boolean newNotificationEnabled;
 }

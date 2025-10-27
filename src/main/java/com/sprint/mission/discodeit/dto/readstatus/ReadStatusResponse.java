@@ -16,12 +16,14 @@ public class ReadStatusResponse {
     private final UUID channelId;
     private final UUID userId;
     private final Instant lastReadAt;
+    private Boolean notificationEnabled;
 
     public ReadStatusResponse (ReadStatus readStatus) {
         this.id = readStatus.getId();
         this.channelId = readStatus.getChannelId();
         this.userId = readStatus.getUserId();
         this.lastReadAt = readStatus.getLastReadAt();
+        this.notificationEnabled = readStatus.getNotificationEnabled();
     }
 
 }

@@ -73,6 +73,7 @@ dependencies {
     implementation 'software.amazon.awssdk:auth:2.20.70'
 
     implementation 'com.nimbusds:nimbus-jose-jwt:10.3'
+    implementation 'org.springframework.retry:spring-retry'
 
 
 }

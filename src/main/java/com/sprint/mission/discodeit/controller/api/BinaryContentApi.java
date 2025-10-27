@@ -40,14 +40,14 @@ public interface BinaryContentApi {
     ResponseEntity<List<BinaryContentResponse>> getBinaryContents(
             @Parameter(description = "조회할 첨부 파일 ID 목록") List<UUID> binaryContentsIds);
 
-//    @Operation(summary = "파일 다운로드")
-//    @ApiResponses(value = {
-//            @ApiResponse(
-//                    responseCode = "200", description = "파일 다운로드 성공",
-//                    content = @Content(schema = @Schema(type = "string", format = "binary"))
-//            )
-//    })
-//    ResponseEntity<?> download (
-//            @Parameter(description = "다운로드할 파일 ID") UUID binaryContentId);
+    @Operation(summary = "파일 다운로드")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200", description = "파일 다운로드 성공",
+                    content = @Content(schema = @Schema(type = "string", format = "binary"))
+            )
+    })
+    ResponseEntity<?> download (
+            @Parameter(description = "다운로드할 파일 ID") UUID binaryContentId);
 
 }

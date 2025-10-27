@@ -37,8 +37,8 @@ logging:
         SQL: DEBUG
         orm:
           jdbc:
-            bind: TRACE
+            bind: DEBUG
       springframework:
-        security: TRACE
+        security: DEBUG
 
 

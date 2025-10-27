@@ -19,9 +19,13 @@ public class ReadStatusUpdateRequest {
     @NotNull(message = "읽음 상태가 null 이면 안됨")
     private Instant newLastReadAt;
 
+    @NotNull(message = "새 알람은 null이면 안됨")
+    private Boolean newNotificationEnabled;
+
     public ReadStatusUpdateServiceRequest toServiceRequest(UUID readStatusId) {
         return ReadStatusUpdateServiceRequest.builder()
                 .newLastReadAt(newLastReadAt)
+                .newNotificationEnabled(newNotificationEnabled)
                 .readStatusId(readStatusId)
                 .build();
     }

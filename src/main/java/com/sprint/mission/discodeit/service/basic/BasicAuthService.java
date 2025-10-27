@@ -8,6 +8,7 @@ import com.sprint.mission.discodeit.dto.auth.request.RoleUpdateRequest;
 import com.sprint.mission.discodeit.dto.user.UserResponse;
 import com.sprint.mission.discodeit.entity.Role;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.event.RoleUpdatedEvent;
 import com.sprint.mission.discodeit.exception.TokenException;
 import com.sprint.mission.discodeit.exception.UserAuthException;
 import com.sprint.mission.discodeit.exception.UserException;
@@ -18,13 +19,11 @@ import com.sprint.mission.discodeit.security.jwt.JwtInformation;
 import com.sprint.mission.discodeit.security.jwt.JwtProvider;
 import com.sprint.mission.discodeit.security.jwt.JwtRegistry;
 import com.sprint.mission.discodeit.service.AuthService;
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.session.SessionInformation;
-import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,8 +49,6 @@ public class BasicAuthService implements AuthService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final SessionRegistry sessionRegistry;
-
     private final UserDetailsService userDetailsService;
 
     private final JwtProvider jwtProvider;
@@ -60,31 +57,23 @@ public class BasicAuthService implements AuthService {
 
     private final UserMapper userMapper;
 
+    private final ApplicationEventPublisher applicationEventPublisher;
+
     @Override
     @Transactional
     public UserResponse updateRole(RoleUpdateRequest roleUpdateRequest) {
         User user = userRepository.findById(roleUpdateRequest.getUserId())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
-        user.updateRole(roleUpdateRequest.getNewRole());
+        Role oldRole = user.getRole();
+        Role newRole = roleUpdateRequest.getNewRole();
+        user.updateRole(newRole);
 
-        UserResponse userResponse = userMapper.toResponse(user);
-
-        DiscodeitUserDetails newDetails = new DiscodeitUserDetails(userResponse, user.getPassword());
-
-        sessionRegistry.getAllPrincipals().stream()
-                        .filter(principal -> principal instanceof DiscodeitUserDetails)
-                        .filter(principal -> ((DiscodeitUserDetails) principal).getUserResponse().getId().equals(user.getId()))
-                        .findFirst()
-                        .ifPresent(
-                                principal ->
-                                {
-                                    List<SessionInformation> sessions = sessionRegistry.getAllSessions(principal, false);
-                                    sessions.forEach(SessionInformation::expireNow);
-                                }
-                        );
-
+        jwtRegistry.invalidateJwtInformationByUserId(user.getId());
         userRepository.save(user);
+
+        RoleUpdatedEvent roleUpdateEvent = new RoleUpdatedEvent(user.getId(), oldRole, newRole);
+        applicationEventPublisher.publishEvent(roleUpdateEvent);
         return userMapper.toResponse(user);
 
     }

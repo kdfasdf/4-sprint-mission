@@ -6,6 +6,7 @@ import com.sprint.mission.discodeit.dto.message.MessageResponse;
 import com.sprint.mission.discodeit.dto.message.request.MessageCreateRequest;
 import com.sprint.mission.discodeit.dto.message.request.MessageUpdateRequest;
 import com.sprint.mission.discodeit.service.MessageService;
+import io.micrometer.core.annotation.Timed;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -37,6 +38,7 @@ public class MessageController implements MessageApi {
     private final MessageService messageService;
 
     @Override
+    @Timed("message.create.async")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MessageResponse> createMessage(
             @RequestPart("messageCreateRequest") MessageCreateRequest request,

@@ -32,7 +32,7 @@ public class BinaryContent extends BaseUpdatableEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private BinaryContentStatus binaryContentStatus = BinaryContentStatus.PROCESSING;
+    private BinaryContentStatus status = BinaryContentStatus.PROCESSING;
 
     @Builder
     @JsonCreator
@@ -48,6 +48,6 @@ public class BinaryContent extends BaseUpdatableEntity {
     }
 
     public void updateStatus(BinaryContentStatus binaryContentStatus) {
-        this.binaryContentStatus = binaryContentStatus;
+        this.status = binaryContentStatus;
     }
 }

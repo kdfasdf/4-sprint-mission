@@ -9,7 +9,6 @@ import com.sprint.mission.discodeit.security.jwt.JwtInformation;
 import com.sprint.mission.discodeit.security.jwt.JwtProvider;
 import com.sprint.mission.discodeit.service.AuthService;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +48,7 @@ public class AuthController implements AuthApi {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/role")
-    public ResponseEntity<UserResponse> updateRole(@Valid @RequestBody RoleUpdateRequest roleUpdateRequest, HttpServletRequest request) {
+    public ResponseEntity<UserResponse> updateRole(@Valid @RequestBody RoleUpdateRequest roleUpdateRequest) {
         return ResponseEntity.ok().body(authService.updateRole(roleUpdateRequest));
     }
 

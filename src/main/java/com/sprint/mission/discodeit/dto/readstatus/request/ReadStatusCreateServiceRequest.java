@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit.dto.readstatus.request;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ReadStatus;
 import com.sprint.mission.discodeit.entity.User;
+import java.time.Instant;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +14,7 @@ public class ReadStatusCreateServiceRequest {
 
     private final UUID channelId;
     private final UUID userId;
+    private final Instant lastReadAt;
 
     public ReadStatus toEntity(User user, Channel channel) {
         return ReadStatus.builder()

@@ -32,7 +32,7 @@ public class BinaryContentResponse {
         this.contentType = binaryContent.getContentType();
         this.bytes = binaryContent.getBytes();
         this.size = binaryContent.getSize();
-        this.status = binaryContent.getBinaryContentStatus();
+        this.status = binaryContent.getStatus();
     }
 
 }
