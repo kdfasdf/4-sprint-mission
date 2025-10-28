@@ -1,13 +1,15 @@
 package com.sprint.mission.discodeit.event;
 
 import java.util.UUID;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class BinaryContentUploadFailureEvent {
-    private final String requestId;
-    private final UUID binaryContentId;
-    private final String reason;
+    private String requestId;
+    private UUID binaryContentId;
+    private String reason;
 }

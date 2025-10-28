@@ -69,6 +69,7 @@ public class BasicBinaryContentService implements BinaryContentService {
     }
 
     @Override
+    @Transactional
     public BinaryContentResponse updateBinaryContentStatus(UUID binaryContentId, BinaryContentStatus binaryContentStatus) {
         BinaryContent binaryContent = binaryContentRepository.findById(binaryContentId)
                 .orElseThrow(() -> new BinaryContentException(BinaryContentErrorCode.BINARY_CONTENT_NOT_FOUND));

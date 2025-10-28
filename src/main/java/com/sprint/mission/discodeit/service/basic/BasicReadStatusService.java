@@ -18,6 +18,7 @@ import com.sprint.mission.discodeit.repository.ReadStatusRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.ReadStatusService;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -87,7 +88,7 @@ public class BasicReadStatusService implements ReadStatusService {
                 .orElseThrow(() -> new ReadStatusException(ReadStatusErrorCode.READ_STATUS_NOT_FOUND));
 
         readStatusToUpdate.updateLastReadAt();
-        readStatusToUpdate.updateNotificationEnabled(request.getNewNotificationEnabled());
+        Optional.ofNullable(request.getNewNotificationEnabled()).ifPresent(readStatusToUpdate::updateNotificationEnabled);
 
         readStatusRepository.save(readStatusToUpdate);
 

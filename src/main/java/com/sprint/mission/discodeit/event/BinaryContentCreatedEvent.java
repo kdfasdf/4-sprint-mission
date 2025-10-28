@@ -1,12 +1,14 @@
 package com.sprint.mission.discodeit.event;
 
 import java.util.UUID;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class BinaryContentCreatedEvent {
-    private final UUID binaryContentId;
-    private final byte[] bytes;
+    private UUID binaryContentId;
+    private byte[] bytes;
 }

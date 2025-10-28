@@ -1,14 +1,16 @@
 package com.sprint.mission.discodeit.event;
 
 import java.util.UUID;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class MessageCreatedEvent {
-    private final UUID id;
-    private final UUID authorId;
-    private final UUID channelId;
-    private final String content;
+    private UUID id;
+    private UUID authorId;
+    private UUID channelId;
+    private String content;
 }
