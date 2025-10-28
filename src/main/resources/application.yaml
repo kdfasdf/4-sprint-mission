@@ -23,12 +23,22 @@ spring:
         max-file-size: 50MB
         max-request-size: 50MB
   cache:
+    cache-names:
+      - channels
+      - notifications
+      - users
     caffeine:
       spec:
         initialCapacity=100,
         maximumSize=1000,
         expireAfterAccess=30m,
         recordStats
+    redis:
+      enable-statistics: true
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
   kafka:
     bootstrap-servers: localhost:9092
     producer:
